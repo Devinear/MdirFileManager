@@ -9,11 +9,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.util.jar.Manifest
 
-class FileManager : AppCompatActivity() {
+class FileManagerActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_CODE = 1
     }
+
+    private val adapter: FileAdapter = FileAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
