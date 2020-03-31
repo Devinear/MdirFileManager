@@ -1,13 +1,13 @@
 package com.example.mdirfilemanager
 
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.util.jar.Manifest
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class FileManagerActivity : AppCompatActivity() {
 
@@ -19,7 +19,13 @@ class FileManagerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.layout_file_manager)
         checkPermission()
+
+        findViewById<RecyclerView>(R.id.recycler).also {
+            it.layoutManager = LinearLayoutManager(this@FileManagerActivity)
+            it.adapter = adapter
+        }
     }
 
     private fun checkPermission() {

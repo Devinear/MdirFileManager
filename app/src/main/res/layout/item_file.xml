@@ -1,12 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content"
+    android:background="@android:color/black"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_file" />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="0.5"
+        android:layout_marginStart="@dimen/recycler_item_margin_default"
+        android:layout_marginEnd="@dimen/recycler_item_margin_default"
+        android:textSize="@dimen/recycler_item_text_size"
+        tools:textColor="#FFFFFF"
+        tools:text="NAME"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_type" />
+
+    <TextView
+        android:id="@+id/tv_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="0.3"
+        android:layout_marginEnd="@dimen/recycler_item_margin_default"
+        android:textAlignment="center"
+        android:textSize="@dimen/recycler_item_text_size"
+        tools:textColor="#FFFFFF"
+        tools:text="TYPE"
+        app:layout_constraintTop_toTopOf="@id/tv_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        app:layout_constraintStart_toEndOf="@id/tv_name"
+        app:layout_constraintEnd_toStartOf="@id/tv_size" />
+
+    <TextView
+        android:id="@+id/tv_size"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="0.3"
+        android:layout_marginEnd="@dimen/recycler_item_margin_default"
+        android:textAlignment="viewEnd"
+        android:textSize="@dimen/recycler_item_text_size"
+        tools:textColor="#FFFFFF"
+        tools:text="SIZE"
+        app:layout_constraintTop_toTopOf="@id/tv_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        app:layout_constraintStart_toEndOf="@id/tv_type"
+        app:layout_constraintEnd_toStartOf="@id/tv_time" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="0.3"
+        android:layout_marginEnd="@dimen/recycler_item_margin_default"
+        android:textAlignment="viewEnd"
+        android:textSize="@dimen/recycler_item_text_size"
+        tools:textColor="#FFFFFF"
+        tools:text="TIME"
+        app:layout_constraintTop_toTopOf="@id/tv_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_name"
+        app:layout_constraintStart_toEndOf="@id/tv_size"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
