@@ -2,6 +2,7 @@ package com.example.mdirfilemanager
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,7 +16,8 @@ class FileManagerActivity : AppCompatActivity() {
         const val REQUEST_CODE = 1
     }
 
-    private val adapter: FileAdapter = FileAdapter()
+    // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
+    private val adapter: FileAdapter = FileAdapter(this, Environment.getExternalStorageDirectory().absolutePath, hidden = false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,7 @@ class FileManagerActivity : AppCompatActivity() {
             it.layoutManager = LinearLayoutManager(this@FileManagerActivity)
             it.adapter = adapter
         }
+        adapter.refreshDir()
     }
 
     private fun checkPermission() {
