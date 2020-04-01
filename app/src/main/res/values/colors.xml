@@ -3,4 +3,15 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="type_storage">#A44501</color>
+    <color name="type_dir">#FC3B41</color>
+    <color name="type_default">#9C999D</color>
+    <color name="type_white">#FFFFFF</color>
+    <color name="type_yellow">#EFF344</color>
+    <color name="type_blue_1">#149B9A</color>
+    <color name="type_blue_2">#128383</color>
+    <color name="type_green_1">#4CF943</color>
+    <color name="type_green_2">#139902</color>
+
 </resources>
