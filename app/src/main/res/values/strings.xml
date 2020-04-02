@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MdirFileManager</string>
+    <string name="date_format_pattern">yy-MM-dd HH:mm</string>
 </resources>

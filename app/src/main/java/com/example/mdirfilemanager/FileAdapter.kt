@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mdirfilemanager.common.FileType
 import java.io.File
 import java.io.FileFilter
+import java.text.SimpleDateFormat
 import java.util.*
 
 class FileAdapter(val context: Context, var path: String, val hidden: Boolean) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
@@ -31,11 +32,11 @@ class FileAdapter(val context: Context, var path: String, val hidden: Boolean) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
-            val isDir = items[position].type == FileType.Dir
+            val isDir = (items[position].type == FileType.Dir) or (items[position].type == FileType.UpDir)
             val color = items[position].type.color
 
             name.text = items[position].name
-            type.text = items[position].type.toString()
+            type.text = items[position].type.abbr
             size.text = items[position].size.toString()
             time.text = items[position].time
 
@@ -50,16 +51,15 @@ class FileAdapter(val context: Context, var path: String, val hidden: Boolean) :
         val file : File = File(path)
         if(file.exists()) {
             items.clear()
-            items.add(FileItem(name = "..", type = FileType.Dir, size = 0L, time = ""))
+            items.add(FileItem(name = "..", type = FileType.UpDir, size = 0L, time = ""))
 
-            file.listFiles().forEach {
-//                val date : Date = Date(it.lastModified())
-                if(it.isDirectory) {
-                    items.add(FileItem(name = it.name, type = FileType.Dir, size = 0L, time = Date(it.lastModified()).toString()))
-                }
-                else {
-                    items.add(FileItem(name = it.name, type = FileType.Default, size = it.length(), time = Date(it.lastModified()).toString()))
-                }
+            val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
+
+            file.listFiles()?.forEach {
+                if(it.isDirectory)
+                    items.add(FileItem(name = it.name, type = FileType.Dir, size = 0L, time = time.format(Date(it.lastModified()))))
+                else
+                    items.add(FileItem(name = it.name, type = FileType.Default, size = it.length(), time = time.format(Date(it.lastModified()))))
             }
 //            file.listFiles(FileFilter {
 //                pathname -> pathname.isDirectory
