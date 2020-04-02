@@ -35,7 +35,8 @@ class FileManagerActivity : AppCompatActivity() {
 //        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
 //            return
         val permissions = Array(1) {
-            "android.permission.READ_EXTERNAL_STORAGE"
+//            "android.permission.READ_EXTERNAL_STORAGE"
+            "android.permission.WRITE_EXTERNAL_STORAGE"
         }
         if (ContextCompat.checkSelfPermission(this, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
