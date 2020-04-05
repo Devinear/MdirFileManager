@@ -4,6 +4,8 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
+import android.view.Surface
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 class FileManagerActivity : AppCompatActivity() {
 
     companion object {
+        const val TAG = "FileManagerActivity"
         const val REQUEST_CODE = 1
     }
 
@@ -21,6 +24,7 @@ class FileManagerActivity : AppCompatActivity() {
     private val adapter: FileAdapter = FileAdapter(this, Environment.getExternalStorageDirectory().absolutePath, hidden = false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_file_manager)
         checkPermission()
@@ -29,6 +33,8 @@ class FileManagerActivity : AppCompatActivity() {
             it.layoutManager = LinearLayoutManager(this@FileManagerActivity)
             it.adapter = adapter
         }
+
+        adapter.isPortrait = windowManager.defaultDisplay.rotation != Surface.ROTATION_90
         adapter.refreshDir()
     }
 
@@ -58,6 +64,8 @@ class FileManagerActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        Log.d(TAG, "onConfigurationChanged ORIENTATION:${newConfig.orientation}")
         adapter.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
+        adapter.notifyDataSetChanged()
     }
 }

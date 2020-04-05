@@ -44,7 +44,7 @@
         android:id="@+id/tv_size"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_weight="0.3"
+        app:layout_constraintHorizontal_weight="0.15"
         android:layout_marginEnd="@dimen/recycler_item_margin_default"
         android:textAlignment="viewEnd"
         android:fontFamily="@font/dos_m"

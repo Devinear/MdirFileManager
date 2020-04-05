@@ -1,6 +1,7 @@
 package com.example.mdirfilemanager
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FileAdapter(private val context: Context, var path: String, val hidden: Boolean) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
+
+    companion object {
+        const val TAG = "FileAdapter"
+    }
 
     private val items = mutableListOf<FileItem>()
     var isPortrait = true // ORIENTATION_PORTRAIT
@@ -31,6 +36,7 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d(TAG, "onBindViewHolder Position:$position Portrait:$isPortrait")
         with(holder) {
             val item : FileItem =  items[position]
             val isDir = (item.type == FileType.Dir) or (item.type == FileType.UpDir)
@@ -39,23 +45,23 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
             if(isDir) {
                 name.text = item.name
                 type.text = item.type.abbr
-                size.visibility = View.GONE
-                time.visibility = View.GONE
+                size.text = ""
             }
             else {
                 name.text = getFileName(item.name)
                 type.text = getFileExt(item.name)
                 size.text = item.size.toString()
-                time.text = item.time
-                size.visibility = if(isPortrait) View.GONE else View.VISIBLE
-                time.visibility = if(isPortrait) View.GONE else View.VISIBLE
             }
+            time.text = item.time
             name.setTextColor(context.getColor(color))
             type.setTextColor(context.getColor(color))
+            size.visibility = if(isPortrait) View.GONE else View.VISIBLE
+            time.visibility = if(isPortrait) View.GONE else View.VISIBLE
         }
     }
 
     fun refreshDir() {
+        Log.d(TAG, "refreshDir")
         val file : File = File(path)
         if(file.exists()) {
             items.clear()
