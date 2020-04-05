@@ -21,7 +21,7 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
     private val items = mutableListOf<FileItem>()
     var isPortrait = true // ORIENTATION_PORTRAIT
 
-    data class FileItem(var name: String, var type: FileType, var size: Long, var time: String)
+    data class FileItem(var name: String, var type: FileType, var byteSize: Long, var time: String)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.tv_name)
@@ -39,10 +39,9 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
         Log.d(TAG, "onBindViewHolder Position:$position Portrait:$isPortrait")
         with(holder) {
             val item : FileItem =  items[position]
-            val isDir = (item.type == FileType.Dir) or (item.type == FileType.UpDir)
             val color = item.type.color
 
-            if(isDir) {
+            if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
                 name.text = item.name
                 type.text = item.type.abbr
                 size.text = ""
@@ -50,13 +49,13 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
             else {
                 name.text = getFileName(item.name)
                 type.text = getFileExt(item.name)
-                size.text = item.size.toString()
+                size.text = getFileSize(item.byteSize)
             }
             time.text = item.time
             name.setTextColor(context.getColor(color))
             type.setTextColor(context.getColor(color))
             size.visibility = if(isPortrait) View.GONE else View.VISIBLE
-            time.visibility = if(isPortrait) View.GONE else View.VISIBLE
+            time.visibility = if(isPortrait) View.GONE else if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
         }
     }
 
@@ -65,15 +64,15 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
         val file : File = File(path)
         if(file.exists()) {
             items.clear()
-            items.add(FileItem(name = "..", type = FileType.UpDir, size = 0L, time = ""))
+            items.add(FileItem(name = "..", type = FileType.UpDir, byteSize = 0L, time = "00-00-00 00:00"))
 
             val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
 
             file.listFiles()?.forEach {
                 if(it.isDirectory)
-                    items.add(FileItem(name = it.name, type = FileType.Dir, size = 0L, time = time.format(Date(it.lastModified()))))
+                    items.add(FileItem(name = it.name, type = FileType.Dir, byteSize = 0L, time = time.format(Date(it.lastModified()))))
                 else
-                    items.add(FileItem(name = it.name, type = FileType.Default, size = it.length(), time = time.format(Date(it.lastModified()))))
+                    items.add(FileItem(name = it.name, type = FileType.Default, byteSize = it.length(), time = time.format(Date(it.lastModified()))))
             }
 //            file.listFiles(FileFilter {
 //                pathname -> pathname.isDirectory
@@ -101,5 +100,21 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
             ""
         else
             name.substring(lastIndex+1)
+    }
+
+    private fun getFileSize(byteSize: Long) : String {
+        var size = byteSize
+        if(size < 1024)
+            return "$size B"
+
+        if(size < 1024 * 1024)
+            return "${String.format("%.1f", (size/1024F))} KB"
+
+        size /= 1024
+        if(size < 1024 * 1024)
+            return "${String.format("%.1f", (size/1024F))} MB"
+
+        size /= 1024
+        return "${String.format("%.1f", (size/1024F))} GB"
     }
 }
