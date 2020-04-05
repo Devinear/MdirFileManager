@@ -34,7 +34,7 @@ class FileManagerActivity : AppCompatActivity() {
             it.adapter = adapter
         }
 
-        adapter.isPortrait = windowManager.defaultDisplay.rotation != Surface.ROTATION_90
+        adapter.isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
         adapter.refreshDir()
     }
 
