@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mdirfilemanager.common.FileType
 import java.io.File
-import java.io.FileFilter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FileAdapter(val context: Context, var path: String, val hidden: Boolean) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
+class FileAdapter(private val context: Context, var path: String, val hidden: Boolean) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
 
     private val items = mutableListOf<FileItem>()
+    var isPortrait = true // ORIENTATION_PORTRAIT
 
     data class FileItem(var name: String, var type: FileType, var size: Long, var time: String)
 
@@ -32,18 +32,26 @@ class FileAdapter(val context: Context, var path: String, val hidden: Boolean) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
-            val isDir = (items[position].type == FileType.Dir) or (items[position].type == FileType.UpDir)
-            val color = items[position].type.color
+            val item : FileItem =  items[position]
+            val isDir = (item.type == FileType.Dir) or (item.type == FileType.UpDir)
+            val color = item.type.color
 
-            name.text = items[position].name
-            type.text = items[position].type.abbr
-            size.text = items[position].size.toString()
-            time.text = items[position].time
-
+            if(isDir) {
+                name.text = item.name
+                type.text = item.type.abbr
+                size.visibility = View.GONE
+                time.visibility = View.GONE
+            }
+            else {
+                name.text = getFileName(item.name)
+                type.text = getFileExt(item.name)
+                size.text = item.size.toString()
+                time.text = item.time
+                size.visibility = if(isPortrait) View.GONE else View.VISIBLE
+                time.visibility = if(isPortrait) View.GONE else View.VISIBLE
+            }
             name.setTextColor(context.getColor(color))
             type.setTextColor(context.getColor(color))
-            size.visibility = if(isDir) View.GONE else View.VISIBLE
-            time.visibility = if(isDir) View.GONE else View.VISIBLE
         }
     }
 
@@ -69,5 +77,23 @@ class FileAdapter(val context: Context, var path: String, val hidden: Boolean) :
         }
 
         notifyDataSetChanged()
+    }
+
+    private fun getFileName(name: String) : String {
+        // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
+        val lastIndex = name.lastIndexOf('.')
+        return if(lastIndex < 2)
+            name
+        else
+            name.substring(0, lastIndex)
+    }
+
+    private fun getFileExt(name: String) : String {
+        // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
+        val lastIndex = name.lastIndexOf('.')
+        return if(lastIndex < 2)
+            ""
+        else
+            name.substring(lastIndex+1)
     }
 }

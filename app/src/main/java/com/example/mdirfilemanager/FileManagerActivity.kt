@@ -1,6 +1,7 @@
 package com.example.mdirfilemanager
 
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Environment
 import android.widget.Toast
@@ -53,5 +54,10 @@ class FileManagerActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        adapter.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
     }
 }
