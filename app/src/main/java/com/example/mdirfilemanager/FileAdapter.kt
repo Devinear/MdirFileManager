@@ -24,7 +24,7 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
     private val items = mutableListOf<FileItem>()
     var isPortrait = true // ORIENTATION_PORTRAIT
 
-    data class FileItem(var name: String, var type: FileType, var byteSize: Long, var time: String)
+    data class FileItem(var name: String, var type: FileType, var ext: String, var byteSize: Long, var time: String)
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.tv_name)
@@ -50,8 +50,8 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
                 size.text = ""
             }
             else {
-                name.text = FileUtil.getFileName(item.name)
-                type.text = FileUtil.getFileExt(item.name)
+                name.text = item.name
+                type.text = item.ext
                 size.text = FileUtil.getFileSize(item.byteSize)
             }
             time.text = item.time
@@ -90,17 +90,28 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
         val file : File = File(path)
         if(file.exists()) {
             items.clear()
-            items.add(FileItem(name = "..", type = FileType.UpDir, byteSize = 0L, time = "00-00-00 00:00"))
+            items.add(FileItem(name = "..", type = FileType.UpDir, ext = "", byteSize = 0L, time = "00-00-00 00:00"))
             val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
 
             file.listFiles()?.forEach {
                 if(hidden && it.name[0] == '.') {}
                 else {
                     if (it.isDirectory)
-                        items.add(FileItem(name = it.name,type = FileType.Dir,byteSize = 0L,time = time.format(Date(it.lastModified()))))
+                        items.add(FileItem(name = it.name,type = FileType.Dir,ext = "",byteSize = 0L,time = time.format(Date(it.lastModified()))))
                     else
-                        items.add(FileItem(name = it.name,type = FileType.Default,byteSize = it.length(),time = time.format(Date(it.lastModified()))))
+                        items.add(FileItem(name = FileUtil.getFileName(it.name),type = FileType.Default,
+                            ext = FileUtil.getFileExt(it.name),byteSize = it.length(),time = time.format(Date(it.lastModified()))))
                 }
+            }
+
+            if(items.isNotEmpty()) {
+                items.sortWith(kotlin.Comparator { o1, o2 ->
+                    when {
+                        o1.type.sort != o2.type.sort  -> { o1.type.sort - o2.type.sort }
+                        o1.ext.compareTo(o2.ext) != 0 -> { o1.ext.compareTo(o2.ext) }
+                        else -> { o1.name.compareTo(o2.name) }
+                    }
+                })
             }
 //            file.listFiles(FileFilter {
 //                pathname -> pathname.isDirectory
