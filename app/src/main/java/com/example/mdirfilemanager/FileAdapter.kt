@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mdirfilemanager.common.FileType
+import com.example.mdirfilemanager.common.FileUtil
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,9 +48,9 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
                 size.text = ""
             }
             else {
-                name.text = getFileName(item.name)
-                type.text = getFileExt(item.name)
-                size.text = getFileSize(item.byteSize)
+                name.text = FileUtil.getFileName(item.name)
+                type.text = FileUtil.getFileExt(item.name)
+                size.text = FileUtil.getFileSize(item.byteSize)
             }
             time.text = item.time
             name.setTextColor(context.getColor(color))
@@ -82,39 +83,5 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
         }
 
         notifyDataSetChanged()
-    }
-
-    private fun getFileName(name: String) : String {
-        // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
-        val lastIndex = name.lastIndexOf('.')
-        return if(lastIndex < 2)
-            name
-        else
-            name.substring(0, lastIndex)
-    }
-
-    private fun getFileExt(name: String) : String {
-        // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
-        val lastIndex = name.lastIndexOf('.')
-        return if(lastIndex < 2)
-            ""
-        else
-            name.substring(lastIndex+1)
-    }
-
-    private fun getFileSize(byteSize: Long) : String {
-        var size = byteSize
-        if(size < 1024)
-            return "$size B"
-
-        if(size < 1024 * 1024)
-            return "${String.format("%.1f", (size/1024F))} KB"
-
-        size /= 1024
-        if(size < 1024 * 1024)
-            return "${String.format("%.1f", (size/1024F))} MB"
-
-        size /= 1024
-        return "${String.format("%.1f", (size/1024F))} GB"
     }
 }

@@ -1,0 +1,37 @@
+package com.example.mdirfilemanager.common
+
+object FileUtil {
+    fun getFileName(name: String) : String {
+        // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
+        val lastIndex = name.lastIndexOf('.')
+        return if(lastIndex < 2)
+            name
+        else
+            name.substring(0, lastIndex)
+    }
+
+    fun getFileExt(name: String) : String {
+        // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
+        val lastIndex = name.lastIndexOf('.')
+        return if(lastIndex < 2)
+            ""
+        else
+            name.substring(lastIndex+1)
+    }
+
+    fun getFileSize(byteSize: Long) : String {
+        var size = byteSize
+        if(size < 1024)
+            return "$size B"
+
+        if(size < 1024 * 1024)
+            return "${String.format("%.1f", (size/1024F))} KB"
+
+        size /= 1024
+        if(size < 1024 * 1024)
+            return "${String.format("%.1f", (size/1024F))} MB"
+
+        size /= 1024
+        return "${String.format("%.1f", (size/1024F))} GB"
+    }
+}
