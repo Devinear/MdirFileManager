@@ -1,6 +1,7 @@
 package com.example.mdirfilemanager.common
 
 import android.os.Environment
+import java.util.*
 
 object FileUtil {
 
@@ -21,7 +22,7 @@ object FileUtil {
         return if(lastIndex < 2)
             ""
         else
-            name.substring(lastIndex+1)
+            name.substring(lastIndex+1).toUpperCase(Locale.ROOT)
     }
 
     fun getFileSize(byteSize: Long) : String {
