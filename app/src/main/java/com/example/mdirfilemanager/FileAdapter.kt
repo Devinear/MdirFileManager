@@ -91,14 +91,16 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
         if(file.exists()) {
             items.clear()
             items.add(FileItem(name = "..", type = FileType.UpDir, byteSize = 0L, time = "00-00-00 00:00"))
-
             val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
 
             file.listFiles()?.forEach {
-                if(it.isDirectory)
-                    items.add(FileItem(name = it.name, type = FileType.Dir, byteSize = 0L, time = time.format(Date(it.lastModified()))))
-                else
-                    items.add(FileItem(name = it.name, type = FileType.Default, byteSize = it.length(), time = time.format(Date(it.lastModified()))))
+                if(hidden && it.name[0] == '.') {}
+                else {
+                    if (it.isDirectory)
+                        items.add(FileItem(name = it.name,type = FileType.Dir,byteSize = 0L,time = time.format(Date(it.lastModified()))))
+                    else
+                        items.add(FileItem(name = it.name,type = FileType.Default,byteSize = it.length(),time = time.format(Date(it.lastModified()))))
+                }
             }
 //            file.listFiles(FileFilter {
 //                pathname -> pathname.isDirectory
