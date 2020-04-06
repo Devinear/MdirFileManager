@@ -3,6 +3,7 @@ package com.example.mdirfilemanager
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mdirfilemanager.common.FileType
 import com.example.mdirfilemanager.common.FileUtil
+import kotlinx.android.synthetic.main.item_file.view.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,6 +80,20 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
                     // 일반 파일
                     Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
                 }
+            }
+            itemView.setOnTouchListener { v, event ->
+                Log.d(TAG, "setOnTouchListener ACTION:${event.action}")
+                if(event.action == MotionEvent.ACTION_DOWN) {
+                    v.tv_name.setTextColor(context.getColor(android.R.color.black))
+                    v.tv_type.setTextColor(context.getColor(android.R.color.black))
+                    v.setBackgroundResource(item.type.color)
+                }
+                else if(event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP) {
+                    v.tv_name.setTextColor(context.getColor(item.type.color))
+                    v.tv_type.setTextColor(context.getColor(item.type.color))
+                    v.setBackgroundResource(android.R.color.black)
+                }
+                return@setOnTouchListener false
             }
         }
     }
