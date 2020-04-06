@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mdirfilemanager.common.FileType
 import com.example.mdirfilemanager.common.FileUtil
@@ -13,12 +14,13 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FileAdapter(private val context: Context, var path: String, val hidden: Boolean) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
+class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
 
     companion object {
         const val TAG = "FileAdapter"
     }
 
+    private var path: String = ""
     private val items = mutableListOf<FileItem>()
     var isPortrait = true // ORIENTATION_PORTRAIT
 
@@ -57,11 +59,34 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
             type.setTextColor(context.getColor(color))
             size.visibility = if(isPortrait) View.GONE else View.VISIBLE
             time.visibility = if(isPortrait) View.GONE else if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
+
+            itemView.setOnClickListener {
+                if(item.type == FileType.UpDir) {
+                    if(path == FileUtil.ROOT) {
+                        Toast.makeText(context, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        path = FileUtil.getUpDirPath(path)
+                        refreshDir()
+                    }
+                }
+                else if(item.type == FileType.Dir){
+                    path = "$path/${item.name}"
+                    refreshDir()
+                }
+                else {
+                    // 일반 파일
+                    Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
     fun refreshDir() {
         Log.d(TAG, "refreshDir")
+        if(path.isEmpty())
+            path = FileUtil.ROOT
+
         val file : File = File(path)
         if(file.exists()) {
             items.clear()
@@ -81,7 +106,6 @@ class FileAdapter(private val context: Context, var path: String, val hidden: Bo
 //
 //            }
         }
-
         notifyDataSetChanged()
     }
 }

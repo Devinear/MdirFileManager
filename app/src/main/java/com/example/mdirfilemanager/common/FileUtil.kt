@@ -1,6 +1,11 @@
 package com.example.mdirfilemanager.common
 
+import android.os.Environment
+
 object FileUtil {
+
+    var ROOT = Environment.getExternalStorageDirectory().absolutePath
+
     fun getFileName(name: String) : String {
         // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
         val lastIndex = name.lastIndexOf('.')
@@ -33,5 +38,13 @@ object FileUtil {
 
         size /= 1024
         return "${String.format("%.1f", (size/1024F))} GB"
+    }
+
+    fun getUpDirPath(path: String) : String {
+        val last = path.lastIndexOf('/')
+        return if(last < 0)
+            ""
+        else
+            path.substring(0, last)
     }
 }
