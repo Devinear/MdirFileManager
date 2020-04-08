@@ -1,4 +1,4 @@
-package com.example.mdirfilemanager
+package com.example.mdirfilemanager.view
 
 import android.content.Context
 import android.util.Log
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mdirfilemanager.R
 import com.example.mdirfilemanager.common.FileType
 import com.example.mdirfilemanager.common.FileUtil
 import kotlinx.android.synthetic.main.item_file.view.*
@@ -36,7 +37,13 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_file, parent, false))
+            = ViewHolder(
+        LayoutInflater.from(parent.context).inflate(
+            R.layout.item_file,
+            parent,
+            false
+        )
+    )
 
     override fun getItemCount(): Int = items.size
 
@@ -106,17 +113,40 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
         val file : File = File(path)
         if(file.exists()) {
             items.clear()
-            items.add(FileItem(name = "..", type = FileType.UpDir, ext = "", byteSize = 0L, time = "00-00-00 00:00"))
+            items.add(
+                FileItem(
+                    name = "..",
+                    type = FileType.UpDir,
+                    ext = "",
+                    byteSize = 0L,
+                    time = "00-00-00 00:00"
+                )
+            )
             val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
 
             file.listFiles()?.forEach {
                 if(hidden && it.name[0] == '.') {}
                 else {
                     if (it.isDirectory)
-                        items.add(FileItem(name = it.name,type = FileType.Dir,ext = "",byteSize = 0L,time = time.format(Date(it.lastModified()))))
+                        items.add(
+                            FileItem(
+                                name = it.name,
+                                type = FileType.Dir,
+                                ext = "",
+                                byteSize = 0L,
+                                time = time.format(Date(it.lastModified()))
+                            )
+                        )
                     else
-                        items.add(FileItem(name = FileUtil.getFileName(it.name),type = FileType.Default,
-                            ext = FileUtil.getFileExt(it.name),byteSize = it.length(),time = time.format(Date(it.lastModified()))))
+                        items.add(
+                            FileItem(
+                                name = FileUtil.getFileName(it.name),
+                                type = FileType.Default,
+                                ext = FileUtil.getFileExt(it.name),
+                                byteSize = it.length(),
+                                time = time.format(Date(it.lastModified()))
+                            )
+                        )
                 }
             }
 

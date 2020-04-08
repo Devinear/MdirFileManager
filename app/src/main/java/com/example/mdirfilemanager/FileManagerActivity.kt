@@ -3,7 +3,6 @@ package com.example.mdirfilemanager
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.Surface
 import android.widget.Toast
@@ -12,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mdirfilemanager.view.FileAdapter
 
 class FileManagerActivity : AppCompatActivity() {
 
@@ -21,7 +21,8 @@ class FileManagerActivity : AppCompatActivity() {
     }
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapter: FileAdapter = FileAdapter(this, hidden = false)
+    private val adapter: FileAdapter =
+        FileAdapter(this, hidden = false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
