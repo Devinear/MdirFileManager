@@ -1,6 +1,7 @@
 package com.example.mdirfilemanager.view
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mdirfilemanager.R
 import com.example.mdirfilemanager.common.FileType
@@ -86,6 +88,15 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
                 else {
                     // 일반 파일
                     Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
+
+                    val sendIntent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        type = "application/*"
+                        val file = File("$path/${item.name}")
+                        val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                    }
+                    context.startActivity(sendIntent)
                 }
             }
             itemView.setOnTouchListener { v, event ->
