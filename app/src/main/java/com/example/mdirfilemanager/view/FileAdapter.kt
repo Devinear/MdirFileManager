@@ -92,11 +92,9 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
                     val sendIntent = Intent().apply {
                         action = Intent.ACTION_SEND
                         type = "application/*"
-                        val file = File("$path/${item.name}")
-                        val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-                        putExtra(Intent.EXTRA_STREAM, uri)
+                        putExtra(Intent.EXTRA_STREAM, File("$path/${item.name}").toURI())
                     }
-                    context.startActivity(sendIntent)
+                    context.startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
                 }
             }
             itemView.setOnTouchListener { v, event ->
