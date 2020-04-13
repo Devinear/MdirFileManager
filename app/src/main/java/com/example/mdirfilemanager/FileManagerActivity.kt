@@ -55,6 +55,7 @@ class FileManagerActivity : AppCompatActivity() {
                     finish()
                 }
             }
+            adapter.refreshDir()
         }
     }
 
