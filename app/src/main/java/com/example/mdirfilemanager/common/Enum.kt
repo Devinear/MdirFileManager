@@ -11,7 +11,8 @@ enum class FileType(@ColorRes val color : Int, val abbr: String /*abbreviation*/
     Storage(R.color.type_storage, "", 5),
     Image(R.color.type_blue_1, "", 6),
     Video(R.color.type_green_1, "", 7),
-    Audio(R.color.type_yellow, "", 8)
+    Audio(R.color.type_green_2, "", 8),
+    Document(R.color.type_yellow, "", 9)
 }
 
 enum class ExtType {

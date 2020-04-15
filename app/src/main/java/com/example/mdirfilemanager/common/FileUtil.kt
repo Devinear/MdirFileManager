@@ -1,6 +1,7 @@
 package com.example.mdirfilemanager.common
 
 import android.os.Environment
+import java.io.File
 import java.util.*
 
 object FileUtil {
@@ -61,6 +62,16 @@ object FileUtil {
                 ExtType.Document
             else ->
                 ExtType.Default
+        }
+    }
+
+    fun toFileType(ext: ExtType) : FileType {
+        return when(ext) {
+            ExtType.Audio -> FileType.Audio
+            ExtType.Image -> FileType.Image
+            ExtType.Video -> FileType.Video
+            ExtType.Document -> FileType.Document
+            else -> FileType.Default
         }
     }
 

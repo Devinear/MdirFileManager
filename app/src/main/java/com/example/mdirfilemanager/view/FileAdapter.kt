@@ -141,26 +141,23 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
             file.listFiles()?.forEach {
                 if(hidden && it.name[0] == '.') {}
                 else {
-                    if (it.isDirectory)
+                    if (it.isDirectory) {
                         items.add(
-                            FileItem(
-                                name = it.name,
-                                type = FileType.Dir,
-                                ext = "",
-                                byteSize = 0L,
-                                time = time.format(Date(it.lastModified()))
-                            )
+                            FileItem(name = it.name,type = FileType.Dir,
+                                ext = "",byteSize = 0L,time = time.format(Date(it.lastModified())))
                         )
-                    else
+                    }
+                    else {
                         items.add(
                             FileItem(
                                 name = FileUtil.getFileName(it.name),
-                                type = FileType.Default,
+                                type = FileUtil.toFileType(FileUtil.getFileExtType(FileUtil.getFileExt(it.name))),
                                 ext = FileUtil.getFileExt(it.name),
                                 byteSize = it.length(),
                                 time = time.format(Date(it.lastModified()))
                             )
                         )
+                    }
                 }
             }
 
