@@ -48,4 +48,20 @@ object FileUtil {
         else
             path.substring(0, last)
     }
+
+    fun getFileExtType(ext: String) : ExtType {
+        return when (ext.toLowerCase()) {
+            "jpg", "jpeg", "png", "bmp" ->
+                ExtType.Image
+            "3gp", "mp4", "webm", "mkv", "ts" ->
+                ExtType.Video
+            "m4a", "aac", "flac", "gsm", "mp3" ->
+                ExtType.Audio
+            "doc", "xls", "ppt", "docx", "xlsx", "pptx", "pdf" ->
+                ExtType.Document
+            else ->
+                ExtType.Default
+        }
+    }
+
 }

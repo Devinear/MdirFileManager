@@ -9,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mdirfilemanager.R
+import com.example.mdirfilemanager.common.ExtType
 import com.example.mdirfilemanager.common.FileType
 import com.example.mdirfilemanager.common.FileUtil
 import kotlinx.android.synthetic.main.item_file.view.*
@@ -91,7 +91,12 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
 
                     val sendIntent = Intent().apply {
                         action = Intent.ACTION_SEND
-                        type = "application/*"
+                        type = when(FileUtil.getFileExtType(item.ext)) {
+                            ExtType.Image -> "image/*"
+                            ExtType.Video -> "video/*"
+                            ExtType.Audio -> "audio/*"
+                            else -> "application/*"
+                        }
                         putExtra(Intent.EXTRA_STREAM, File("$path/${item.name}").toURI())
                     }
                     context.startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
