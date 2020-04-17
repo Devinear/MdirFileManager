@@ -19,7 +19,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
+class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
 
     companion object {
         const val TAG = "FileAdapter"
@@ -28,6 +28,7 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
     private var path: String = ""
     private val items = mutableListOf<FileItem>()
     var isPortrait = true // ORIENTATION_PORTRAIT
+    var isHideShow = false
 
     data class FileItem(var name: String, var type: FileType, var ext: String, var byteSize: Long, var time: String)
 
@@ -139,7 +140,7 @@ class FileAdapter(private val context: Context, val hidden: Boolean) : RecyclerV
             val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
 
             file.listFiles()?.forEach {
-                if(hidden && it.name[0] == '.') {}
+                if(!isHideShow && it.name[0] == '.') {}
                 else {
                     if (it.isDirectory) {
                         items.add(

@@ -4,6 +4,9 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.Surface
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,14 +18,8 @@ import com.example.mdirfilemanager.view.FileAdapter
 
 class FileManagerActivity : AppCompatActivity() {
 
-    companion object {
-        const val TAG = "FileManagerActivity"
-        const val REQUEST_CODE = 1
-    }
-
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapter: FileAdapter =
-        FileAdapter(this, hidden = false)
+    private val adapter: FileAdapter = FileAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -64,5 +61,28 @@ class FileManagerActivity : AppCompatActivity() {
         Log.d(TAG, "onConfigurationChanged ORIENTATION:${newConfig.orientation}")
         adapter.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.hide_show -> {
+                adapter.isHideShow = !adapter.isHideShow
+                item.isChecked = adapter.isHideShow
+                adapter.refreshDir()
+                true
+            }
+            else -> { false }
+        }
+    }
+
+    companion object {
+        const val TAG = "FileManagerActivity"
+        const val REQUEST_CODE = 1
     }
 }
