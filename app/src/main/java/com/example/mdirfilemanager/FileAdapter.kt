@@ -1,4 +1,4 @@
-package com.example.mdirfilemanager.view
+package com.example.mdirfilemanager
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mdirfilemanager.R
 import com.example.mdirfilemanager.common.ExtType
 import com.example.mdirfilemanager.common.FileType
 import com.example.mdirfilemanager.common.FileUtil
@@ -144,15 +143,23 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
                 else {
                     if (it.isDirectory) {
                         items.add(
-                            FileItem(name = it.name,type = FileType.Dir,
-                                ext = "",byteSize = 0L,time = time.format(Date(it.lastModified())))
+                            FileItem(
+                                name = it.name, type = FileType.Dir,
+                                ext = "", byteSize = 0L, time = time.format(Date(it.lastModified()))
+                            )
                         )
                     }
                     else {
                         items.add(
                             FileItem(
                                 name = FileUtil.getFileName(it.name),
-                                type = FileUtil.toFileType(FileUtil.getFileExtType(FileUtil.getFileExt(it.name))),
+                                type = FileUtil.toFileType(
+                                    FileUtil.getFileExtType(
+                                        FileUtil.getFileExt(
+                                            it.name
+                                        )
+                                    )
+                                ),
                                 ext = FileUtil.getFileExt(it.name),
                                 byteSize = it.length(),
                                 time = time.format(Date(it.lastModified()))

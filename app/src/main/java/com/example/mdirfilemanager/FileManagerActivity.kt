@@ -14,12 +14,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mdirfilemanager.view.FileAdapter
 
 class FileManagerActivity : AppCompatActivity() {
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapter: FileAdapter = FileAdapter(this)
+    private val adapter: FileAdapter =
+        FileAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
