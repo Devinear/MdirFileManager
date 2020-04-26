@@ -1,4 +1,4 @@
-package com.example.mdirfilemanager
+package com.example.projects.mdir
 
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projects.R
 
 class FileManagerActivity : AppCompatActivity() {
 
@@ -39,7 +40,9 @@ class FileManagerActivity : AppCompatActivity() {
     private fun checkPermission() {
         val permissions = Array(1) { "android.permission.WRITE_EXTERNAL_STORAGE" }
         if (ContextCompat.checkSelfPermission(this, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
+            ActivityCompat.requestPermissions(this, permissions,
+                REQUEST_CODE
+            )
         }
     }
 

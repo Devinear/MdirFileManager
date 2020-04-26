@@ -1,7 +1,7 @@
-package com.example.mdirfilemanager.common
+package com.example.projects.mdir.common
 
 import androidx.annotation.ColorRes
-import com.example.mdirfilemanager.R
+import com.example.projects.R
 
 enum class FileType(@ColorRes val color : Int, val abbr: String /*abbreviation*/, val sort: Int) {
     UpDir(R.color.type_dir, "[ Up-Dir ]", 1),

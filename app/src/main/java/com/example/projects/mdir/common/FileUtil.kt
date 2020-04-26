@@ -1,7 +1,6 @@
-package com.example.mdirfilemanager.common
+package com.example.projects.mdir.common
 
 import android.os.Environment
-import java.io.File
 import java.util.*
 
 object FileUtil {

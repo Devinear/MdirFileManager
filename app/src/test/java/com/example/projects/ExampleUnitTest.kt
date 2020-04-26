@@ -1,4 +1,4 @@
-package com.example.mdirfilemanager
+package com.example.projects
 
 import org.junit.Test
 

@@ -1,4 +1,4 @@
-package com.example.mdirfilemanager
+package com.example.projects.mdir
 
 import android.content.Context
 import android.content.Intent
@@ -10,9 +10,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mdirfilemanager.common.ExtType
-import com.example.mdirfilemanager.common.FileType
-import com.example.mdirfilemanager.common.FileUtil
+import com.example.projects.R
+import com.example.projects.mdir.common.ExtType
+import com.example.projects.mdir.common.FileType
+import com.example.projects.mdir.common.FileUtil
 import kotlinx.android.synthetic.main.item_file.view.*
 import java.io.File
 import java.text.SimpleDateFormat
