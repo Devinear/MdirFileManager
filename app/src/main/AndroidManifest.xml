@@ -22,6 +22,8 @@
         <activity
             android:name="com.example.projects.mdir.FileManagerActivity"
             android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name="com.example.projects.maps.MapActivity"/>
     </application>
 
 </manifest>
