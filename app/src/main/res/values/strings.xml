@@ -2,4 +2,6 @@
     <string name="app_name">MdirFileManager</string>
     <string name="date_format_pattern">yy-MM-dd HH:mm</string>
     <string name="menu_hide_show">숨김 폴더/파일 표시</string>
+    <string name="string_m_dir">M Dir</string>
+    <string name="string_map">MAP</string>
 </resources>
