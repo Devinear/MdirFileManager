@@ -2,13 +2,39 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/lay_path"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycler_item_height"
+        android:background="@android:color/black"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/recycler" >
+
+        <TextView
+            android:id="@+id/tv_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/recycler_item_margin_default"
+            android:layout_marginEnd="@dimen/recycler_item_margin_default"
+            android:textAlignment="viewStart"
+            android:fontFamily="@font/dos_m"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="#FFFFFF"
+            tools:text="PATH"/>
+
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
         android:background="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/lay_path"
         tools:listitem="@layout/item_file" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
