@@ -6,18 +6,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/lay_path"
+        android:id="@+id/lay_top"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_item_height"
-        android:background="@color/title_sub"
+        android:paddingStart="@dimen/layout_padding_default_size"
+        android:paddingEnd="@dimen/layout_padding_default_size"
+        android:background="@color/layout_top"
         android:gravity="center|start"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recycler" >
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/recycler_item_margin_default"
             android:layout_marginEnd="@dimen/recycler_item_margin_default"
             android:textAlignment="viewStart"
             android:fontFamily="@font/dos_m"
@@ -30,7 +33,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginEnd="@dimen/recycler_item_margin_default"
             android:textAlignment="viewStart"
             android:fontFamily="@font/dos_m"
             android:text="Path"
@@ -39,14 +41,27 @@
             tools:text="C:\"/>
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintVertical_weight="1"
         android:background="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/lay_path"
+        app:layout_constraintTop_toBottomOf="@id/lay_top"
+        app:layout_constraintBottom_toTopOf="@id/lay_bottom"
         tools:listitem="@layout/item_file" />
+
+    <LinearLayout
+        android:id="@+id/lay_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycler_item_height"
+        android:paddingStart="@dimen/layout_padding_default_size"
+        android:paddingEnd="@dimen/layout_padding_default_size"
+        android:orientation="horizontal"
+        android:background="@color/layout_bottom"
+        app:layout_constraintTop_toBottomOf="@id/recycler"
+        app:layout_constraintBottom_toBottomOf="parent" >
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
