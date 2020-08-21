@@ -9,15 +9,23 @@
         android:id="@+id/lay_top"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_item_height"
-        android:paddingStart="@dimen/layout_padding_default_size"
-        android:paddingEnd="@dimen/layout_padding_default_size"
         android:background="@color/title_main"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recycler" >
 
-        <TextView
+        <Button
+            android:id="@+id/bt_home"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:fontFamily="@font/dos_m"
+            android:text="PATH"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white" />
+
+<!--        <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +33,7 @@
             android:fontFamily="@font/dos_m"
             android:text="Path"
             android:textSize="@dimen/recycler_item_text_size"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"/>-->
 
         <TextView
             android:id="@+id/tv_path"
@@ -56,7 +64,7 @@
         android:paddingStart="@dimen/layout_padding_default_size"
         android:paddingEnd="@dimen/layout_padding_default_size"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:gravity="center|end"
         android:background="@color/title_main"
         app:layout_constraintTop_toBottomOf="@id/recycler"
         app:layout_constraintBottom_toTopOf="@id/lay_bottom_sub" >
@@ -91,8 +99,26 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/title_item_margin"
             android:fontFamily="@font/dos_m"
             android:text=" Dir"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/tv_imgs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dos_m"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white"
+            tools:text="10"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dos_m"
+            android:text=" IMAGE"
             android:textSize="@dimen/recycler_item_text_size"
             android:textColor="@android:color/black"/>
 
@@ -102,12 +128,75 @@
         android:id="@+id/lay_bottom_sub"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_item_height"
-        android:paddingStart="@dimen/layout_padding_default_size"
-        android:paddingEnd="@dimen/layout_padding_default_size"
         android:orientation="horizontal"
         android:background="@color/title_sub"
         app:layout_constraintTop_toBottomOf="@id/lay_bottom_main"
         app:layout_constraintBottom_toBottomOf="parent" >
+
+        <Button
+            android:id="@+id/bt_grid"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:fontFamily="@font/dos_m"
+            android:text="GRID"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/black" />
+
+        <Button
+            android:id="@+id/bt_image"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:fontFamily="@font/dos_m"
+            android:text="IMAGE"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/black" />
+
+        <Button
+            android:id="@+id/bt_zip"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:fontFamily="@font/dos_m"
+            android:text="ZIP"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@android:color/black" />
+
+        <Button
+            android:id="@+id/bt_doc"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:fontFamily="@font/dos_m"
+            android:text="DOC"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
