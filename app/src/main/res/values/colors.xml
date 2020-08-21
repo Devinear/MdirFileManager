@@ -14,7 +14,7 @@
     <color name="type_green_1">#4CF943</color>
     <color name="type_green_2">#139902</color>
 
-    <color name="layout_top">#C4C2C2</color>
-    <color name="layout_bottom">#387D7C</color>
+    <color name="title_main">#C4C2C2</color>
+    <color name="title_sub">#387D7C</color>
 
 </resources>

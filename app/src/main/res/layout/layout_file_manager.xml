@@ -11,8 +11,8 @@
         android:layout_height="@dimen/recycler_item_height"
         android:paddingStart="@dimen/layout_padding_default_size"
         android:paddingEnd="@dimen/layout_padding_default_size"
-        android:background="@color/layout_top"
-        android:gravity="center|start"
+        android:background="@color/title_main"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/recycler" >
@@ -22,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/recycler_item_margin_default"
-            android:textAlignment="viewStart"
             android:fontFamily="@font/dos_m"
             android:text="Path"
             android:textSize="@dimen/recycler_item_text_size"
@@ -33,7 +32,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="viewStart"
             android:fontFamily="@font/dos_m"
             android:text="Path"
             android:textSize="@dimen/recycler_item_text_size"
@@ -48,18 +46,67 @@
         app:layout_constraintVertical_weight="1"
         android:background="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/lay_top"
-        app:layout_constraintBottom_toTopOf="@id/lay_bottom"
+        app:layout_constraintBottom_toTopOf="@id/lay_bottom_main"
         tools:listitem="@layout/item_file" />
 
     <LinearLayout
-        android:id="@+id/lay_bottom"
+        android:id="@+id/lay_bottom_main"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_item_height"
         android:paddingStart="@dimen/layout_padding_default_size"
         android:paddingEnd="@dimen/layout_padding_default_size"
         android:orientation="horizontal"
-        android:background="@color/layout_bottom"
+        android:gravity="center_vertical"
+        android:background="@color/title_main"
         app:layout_constraintTop_toBottomOf="@id/recycler"
+        app:layout_constraintBottom_toTopOf="@id/lay_bottom_sub" >
+
+        <TextView
+            android:id="@+id/tv_files"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dos_m"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white"
+            tools:text="10"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/title_item_margin"
+            android:fontFamily="@font/dos_m"
+            android:text=" File"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/tv_dirs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dos_m"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/white"
+            tools:text="10"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dos_m"
+            android:text=" Dir"
+            android:textSize="@dimen/recycler_item_text_size"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lay_bottom_sub"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycler_item_height"
+        android:paddingStart="@dimen/layout_padding_default_size"
+        android:paddingEnd="@dimen/layout_padding_default_size"
+        android:orientation="horizontal"
+        android:background="@color/title_sub"
+        app:layout_constraintTop_toBottomOf="@id/lay_bottom_main"
         app:layout_constraintBottom_toBottomOf="parent" >
 
     </LinearLayout>
