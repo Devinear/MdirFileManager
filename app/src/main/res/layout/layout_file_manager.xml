@@ -25,16 +25,6 @@
             android:textSize="@dimen/recycler_item_text_size"
             android:textColor="@android:color/white" />
 
-<!--        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/recycler_item_margin_default"
-            android:fontFamily="@font/dos_m"
-            android:text="Path"
-            android:textSize="@dimen/recycler_item_text_size"
-            android:textColor="@android:color/black"/>-->
-
         <TextView
             android:id="@+id/tv_path"
             android:layout_width="0dp"
