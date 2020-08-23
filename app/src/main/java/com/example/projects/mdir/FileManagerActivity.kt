@@ -12,11 +12,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.R
+import com.example.projects.databinding.LayoutFileManagerBinding
 
 class FileManagerActivity : AppCompatActivity() {
+
+    private lateinit var binding : LayoutFileManagerBinding
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapter: FileAdapter = FileAdapter(this)
@@ -24,14 +27,14 @@ class FileManagerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_file_manager)
+//        setContentView(R.layout.layout_file_manager)
         checkPermission()
 
-        findViewById<RecyclerView>(R.id.recycler).also {
-            it.layoutManager = LinearLayoutManager(this@FileManagerActivity)
-            it.adapter = adapter
+        binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
+        binding.recycler.apply {
+            layoutManager = LinearLayoutManager(this@FileManagerActivity)
+            adapter = adapter
         }
-
         adapter.isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
         adapter.refreshDir()
     }
