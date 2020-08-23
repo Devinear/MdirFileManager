@@ -30,8 +30,6 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
     var isPortrait = true // ORIENTATION_PORTRAIT
     var isHideShow = false
 
-    data class FileItem(var name: String, var type: FileType, var ext: String, var byteSize: Long, var time: String)
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.tv_name)
         val type: TextView = itemView.findViewById(R.id.tv_type)
