@@ -31,10 +31,9 @@ class FileManagerActivity : AppCompatActivity() {
         checkPermission()
 
         binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
-        binding.recycler.apply {
-            layoutManager = LinearLayoutManager(this@FileManagerActivity)
-            adapter = adapter
-        }
+        binding.recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
+        binding.recycler.adapter = adapter
+
         adapter.isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
         adapter.refreshDir()
     }
