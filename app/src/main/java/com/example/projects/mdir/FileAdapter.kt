@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.R
+import com.example.projects.databinding.ItemFileBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
@@ -30,21 +31,28 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
     var isPortrait = true // ORIENTATION_PORTRAIT
     var isHideShow = false
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name: TextView = itemView.findViewById(R.id.tv_name)
-        val type: TextView = itemView.findViewById(R.id.tv_type)
-        val size: TextView = itemView.findViewById(R.id.tv_size)
-        val time: TextView = itemView.findViewById(R.id.tv_time)
+    class ViewHolder(private val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
+            if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
+                binding.tvName.text = item.name
+                binding.tvType.text = item.type.abbr
+                binding.tvSize.text = ""
+            }
+            else {
+                binding.tvName.text = item.name
+                binding.tvType.text = item.ext
+                binding.tvSize.text = FileUtil.getFileSize(item.byteSize)
+            }
+            binding.tvTime.text = item.time
+            binding.tvName.setTextColor(color)
+            binding.tvType.setTextColor(color)
+            binding.tvSize.visibility = if(isPortrait) View.GONE else View.VISIBLE
+            binding.tvTime.visibility = if(isPortrait) View.GONE else if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(
-        LayoutInflater.from(parent.context).inflate(
-            R.layout.item_file,
-            parent,
-            false
-        )
-    )
+            = ViewHolder(ItemFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun getItemCount(): Int = items.size
 
@@ -52,23 +60,9 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
         Log.d(TAG, "onBindViewHolder Position:$position Portrait:$isPortrait")
         with(holder) {
             val item : FileItem =  items[position]
-            val color = item.type.color
+            val color = context.getColor(item.type.color)
 
-            if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
-                name.text = item.name
-                type.text = item.type.abbr
-                size.text = ""
-            }
-            else {
-                name.text = item.name
-                type.text = item.ext
-                size.text = FileUtil.getFileSize(item.byteSize)
-            }
-            time.text = item.time
-            name.setTextColor(context.getColor(color))
-            type.setTextColor(context.getColor(color))
-            size.visibility = if(isPortrait) View.GONE else View.VISIBLE
-            time.visibility = if(isPortrait) View.GONE else if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
+            onBind(item, color, isPortrait)
 
             itemView.setOnClickListener {
                 if(item.type == FileType.UpDir) {
