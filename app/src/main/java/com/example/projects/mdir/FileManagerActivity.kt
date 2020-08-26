@@ -33,12 +33,16 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
         checkPermission()
 
         binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
-        binding.recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
-        binding.recycler.adapter = adapter
+        binding.apply {
+            recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
+            recycler.adapter = adapter
+        }
 
-        adapter.stateListener = this
-        adapter.isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
-        adapter.refreshDir()
+        adapter.apply {
+            stateListener = this@FileManagerActivity
+            isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
+            refreshDir()
+        }
     }
 
     private fun checkPermission() {
