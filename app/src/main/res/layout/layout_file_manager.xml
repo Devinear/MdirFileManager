@@ -5,7 +5,7 @@
     
     <data>
         <variable
-            name="vm"
+            name="activity"
             type="com.example.projects.mdir.FileManagerActivity" />
     </data>
 
@@ -39,10 +39,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/dos_m"
-                android:text="Path"
+                android:text="@{activity.livePath}"
                 android:textSize="@dimen/recycler_item_text_size"
                 android:textColor="@android:color/black"
-                tools:text="C:\"/>
+                tools:text=".."/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

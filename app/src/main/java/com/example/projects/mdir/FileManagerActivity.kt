@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFileManagerBinding
@@ -26,6 +27,8 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapter: FileAdapter = FileAdapter(this)
 
+    val livePath = MutableLiveData<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
@@ -36,6 +39,10 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
         binding.apply {
             recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
             recycler.adapter = adapter
+
+            // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
+            lifecycleOwner = this@FileManagerActivity
+            activity = this@FileManagerActivity
         }
 
         adapter.apply {
@@ -43,6 +50,8 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
             isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
             refreshDir()
         }
+
+        livePath.value = ".."
     }
 
     private fun checkPermission() {
@@ -93,7 +102,8 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
     }
 
     override fun notifyPath(path: String) {
-        binding.tvPath.text = "..${path.removePrefix(FileUtil.ROOT)}"
+//        binding.tvPath.text = "..${path.removePrefix(FileUtil.ROOT)}"
+        livePath.value = "..${path.removePrefix(FileUtil.ROOT)}"
     }
 
     override fun notifyDirCount(count: Int) {
