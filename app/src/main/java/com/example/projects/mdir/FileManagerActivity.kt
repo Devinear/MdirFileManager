@@ -16,8 +16,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFileManagerBinding
+import com.example.projects.mdir.`interface`.StateChangeListener
 
-class FileManagerActivity : AppCompatActivity() {
+class FileManagerActivity : AppCompatActivity(), StateChangeListener {
 
     private lateinit var binding : LayoutFileManagerBinding
 
@@ -34,6 +35,7 @@ class FileManagerActivity : AppCompatActivity() {
         binding.recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
         binding.recycler.adapter = adapter
 
+        adapter.stateListener = this
         adapter.isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
         adapter.refreshDir()
     }
@@ -83,6 +85,11 @@ class FileManagerActivity : AppCompatActivity() {
             }
             else -> { false }
         }
+    }
+
+    override fun notifyPath(path: String) {
+        Log.d(TAG, "notifyPath Path:$path")
+        binding.tvPath.text = "$path"
     }
 
     companion object {

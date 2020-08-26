@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.R
 import com.example.projects.databinding.ItemFileBinding
+import com.example.projects.mdir.`interface`.StateChangeListener
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
@@ -29,10 +30,14 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
 
     private var path: String = ""
     private val items = mutableListOf<FileItem>()
+
     var isPortrait = true // ORIENTATION_PORTRAIT
     var isHideShow = false
 
+    var stateListener : StateChangeListener? = null
+
     class ViewHolder(private val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
             binding.tvName.text = item.name
             binding.tvTime.text = item.time
@@ -180,12 +185,8 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
                     }
                 })
             }
-//            file.listFiles(FileFilter {
-//                pathname -> pathname.isDirectory
-//            }).forEach {
-//
-//            }
         }
+        stateListener?.notifyPath(path = path)
         notifyDataSetChanged()
     }
 }
