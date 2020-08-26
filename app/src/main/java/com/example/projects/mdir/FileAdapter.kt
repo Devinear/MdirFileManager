@@ -8,16 +8,14 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.R
 import com.example.projects.databinding.ItemFileBinding
-import com.example.projects.mdir.`interface`.StateChangeListener
+import com.example.projects.mdir.listener.StateChangeListener
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
-import kotlinx.android.synthetic.main.item_file.view.*
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
