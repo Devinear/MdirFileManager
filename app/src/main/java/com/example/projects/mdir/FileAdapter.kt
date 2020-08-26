@@ -184,6 +184,22 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
                 })
             }
         }
+
+        var dirs = 0
+        var files = 0
+        var images = 0
+        items.forEach {
+            when(it.type) {
+                FileType.UpDir -> { }
+                FileType.Dir -> { dirs += 1 }
+                FileType.Image -> { images += 1 }
+                else -> { files += 1 }
+            }
+        }
+        stateListener?.notifyDirCount(count = dirs)
+        stateListener?.notifyFileCount(count = files)
+        stateListener?.notifyImageCount(count = images)
+
         stateListener?.notifyPath(path = path)
         notifyDataSetChanged()
     }

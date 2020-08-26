@@ -89,8 +89,19 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
     }
 
     override fun notifyPath(path: String) {
-        Log.d(TAG, "notifyPath Path:$path")
         binding.tvPath.text = "..${path.removePrefix(FileUtil.ROOT)}"
+    }
+
+    override fun notifyDirCount(count: Int) {
+        binding.tvDirs.text = "$count"
+    }
+
+    override fun notifyFileCount(count: Int) {
+        binding.tvFiles.text = "$count"
+    }
+
+    override fun notifyImageCount(count: Int) {
+        binding.tvImgs.text = "$count"
     }
 
     companion object {
