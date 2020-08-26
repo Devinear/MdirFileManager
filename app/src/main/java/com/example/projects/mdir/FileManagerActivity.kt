@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFileManagerBinding
+import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.listener.StateChangeListener
 
 class FileManagerActivity : AppCompatActivity(), StateChangeListener {
@@ -89,7 +90,7 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
 
     override fun notifyPath(path: String) {
         Log.d(TAG, "notifyPath Path:$path")
-        binding.tvPath.text = "$path"
+        binding.tvPath.text = "..${path.removePrefix(FileUtil.ROOT)}"
     }
 
     companion object {
