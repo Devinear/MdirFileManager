@@ -192,7 +192,10 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
             when(it.type) {
                 FileType.UpDir -> { }
                 FileType.Dir -> { dirs += 1 }
-                FileType.Image -> { images += 1 }
+                FileType.Image -> {
+                    images += 1
+                    files += 1
+                }
                 else -> { files += 1 }
             }
         }
