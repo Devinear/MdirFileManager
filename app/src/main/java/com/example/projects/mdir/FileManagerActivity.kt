@@ -28,6 +28,10 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
     private val adapter: FileAdapter = FileAdapter(this)
 
     val livePath = MutableLiveData<String>()
+    val liveDirs = MutableLiveData<Int>()
+    val liveFiles = MutableLiveData<Int>()
+    val liveImages = MutableLiveData<Int>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -51,7 +55,10 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
             refreshDir()
         }
 
-        livePath.value = ".."
+//        livePath.value = ".."
+//        liveDirs.value = 0
+//        liveFiles.value = 0
+//        liveImages.value = 0
     }
 
     private fun checkPermission() {
@@ -107,15 +114,18 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
     }
 
     override fun notifyDirCount(count: Int) {
-        binding.tvDirs.text = "$count"
+//        binding.tvDirs.text = "$count"
+        liveDirs.value = count
     }
 
     override fun notifyFileCount(count: Int) {
-        binding.tvFiles.text = "$count"
+//        binding.tvFiles.text = "$count"
+        liveFiles.value = count
     }
 
     override fun notifyImageCount(count: Int) {
-        binding.tvImgs.text = "$count"
+//        binding.tvImgs.text = "$count"
+        liveImages.value = count
     }
 
     companion object {
