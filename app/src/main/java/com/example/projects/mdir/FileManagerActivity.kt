@@ -22,10 +22,9 @@ import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.listener.OnFileClickListener
-import com.example.projects.mdir.listener.OnStateChangeListener
 import java.io.File
 
-class FileManagerActivity : AppCompatActivity(), OnStateChangeListener, OnFileClickListener {
+class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     private lateinit var binding : LayoutFileManagerBinding
 
@@ -62,7 +61,6 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener, OnFileCl
         }
 
         adapter.apply {
-            stateListener = this@FileManagerActivity
             clickListener = this@FileManagerActivity
             isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
             refreshDir()
@@ -116,22 +114,6 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener, OnFileCl
         }
     }
 
-    override fun notifyPath(path: String) {
-        livePath.value = "..${path.removePrefix(FileUtil.ROOT)}"
-    }
-
-    override fun notifyDirCount(count: Int) {
-        liveDirs.value = count
-    }
-
-    override fun notifyFileCount(count: Int) {
-        liveFiles.value = count
-    }
-
-    override fun notifyImageCount(count: Int) {
-        liveImages.value = count
-    }
-
     override fun onClickFileItem(item: FileItem) {
         when (item.type) {
             FileType.UpDir -> {
@@ -140,10 +122,12 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener, OnFileCl
                     return
                 }
                 currentPath = FileUtil.getUpDirPath(currentPath)
+                livePath.value = "..${currentPath.removePrefix(FileUtil.ROOT)}"
                 refreshDir()
             }
             FileType.Dir -> {
                 currentPath = "$currentPath/${item.name}"
+                livePath.value = "..${currentPath.removePrefix(FileUtil.ROOT)}"
                 refreshDir()
             }
             else -> {
@@ -168,8 +152,10 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener, OnFileCl
 
     private fun refreshDir() {
         Log.d(TAG, "refreshDir")
-        if(currentPath.isEmpty())
+        if(currentPath.isEmpty()) {
             currentPath = FileUtil.ROOT
+            livePath.value = ".."
+        }
 
         listFileItem.clear()
         listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow))
@@ -188,12 +174,9 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener, OnFileCl
                 else -> { files += 1 }
             }
         }
-//        stateListener?.notifyDirCount(count = dirs)
-//        stateListener?.notifyFileCount(count = files)
-//        stateListener?.notifyImageCount(count = images)
-//
-//        stateListener?.notifyPath(path = currentPath)
-//        notifyDataSetChanged()
+        liveDirs.value = dirs
+        liveFiles.value = files
+        liveImages.value = images
     }
 
     companion object {

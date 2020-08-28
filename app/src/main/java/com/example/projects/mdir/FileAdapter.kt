@@ -12,7 +12,6 @@ import com.example.projects.databinding.ItemFileBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.listener.OnFileClickListener
-import com.example.projects.mdir.listener.OnStateChangeListener
 
 class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
 
@@ -20,7 +19,6 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
     var isPortrait = true // ORIENTATION_PORTRAIT
 
     var clickListener : OnFileClickListener? = null
-    var stateListener : OnStateChangeListener? = null
 
     class ViewHolder(private val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
 
