@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:bind="http://schemas.android.com/tools" >
     
     <data>
+        <import type="androidx.databinding.ObservableArrayList" />
+        <import type="com.example.projects.mdir.FileItem" />
+        
         <variable
             name="activity"
             type="com.example.projects.mdir.FileManagerActivity" />
+        <variable
+            name="items"
+            type="ObservableArrayList&lt;FileItem&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,6 +74,8 @@
             android:background="@android:color/black"
             app:layout_constraintTop_toBottomOf="@id/lay_top_inner"
             app:layout_constraintBottom_toTopOf="@id/lay_bottom_inner"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            bind:item="@{items}"
             tools:listitem="@layout/item_file" />
 
         <LinearLayout

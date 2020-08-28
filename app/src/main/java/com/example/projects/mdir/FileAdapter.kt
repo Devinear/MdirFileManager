@@ -2,36 +2,24 @@ package com.example.projects.mdir
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projects.R
 import com.example.projects.databinding.ItemFileBinding
-import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.listener.OnStateChangeListener
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
 
-    companion object {
-        const val TAG = "FileAdapter"
-    }
-
-    private var path: String = ""
     private val items = mutableListOf<FileItem>()
-
     var isPortrait = true // ORIENTATION_PORTRAIT
-    var isHideShow = false
 
+    var clickListener : OnFileClickListener? = null
     var stateListener : OnStateChangeListener? = null
 
     class ViewHolder(private val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -82,7 +70,8 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
             onBind(item, color, isPortrait)
 
             itemView.setOnClickListener {
-                onClickItem(item)
+//                onClickItem(item)
+                clickListener?.onClickFileItem(item)
             }
             itemView.setOnTouchListener { _, event ->
                 onTouch(context, event, item)
@@ -91,66 +80,14 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
         }
     }
 
-    private fun onClickItem(item: FileItem) {
-        if(item.type == FileType.UpDir) {
-            if(path == FileUtil.ROOT) {
-                Toast.makeText(context, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                path = FileUtil.getUpDirPath(path)
-                refreshDir()
-            }
-        }
-        else if(item.type == FileType.Dir){
-            path = "$path/${item.name}"
-            refreshDir()
-        }
-        else {
-            // 일반 파일
-            Toast.makeText(context, item.name, Toast.LENGTH_SHORT).show()
-
-            val sendIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                type = when(FileUtil.getFileExtType(item.ext)) {
-                    ExtType.Image -> "image/*"
-                    ExtType.Video -> "video/*"
-                    ExtType.Audio -> "audio/*"
-                    else -> "application/*"
-                }
-                putExtra(Intent.EXTRA_STREAM, File("$path/${item.name}").toURI())
-            }
-            // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
-            context.startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
-        }
+    fun setFileItems(list: List<FileItem>) {
+        Log.d(TAG, "setFileItems")
+        items.clear()
+        items.addAll(list)
+        notifyDataSetChanged()
     }
 
-    fun refreshDir() {
-        Log.d(TAG, "refreshDir")
-        if(path.isEmpty())
-            path = FileUtil.ROOT
-
-        items.clear()
-        items.addAll(FileUtil.getChildFileItems(context, path, isHideShow))
-
-        var dirs = 0
-        var files = 0
-        var images = 0
-        items.forEach {
-            when(it.type) {
-                FileType.UpDir -> { }
-                FileType.Dir -> { dirs += 1 }
-                FileType.Image -> {
-                    images += 1
-                    files += 1
-                }
-                else -> { files += 1 }
-            }
-        }
-        stateListener?.notifyDirCount(count = dirs)
-        stateListener?.notifyFileCount(count = files)
-        stateListener?.notifyImageCount(count = images)
-
-        stateListener?.notifyPath(path = path)
-        notifyDataSetChanged()
+    companion object {
+        const val TAG = "FileAdapter"
     }
 }

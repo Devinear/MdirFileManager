@@ -1,5 +1,6 @@
 package com.example.projects.mdir
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
@@ -13,25 +14,34 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFileManagerBinding
+import com.example.projects.mdir.common.ExtType
+import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.listener.OnStateChangeListener
+import java.io.File
 
-class FileManagerActivity : AppCompatActivity(), OnStateChangeListener {
+class FileManagerActivity : AppCompatActivity(), OnStateChangeListener, OnFileClickListener {
 
     private lateinit var binding : LayoutFileManagerBinding
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapter: FileAdapter = FileAdapter(this)
 
+    // UI
     val livePath = MutableLiveData<String>()
     val liveDirs = MutableLiveData<Int>()
     val liveFiles = MutableLiveData<Int>()
     val liveImages = MutableLiveData<Int>()
 
+    // Value
+    private val listFileItem = ObservableArrayList<FileItem>()
+    private var currentPath: String = ""
+    private var isHideShow : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -41,16 +51,19 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener {
 
         binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
         binding.apply {
-            recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
             recycler.adapter = adapter
 
             // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
             lifecycleOwner = this@FileManagerActivity
             activity = this@FileManagerActivity
+
+            // Bind Item
+            items = listFileItem
         }
 
         adapter.apply {
             stateListener = this@FileManagerActivity
+            clickListener = this@FileManagerActivity
             isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
             refreshDir()
         }
@@ -74,7 +87,7 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener {
                     finish()
                 }
             }
-            adapter.refreshDir()
+            refreshDir()
         }
     }
 
@@ -94,9 +107,9 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.hide_show -> {
-                adapter.isHideShow = !adapter.isHideShow
-                item.isChecked = adapter.isHideShow
-                adapter.refreshDir()
+                isHideShow = !isHideShow
+                item.isChecked = isHideShow
+                refreshDir()
                 true
             }
             else -> { false }
@@ -117,6 +130,70 @@ class FileManagerActivity : AppCompatActivity(), OnStateChangeListener {
 
     override fun notifyImageCount(count: Int) {
         liveImages.value = count
+    }
+
+    override fun onClickFileItem(item: FileItem) {
+        when (item.type) {
+            FileType.UpDir -> {
+                if(currentPath == FileUtil.ROOT) {
+                    Toast.makeText(this, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
+                    return
+                }
+                currentPath = FileUtil.getUpDirPath(currentPath)
+                refreshDir()
+            }
+            FileType.Dir -> {
+                currentPath = "$currentPath/${item.name}"
+                refreshDir()
+            }
+            else -> {
+                // 일반 파일
+                Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
+
+                val sendIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = when(FileUtil.getFileExtType(item.ext)) {
+                        ExtType.Image -> "image/*"
+                        ExtType.Video -> "video/*"
+                        ExtType.Audio -> "audio/*"
+                        else -> "application/*"
+                    }
+                    putExtra(Intent.EXTRA_STREAM, File("$currentPath/${item.name}").toURI())
+                }
+                // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
+                startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
+            }
+        }
+    }
+
+    private fun refreshDir() {
+        Log.d(TAG, "refreshDir")
+        if(currentPath.isEmpty())
+            currentPath = FileUtil.ROOT
+
+        listFileItem.clear()
+        listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow))
+
+        var dirs = 0
+        var files = 0
+        var images = 0
+        listFileItem.forEach {
+            when(it.type) {
+                FileType.UpDir -> { }
+                FileType.Dir -> { dirs += 1 }
+                FileType.Image -> {
+                    images += 1
+                    files += 1
+                }
+                else -> { files += 1 }
+            }
+        }
+//        stateListener?.notifyDirCount(count = dirs)
+//        stateListener?.notifyFileCount(count = files)
+//        stateListener?.notifyImageCount(count = images)
+//
+//        stateListener?.notifyPath(path = currentPath)
+//        notifyDataSetChanged()
     }
 
     companion object {
