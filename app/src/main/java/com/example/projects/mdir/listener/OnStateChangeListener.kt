@@ -1,6 +1,6 @@
 package com.example.projects.mdir.listener
 
-interface StateChangeListener {
+interface OnStateChangeListener {
     fun notifyPath(path: String)
     fun notifyDirCount(count: Int)
     fun notifyFileCount(count: Int)

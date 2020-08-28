@@ -15,7 +15,7 @@ import com.example.projects.databinding.ItemFileBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
-import com.example.projects.mdir.listener.StateChangeListener
+import com.example.projects.mdir.listener.OnStateChangeListener
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,7 +32,7 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
     var isPortrait = true // ORIENTATION_PORTRAIT
     var isHideShow = false
 
-    var stateListener : StateChangeListener? = null
+    var stateListener : OnStateChangeListener? = null
 
     class ViewHolder(private val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
 

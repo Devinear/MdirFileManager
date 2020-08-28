@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFileManagerBinding
 import com.example.projects.mdir.common.FileUtil
-import com.example.projects.mdir.listener.StateChangeListener
+import com.example.projects.mdir.listener.OnStateChangeListener
 
-class FileManagerActivity : AppCompatActivity(), StateChangeListener {
+class FileManagerActivity : AppCompatActivity(), OnStateChangeListener {
 
     private lateinit var binding : LayoutFileManagerBinding
 
