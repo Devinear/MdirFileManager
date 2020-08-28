@@ -129,61 +129,8 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
         if(path.isEmpty())
             path = FileUtil.ROOT
 
-        val file : File = File(path)
-        if(file.exists()) {
-            items.clear()
-            items.add(
-                FileItem(
-                    name = "..",
-                    type = FileType.UpDir,
-                    ext = "",
-                    byteSize = 0L,
-                    time = "00-00-00 00:00"
-                )
-            )
-            val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
-
-            file.listFiles()?.forEach {
-                if(!isHideShow && it.name[0] == '.') {}
-                else {
-                    if (it.isDirectory) {
-                        items.add(
-                            FileItem(
-                                name = it.name, type = FileType.Dir,
-                                ext = "", byteSize = 0L, time = time.format(Date(it.lastModified()))
-                            )
-                        )
-                    }
-                    else {
-                        items.add(
-                            FileItem(
-                                name = FileUtil.getFileName(it.name),
-                                type = FileUtil.toFileType(
-                                    FileUtil.getFileExtType(
-                                        FileUtil.getFileExt(
-                                            it.name
-                                        )
-                                    )
-                                ),
-                                ext = FileUtil.getFileExt(it.name),
-                                byteSize = it.length(),
-                                time = time.format(Date(it.lastModified()))
-                            )
-                        )
-                    }
-                }
-            }
-
-            if(items.isNotEmpty()) {
-                items.sortWith(kotlin.Comparator { o1, o2 ->
-                    when {
-                        o1.type.sort != o2.type.sort  -> { o1.type.sort - o2.type.sort }
-                        o1.ext.compareTo(o2.ext) != 0 -> { o1.ext.compareTo(o2.ext) }
-                        else -> { o1.name.compareTo(o2.name) }
-                    }
-                })
-            }
-        }
+        items.clear()
+        items.addAll(FileUtil.getChildFileItems(context, path, isHideShow))
 
         var dirs = 0
         var files = 0
