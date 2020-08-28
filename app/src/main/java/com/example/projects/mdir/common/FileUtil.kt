@@ -1,6 +1,11 @@
 package com.example.projects.mdir.common
 
+import android.content.Context
 import android.os.Environment
+import com.example.projects.R
+import com.example.projects.mdir.FileItem
+import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 object FileUtil {
@@ -72,6 +77,41 @@ object FileUtil {
             ExtType.Document -> FileType.Document
             else -> FileType.Default
         }
+    }
+
+    fun getChildFileItems(context: Context, path: String, isHideShow: Boolean) : List<FileItem> {
+        val items = mutableListOf<FileItem>()
+
+        val file = File(path)
+        if(file.exists()) {
+            items.clear()
+            items.add(FileItem(name = "..", type = FileType.UpDir, ext = "", byteSize = 0L, time = "00-00-00 00:00"))
+            val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
+
+            file.listFiles()?.forEach {
+                if (isHideShow || it.name[0] != '.') {
+                    if (it.isDirectory) {
+                        items.add(FileItem(name = it.name, type = FileType.Dir,
+                            ext = "", byteSize = 0L, time = time.format(Date(it.lastModified()))))
+                    } else {
+                        items.add(FileItem(name = getFileName(it.name),
+                            type = toFileType(getFileExtType(getFileExt(it.name))),
+                            ext = getFileExt(it.name), byteSize = it.length(),
+                            time = time.format(Date(it.lastModified()))))
+                    }
+                }
+            }
+            if(items.isNotEmpty()) {
+                items.sortWith(kotlin.Comparator { o1, o2 ->
+                    when {
+                        o1.type.sort != o2.type.sort  -> { o1.type.sort - o2.type.sort }
+                        o1.ext.compareTo(o2.ext) != 0 -> { o1.ext.compareTo(o2.ext) }
+                        else -> { o1.name.compareTo(o2.name) }
+                    }
+                })
+            }
+        }
+        return items
     }
 
 }
