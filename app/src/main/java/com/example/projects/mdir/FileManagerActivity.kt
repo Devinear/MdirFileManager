@@ -54,11 +54,6 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
             isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
             refreshDir()
         }
-
-//        livePath.value = ".."
-//        liveDirs.value = 0
-//        liveFiles.value = 0
-//        liveImages.value = 0
     }
 
     private fun checkPermission() {
@@ -109,22 +104,18 @@ class FileManagerActivity : AppCompatActivity(), StateChangeListener {
     }
 
     override fun notifyPath(path: String) {
-//        binding.tvPath.text = "..${path.removePrefix(FileUtil.ROOT)}"
         livePath.value = "..${path.removePrefix(FileUtil.ROOT)}"
     }
 
     override fun notifyDirCount(count: Int) {
-//        binding.tvDirs.text = "$count"
         liveDirs.value = count
     }
 
     override fun notifyFileCount(count: Int) {
-//        binding.tvFiles.text = "$count"
         liveFiles.value = count
     }
 
     override fun notifyImageCount(count: Int) {
-//        binding.tvImgs.text = "$count"
         liveImages.value = count
     }
 
