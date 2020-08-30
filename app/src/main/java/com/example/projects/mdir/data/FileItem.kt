@@ -1,4 +1,4 @@
-package com.example.projects.mdir
+package com.example.projects.mdir.data
 
 import com.example.projects.mdir.common.FileType
 

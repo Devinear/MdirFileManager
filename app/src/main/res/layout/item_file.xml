@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item"
-            type="com.example.projects.mdir.FileItem" />
+            type="com.example.projects.mdir.data.FileItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

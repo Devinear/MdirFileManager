@@ -21,7 +21,9 @@ import com.example.projects.databinding.LayoutFileManagerBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
+import com.example.projects.mdir.view.FileAdapter
 import java.io.File
 
 class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
@@ -45,7 +47,6 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.layout_file_manager)
         checkPermission()
 
         binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)

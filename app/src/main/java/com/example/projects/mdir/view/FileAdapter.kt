@@ -1,4 +1,4 @@
-package com.example.projects.mdir
+package com.example.projects.mdir.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.databinding.ItemFileBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 
 class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {

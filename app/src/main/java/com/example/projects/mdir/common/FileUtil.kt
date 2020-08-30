@@ -3,7 +3,7 @@ package com.example.projects.mdir.common
 import android.content.Context
 import android.os.Environment
 import com.example.projects.R
-import com.example.projects.mdir.FileItem
+import com.example.projects.mdir.data.FileItem
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -91,13 +91,17 @@ object FileUtil {
             file.listFiles()?.forEach {
                 if (isHideShow || it.name[0] != '.') {
                     if (it.isDirectory) {
-                        items.add(FileItem(name = it.name, type = FileType.Dir,
-                            ext = "", byteSize = 0L, time = time.format(Date(it.lastModified()))))
+                        items.add(
+                            FileItem(name = it.name, type = FileType.Dir,
+                            ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())))
+                        )
                     } else {
-                        items.add(FileItem(name = getFileName(it.name),
+                        items.add(
+                            FileItem(name = getFileName(it.name),
                             type = toFileType(getFileExtType(getFileExt(it.name))),
                             ext = getFileExt(it.name), byteSize = it.length(),
-                            time = time.format(Date(it.lastModified()))))
+                            time = time.format(Date(it.lastModified())))
+                        )
                     }
                 }
             }
