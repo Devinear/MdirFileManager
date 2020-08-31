@@ -151,9 +151,9 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         }
     }
 
-    private fun refreshDir() {
+    private fun refreshDir(isHome: Boolean = false) {
         Log.d(TAG, "refreshDir")
-        if(currentPath.isEmpty()) {
+        if(currentPath.isEmpty() || isHome) {
             currentPath = FileUtil.ROOT
             livePath.value = ".."
         }
@@ -179,6 +179,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         liveFiles.value = files
         liveImages.value = images
     }
+
+    fun onClickHome() = refreshDir(isHome = true)
 
     companion object {
         const val TAG = "FileManagerActivity"
