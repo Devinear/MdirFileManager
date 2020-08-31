@@ -13,7 +13,7 @@
             type="com.example.projects.mdir.FileManagerActivity" />
         <variable
             name="items"
-            type="com.example.projects.mdir.data.FileItem" />
+            type="ObservableArrayList&lt;FileItem&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
