@@ -185,6 +185,14 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         refreshDir(isHome = true)
     }
 
+    fun onClickGrid() = Unit
+
+    fun onClickImage() = Unit
+
+    fun onClickZip() = Unit
+
+    fun onClickDoc() = Unit
+
     companion object {
         const val TAG = "FileManagerActivity"
         const val REQUEST_CODE = 1

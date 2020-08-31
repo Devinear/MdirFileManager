@@ -167,7 +167,8 @@
                 android:fontFamily="@font/dos_m"
                 android:text="GRID"
                 android:textSize="@dimen/recycler_item_text_size"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickGrid()}" />
 
             <View
                 android:layout_width="2dp"
@@ -185,7 +186,8 @@
                 android:fontFamily="@font/dos_m"
                 android:text="IMAGE"
                 android:textSize="@dimen/recycler_item_text_size"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickImage()}" />
 
             <View
                 android:layout_width="2dp"
@@ -203,7 +205,8 @@
                 android:fontFamily="@font/dos_m"
                 android:text="ZIP"
                 android:textSize="@dimen/recycler_item_text_size"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickZip()}" />
 
             <View
                 android:layout_width="2dp"
@@ -221,7 +224,8 @@
                 android:fontFamily="@font/dos_m"
                 android:text="DOC"
                 android:textSize="@dimen/recycler_item_text_size"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickDoc()}" />
 
         </LinearLayout>
 
