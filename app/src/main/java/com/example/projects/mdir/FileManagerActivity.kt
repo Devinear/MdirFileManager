@@ -180,7 +180,10 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         liveImages.value = images
     }
 
-    fun onClickHome() = refreshDir(isHome = true)
+    fun onClickHome() {
+        Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
+        refreshDir(isHome = true)
+    }
 
     companion object {
         const val TAG = "FileManagerActivity"
