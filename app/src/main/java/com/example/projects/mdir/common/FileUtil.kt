@@ -82,7 +82,7 @@ object FileUtil {
         }
     }
 
-    fun getChildFileItems(context: Context, path: String, isHideShow: Boolean) : List<FileItem> {
+    fun getChildFileItems(context: Context, path: String, isHideShow: Boolean, isShowType: ShowType = ShowType.All) : List<FileItem> {
         val items = mutableListOf<FileItem>()
 
         val file = File(path)
@@ -99,12 +99,19 @@ object FileUtil {
                             ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())))
                         )
                     } else {
-                        items.add(
-                            FileItem(name = getFileName(it.name),
-                            type = toFileType(getFileExtType(getFileExt(it.name))),
-                            ext = getFileExt(it.name), byteSize = it.length(),
-                            time = time.format(Date(it.lastModified())))
-                        )
+                        val type = toFileType(getFileExtType(getFileExt(it.name)))
+                        val isAddItem = (isShowType == ShowType.All) ||
+                                when(type) {
+                                    FileType.Image    -> isShowType == ShowType.Image
+                                    FileType.Document -> isShowType == ShowType.Document
+                                    FileType.Zip      -> isShowType == ShowType.Zip
+                                    else              -> false
+                                }
+                        if(isAddItem) {
+                            items.add(FileItem(name = getFileName(it.name), type = type,
+                                    ext = getFileExt(it.name), byteSize = it.length(),
+                                    time = time.format(Date(it.lastModified()))))
+                        }
                     }
                 }
             }

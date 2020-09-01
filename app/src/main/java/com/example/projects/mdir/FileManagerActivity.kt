@@ -21,6 +21,7 @@ import com.example.projects.databinding.LayoutFileManagerBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.common.ShowType
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileAdapter
@@ -151,15 +152,15 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         }
     }
 
-    private fun refreshDir(isHome: Boolean = false) {
-        Log.d(TAG, "refreshDir")
+    private fun refreshDir(isHome: Boolean = false, isShowType: ShowType = ShowType.All) {
+        Log.d(TAG, "refreshDir IsHome:$isHome IsShowType:$isShowType")
         if(currentPath.isEmpty() || isHome) {
             currentPath = FileUtil.ROOT
             livePath.value = ".."
         }
 
         listFileItem.clear()
-        listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow))
+        listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow, isShowType))
 
         var dirs = 0
         var files = 0
@@ -187,11 +188,11 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     fun onClickGrid() = Unit
 
-    fun onClickImage() = Unit
+    fun onClickImage() = refreshDir(isShowType = ShowType.Image)
 
-    fun onClickZip() = Unit
+    fun onClickZip() = refreshDir(isShowType = ShowType.Zip)
 
-    fun onClickDoc() = Unit
+    fun onClickDoc() = refreshDir(isShowType = ShowType.Document)
 
     companion object {
         const val TAG = "FileManagerActivity"
