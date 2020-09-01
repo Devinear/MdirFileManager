@@ -62,7 +62,7 @@ object FileUtil {
                 ExtType.Video
             "m4a", "aac", "flac", "gsm", "mp3" ->
                 ExtType.Audio
-            "doc", "xls", "ppt", "docx", "xlsx", "pptx", "pdf" ->
+            "doc", "hwp", "xls", "ppt", "docx", "xlsx", "pptx", "pdf" ->
                 ExtType.Document
             "zip", "7z", "rar" ->
                 ExtType.Zip
