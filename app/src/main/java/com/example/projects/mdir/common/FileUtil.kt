@@ -102,8 +102,8 @@ object FileUtil {
                         val type = toFileType(getFileExtType(getFileExt(it.name)))
                         val isAddItem = (isShowType == ShowType.All) ||
                                 when(type) {
-                                    FileType.Image    -> isShowType == ShowType.Image
-                                    FileType.Document -> isShowType == ShowType.Document
+                                    FileType.Image    -> isShowType == ShowType.Img
+                                    FileType.Document -> isShowType == ShowType.Doc
                                     FileType.Zip      -> isShowType == ShowType.Zip
                                     else              -> false
                                 }
