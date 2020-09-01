@@ -92,6 +92,25 @@
             app:layout_constraintBottom_toTopOf="@id/lay_bottom_outer" >
 
             <TextView
+                android:id="@+id/tv_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dos_m"
+                android:text="@{activity.liveShow.toString()}"
+                android:textSize="@dimen/recycler_item_text_size"
+                android:textColor="@android:color/white"
+                tools:text="All"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/title_item_margin"
+                android:fontFamily="@font/dos_m"
+                android:text=" Show"
+                android:textSize="@dimen/recycler_item_text_size"
+                android:textColor="@android:color/black"/>
+
+            <TextView
                 android:id="@+id/tv_files"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,6 +159,7 @@
                 tools:text="10"/>
 
             <TextView
+                android:id="@+id/tv_imgs_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dos_m"

@@ -36,6 +36,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     val liveDirs = MutableLiveData<Int>()
     val liveFiles = MutableLiveData<Int>()
     val liveImages = MutableLiveData<Int>()
+    val liveShow = MutableLiveData<String>()
 
     // Value
     private val listFileItem = ObservableArrayList<FileItem>()
@@ -176,6 +177,10 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         liveDirs.value = dirs
         liveFiles.value = files
         liveImages.value = images
+
+        liveShow.value = isShowType.toString()
+        binding.tvImgs.visibility = if(isShowType == ShowType.All) View.VISIBLE else View.GONE
+        binding.tvImgsName.visibility = if(isShowType == ShowType.All) View.VISIBLE else View.GONE
     }
 
     fun onClickHome() {
