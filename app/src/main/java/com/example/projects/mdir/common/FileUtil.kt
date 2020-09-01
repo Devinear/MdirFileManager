@@ -64,6 +64,8 @@ object FileUtil {
                 ExtType.Audio
             "doc", "xls", "ppt", "docx", "xlsx", "pptx", "pdf" ->
                 ExtType.Document
+            "zip", "7z", "rar" ->
+                ExtType.Zip
             else ->
                 ExtType.Default
         }
@@ -75,6 +77,7 @@ object FileUtil {
             ExtType.Image -> FileType.Image
             ExtType.Video -> FileType.Video
             ExtType.Document -> FileType.Document
+            ExtType.Zip -> FileType.Zip
             else -> FileType.Default
         }
     }
