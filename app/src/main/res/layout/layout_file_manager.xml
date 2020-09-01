@@ -75,7 +75,6 @@
             android:background="@android:color/black"
             app:layout_constraintTop_toBottomOf="@id/lay_top_inner"
             app:layout_constraintBottom_toTopOf="@id/lay_bottom_inner"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             bind:item="@{items}"
             tools:listitem="@layout/item_file" />
 

@@ -13,12 +13,11 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFileManagerBinding
-import com.example.projects.mdir.common.ExtType
-import com.example.projects.mdir.common.FileType
-import com.example.projects.mdir.common.FileUtil
-import com.example.projects.mdir.common.ShowType
+import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileAdapter
@@ -42,6 +41,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     private val listFileItem = ObservableArrayList<FileItem>()
     private var currentPath: String = ""
     private var isHideShow : Boolean = false
+    private var layoutType = LayoutType.Linear
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -51,6 +51,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
         binding.apply {
             recycler.adapter = adapter
+            recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
+            layoutType = LayoutType.Linear
 
             // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
             lifecycleOwner = this@FileManagerActivity
@@ -188,7 +190,17 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         refreshDir(isHome = true)
     }
 
-    fun onClickGrid() = Unit
+    fun onClickGrid() {
+        binding.recycler.layoutManager =
+            if(layoutType == LayoutType.Linear) {
+                layoutType = LayoutType.Grid
+                GridLayoutManager(this, 3)
+            }
+            else {
+                layoutType = LayoutType.Linear
+                LinearLayoutManager(this)
+            }
+    }
 
     fun onClickAll() = refreshDir(isShowType = ShowType.All)
 
