@@ -31,3 +31,8 @@ enum class ShowType {
     Doc,
     All
 }
+
+enum class LayoutType {
+    Linear,
+    Grid
+}
