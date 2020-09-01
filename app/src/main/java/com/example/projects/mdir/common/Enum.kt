@@ -22,3 +22,10 @@ enum class ExtType {
     Document,
     Default
 }
+
+enum class ShowType {
+    Image,
+    Zip,
+    Document,
+    All
+}
