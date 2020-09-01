@@ -179,8 +179,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         liveImages.value = images
 
         liveShow.value = isShowType.toString()
-        binding.tvImgs.visibility = if(images > 0 || isShowType == ShowType.All) View.VISIBLE else View.GONE
-        binding.tvImgsName.visibility = if(images > 0 || isShowType == ShowType.All) View.VISIBLE else View.GONE
+        binding.tvImgs.visibility = if(images > 0 && isShowType == ShowType.All) View.VISIBLE else View.GONE
+        binding.tvImgsName.visibility = if(images > 0 && isShowType == ShowType.All) View.VISIBLE else View.GONE
     }
 
     fun onClickHome() {
