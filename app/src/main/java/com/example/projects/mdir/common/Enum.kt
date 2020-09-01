@@ -26,8 +26,8 @@ enum class ExtType {
 }
 
 enum class ShowType {
-    Image,
+    Img,
     Zip,
-    Document,
+    Doc,
     All
 }
