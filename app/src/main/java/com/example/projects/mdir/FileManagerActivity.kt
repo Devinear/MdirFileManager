@@ -5,10 +5,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.Surface
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -187,6 +184,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     }
 
     fun onClickGrid() = Unit
+
+    fun onClickAll() = refreshDir(isShowType = ShowType.All)
 
     fun onClickImage() = refreshDir(isShowType = ShowType.Img)
 
