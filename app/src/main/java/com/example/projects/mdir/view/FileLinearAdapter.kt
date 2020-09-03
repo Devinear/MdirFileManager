@@ -14,7 +14,7 @@ import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 
-class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapter.ViewHolder>() {
+class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<FileLinearAdapter.ViewHolder>() {
 
     private val items = mutableListOf<FileItem>()
     var isPortrait = true // ORIENTATION_PORTRAIT
@@ -68,10 +68,7 @@ class FileAdapter(private val context: Context) : RecyclerView.Adapter<FileAdapt
 
             onBind(item, color, isPortrait)
 
-            itemView.setOnClickListener {
-//                onClickItem(item)
-                clickListener?.onClickFileItem(item)
-            }
+            itemView.setOnClickListener { clickListener?.onClickFileItem(item) }
             itemView.setOnTouchListener { _, event ->
                 onTouch(context, event, item)
                 return@setOnTouchListener false

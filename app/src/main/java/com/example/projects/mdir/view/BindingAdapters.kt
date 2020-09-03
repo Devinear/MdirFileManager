@@ -10,7 +10,7 @@ object BindingAdapters {
     @JvmStatic
     @BindingAdapter("bind:item")
     fun bindItem(recyclerView: RecyclerView, items: ObservableArrayList<FileItem>) {
-        val adapter : FileAdapter = recyclerView.adapter as FileAdapter
-        adapter.setFileItems(items)
+        val linearAdapter : FileLinearAdapter = recyclerView.adapter as FileLinearAdapter
+        linearAdapter.setFileItems(items)
     }
 }

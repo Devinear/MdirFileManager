@@ -20,7 +20,7 @@ import com.example.projects.databinding.LayoutFileManagerBinding
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
-import com.example.projects.mdir.view.FileAdapter
+import com.example.projects.mdir.view.FileLinearAdapter
 import java.io.File
 
 class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
@@ -28,7 +28,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     private lateinit var binding : LayoutFileManagerBinding
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapter: FileAdapter = FileAdapter(this)
+    private val linearAdapter: FileLinearAdapter = FileLinearAdapter(this)
 
     // UI
     val livePath = MutableLiveData<String>()
@@ -50,7 +50,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
         binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
         binding.apply {
-            recycler.adapter = adapter
+            recycler.adapter = linearAdapter
             recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
             layoutType = LayoutType.Linear
 
@@ -62,7 +62,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
             items = listFileItem
         }
 
-        adapter.apply {
+        linearAdapter.apply {
             clickListener = this@FileManagerActivity
             isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
             refreshDir()
@@ -94,8 +94,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         Log.d(TAG, "onConfigurationChanged ORIENTATION:${newConfig.orientation}")
-        adapter.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
-        adapter.notifyDataSetChanged()
+        linearAdapter.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
+        linearAdapter.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
