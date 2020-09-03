@@ -12,7 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/recycler_item_height"
+        android:layout_height="@dimen/recycler_linear_item_height"
         android:background="@android:color/black" >
 
         <TextView
