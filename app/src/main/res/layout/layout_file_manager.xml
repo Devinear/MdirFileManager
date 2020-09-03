@@ -75,8 +75,10 @@
             android:background="@android:color/black"
             app:layout_constraintTop_toBottomOf="@id/lay_top_inner"
             app:layout_constraintBottom_toTopOf="@id/lay_bottom_inner"
-            bind:item="@{items}"
-            tools:listitem="@layout/item_file" />
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:spanCount="3"
+            tools:listitem="@layout/item_grid_file"
+            bind:item="@{items}" />
 
         <LinearLayout
             android:id="@+id/lay_bottom_inner"
