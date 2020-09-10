@@ -1,6 +1,7 @@
 package com.example.projects.mdir.common
 
 import android.content.Context
+import android.graphics.drawable.BitmapDrawable
 import android.os.Environment
 import com.example.projects.R
 import com.example.projects.mdir.data.FileItem
@@ -108,9 +109,13 @@ object FileUtil {
                                     else              -> false
                                 }
                         if(isAddItem) {
+                            var image : BitmapDrawable? = null
+                            if(type == FileType.Image) {
+                                image = BitmapDrawable.createFromPath(it.absolutePath) as BitmapDrawable
+                            }
                             items.add(FileItem(name = getFileName(it.name), type = type,
                                     ext = getFileExt(it.name), byteSize = it.length(),
-                                    time = time.format(Date(it.lastModified()))))
+                                    time = time.format(Date(it.lastModified())), drawable = image))
                         }
                     }
                 }
