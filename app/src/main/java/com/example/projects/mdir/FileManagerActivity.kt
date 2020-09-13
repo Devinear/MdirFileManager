@@ -193,10 +193,12 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     fun onClickGrid() {
         binding.recycler.layoutManager =
             if(layoutType == LayoutType.Linear) {
+                binding.btGrid.text = "GRID"
                 layoutType = LayoutType.Grid
                 GridLayoutManager(this, 3)
             }
             else {
+                binding.btGrid.text = "LIST"
                 layoutType = LayoutType.Linear
                 LinearLayoutManager(this)
             }

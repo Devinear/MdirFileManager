@@ -186,7 +186,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
-                android:text="GRID"
+                android:text="LIST"
                 android:textSize="@dimen/recycler_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickGrid()}" />
