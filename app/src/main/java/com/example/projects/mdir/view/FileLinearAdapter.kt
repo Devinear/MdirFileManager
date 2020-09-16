@@ -84,6 +84,7 @@ class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<Fil
     }
 
     companion object {
-        const val TAG = "FileAdapter"
+        const val TAG = "FileLinearAdapter"
     }
+
 }
