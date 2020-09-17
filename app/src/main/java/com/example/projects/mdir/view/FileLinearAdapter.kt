@@ -24,32 +24,38 @@ class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<Fil
     class ViewHolder(private val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
-            binding.tvName.text = item.name
-            binding.tvTime.text = item.time
-            if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
-                binding.tvType.text = item.type.abbr
-                binding.tvSize.text = ""
+            binding.run {
+                tvName.text = item.name
+                tvTime.text = item.time
+                if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
+                    tvType.text = item.type.abbr
+                    tvSize.text = ""
+                }
+                else {
+                    tvType.text = item.ext
+                    tvSize.text = FileUtil.getFileSize(item.byteSize)
+                }
+                tvName.setTextColor(color)
+                tvType.setTextColor(color)
+                tvSize.visibility = if(isPortrait) View.GONE else View.VISIBLE
+                tvTime.visibility = if(isPortrait) View.GONE else if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
             }
-            else {
-                binding.tvType.text = item.ext
-                binding.tvSize.text = FileUtil.getFileSize(item.byteSize)
-            }
-            binding.tvName.setTextColor(color)
-            binding.tvType.setTextColor(color)
-            binding.tvSize.visibility = if(isPortrait) View.GONE else View.VISIBLE
-            binding.tvTime.visibility = if(isPortrait) View.GONE else if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
         }
 
         fun onTouch(context: Context, event: MotionEvent, item: FileItem) {
-            if(event.action == MotionEvent.ACTION_DOWN) {
-                binding.tvName.setTextColor(context.getColor(android.R.color.black))
-                binding.tvType.setTextColor(context.getColor(android.R.color.black))
-                binding.root.setBackgroundResource(item.type.color)
-            }
-            else if(event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP) {
-                binding.tvName.setTextColor(context.getColor(item.type.color))
-                binding.tvType.setTextColor(context.getColor(item.type.color))
-                binding.root.setBackgroundResource(android.R.color.black)
+            binding.run {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        tvName.setTextColor(context.getColor(android.R.color.black))
+                        tvType.setTextColor(context.getColor(android.R.color.black))
+                        root.setBackgroundResource(item.type.color)
+                    }
+                    MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                        tvName.setTextColor(context.getColor(item.type.color))
+                        tvType.setTextColor(context.getColor(item.type.color))
+                        root.setBackgroundResource(android.R.color.black)
+                    }
+                }
             }
         }
     }
