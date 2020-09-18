@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.example.projects.databinding.ItemGridFileBinding
 import com.example.projects.mdir.data.FileItem
@@ -17,10 +18,16 @@ class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = 
         override fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
             binding.run {
                 tvName.text = item.name
+                tvName.setTextColor(color)
+
                 if(item.drawable != null) {
                     ivImage.setImageDrawable(item.drawable)
+                    ivImage.scaleType = ImageView.ScaleType.FIT_CENTER
                 }
-                tvName.setTextColor(color)
+                else {
+                    ivImage.setImageResource(item.type.drawableRes)
+                    ivImage.scaleType = ImageView.ScaleType.CENTER
+                }
             }
         }
 

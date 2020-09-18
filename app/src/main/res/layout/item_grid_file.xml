@@ -20,19 +20,24 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintVertical_weight="1"
-            android:src="@{item.drawable}"
-            android:scaleType="fitCenter"
+            android:scaleType="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tv_name" />
+        <!--android:src="@{item.type.drawableRes}"-->
+        <!--android:src="@{item.drawable}"-->
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             app:layout_constraintHorizontal_weight="0.5"
             android:fontFamily="@font/dos_m"
             android:textSize="@dimen/recycler_item_text_size"
-            android:singleLine="true"
+            android:ellipsize="end"
+            android:lines="2"
+            android:textAlignment="center"
             android:text="${item.name}"
             tools:textColor="#FFFFFF"
             tools:text="NAME"
