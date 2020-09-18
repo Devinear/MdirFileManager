@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.databinding.ItemFileBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
+import com.example.projects.mdir.view.base.BaseViewHolder
 
 class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<FileLinearAdapter.ViewHolder>() {
 
@@ -21,9 +23,9 @@ class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<Fil
 
     var clickListener : OnFileClickListener? = null
 
-    class ViewHolder(private val binding: ItemFileBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: ItemFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
-        fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
+        override fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
             binding.run {
                 tvName.text = item.name
                 tvTime.text = item.time
@@ -42,7 +44,7 @@ class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<Fil
             }
         }
 
-        fun onTouch(context: Context, event: MotionEvent, item: FileItem) {
+        override fun onTouch(context: Context, event: MotionEvent, item: FileItem) {
             binding.run {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
