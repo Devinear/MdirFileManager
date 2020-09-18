@@ -20,6 +20,7 @@ import com.example.projects.databinding.LayoutFileManagerBinding
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
+import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 import java.io.File
 
@@ -28,7 +29,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     private lateinit var binding : LayoutFileManagerBinding
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val linearAdapter: FileLinearAdapter = FileLinearAdapter(this)
+    private val adapterLinear = FileLinearAdapter(this)
+    private val adapterGrid = FileGridAdapter(this)
 
     // UI
     val livePath = MutableLiveData<String>()
@@ -50,7 +52,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
         binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
         binding.apply {
-            recycler.adapter = linearAdapter
+            recycler.adapter = adapterLinear
             recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
             layoutType = LayoutType.Linear
 
@@ -62,7 +64,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
             items = listFileItem
         }
 
-        linearAdapter.apply {
+        adapterLinear.apply {
             clickListener = this@FileManagerActivity
             isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
             refreshDir()
@@ -94,8 +96,16 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         Log.d(TAG, "onConfigurationChanged ORIENTATION:${newConfig.orientation}")
-        linearAdapter.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
-        linearAdapter.notifyDataSetChanged()
+        when (layoutType) {
+            LayoutType.Linear -> {
+                adapterLinear.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
+                adapterLinear.notifyDataSetChanged()
+            }
+            else -> {
+                adapterGrid.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
+                adapterGrid.notifyDataSetChanged()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -191,17 +201,32 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     }
 
     fun onClickGrid() {
-        binding.recycler.layoutManager =
-            if(layoutType == LayoutType.Linear) {
-                binding.btGrid.text = "GRID"
+        when (layoutType) {
+            LayoutType.Linear -> {
                 layoutType = LayoutType.Grid
-                GridLayoutManager(this, 3)
+                with(binding) {
+                    btGrid.text = "GRID"
+                    recycler.layoutManager = GridLayoutManager(this@FileManagerActivity, 3)
+                    recycler.adapter = adapterGrid.apply {
+                        clickListener = this@FileManagerActivity
+                        isPortrait = adapterLinear.isPortrait
+                        refreshDir()
+                    }
+                }
             }
-            else {
-                binding.btGrid.text = "LIST"
+            else -> {
                 layoutType = LayoutType.Linear
-                LinearLayoutManager(this)
+                with(binding) {
+                    btGrid.text = "LIST"
+                    recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
+                    recycler.adapter = adapterLinear.apply {
+                        clickListener = this@FileManagerActivity
+                        isPortrait = adapterGrid.isPortrait
+                        refreshDir()
+                    }
+                }
             }
+        }
     }
 
     fun onClickAll() = refreshDir(isShowType = ShowType.All)
