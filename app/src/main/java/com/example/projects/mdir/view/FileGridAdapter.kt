@@ -32,6 +32,18 @@ class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = 
         }
 
         override fun onTouch(context: Context, event: MotionEvent, item: FileItem) {
+            binding.run {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        tvName.setTextColor(context.getColor(android.R.color.black))
+                        root.setBackgroundResource(item.type.color)
+                    }
+                    MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                        tvName.setTextColor(context.getColor(item.type.color))
+                        root.setBackgroundResource(android.R.color.black)
+                    }
+                }
+            }
         }
     }
 
