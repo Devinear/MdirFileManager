@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_grid_item_height"
+        android:padding="5dp"
         android:background="@android:color/black" >
 
         <ImageView
@@ -30,8 +31,6 @@
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
             app:layout_constraintHorizontal_weight="0.5"
             android:fontFamily="@font/dos_m"
             android:textSize="@dimen/recycler_item_text_size"
