@@ -1,24 +1,33 @@
 package com.example.projects.mdir.view
 
 import android.content.Context
+import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.databinding.ViewDataBinding
 import com.example.projects.databinding.ItemGridFileBinding
+import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.view.base.BaseAdapter
+import com.example.projects.mdir.view.base.BaseViewHolder
 
-class FileGridAdapter(private val context: Context) : RecyclerView.Adapter<FileGridAdapter.ViewHolder>() {
+class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = context) {
 
-    class ViewHolder(private val binding: ItemGridFileBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(private val binding: ItemGridFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        TODO("Not yet implemented")
+        override fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
+            binding.run {
+                tvName.text = item.name
+                if(item.drawable != null) {
+                    ivImage.setImageDrawable(item.drawable)
+                }
+                tvName.setTextColor(color)
+            }
+        }
+
+        override fun onTouch(context: Context, event: MotionEvent, item: FileItem) {
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-    }
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
+            = ViewHolder(ItemGridFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 }
