@@ -1,20 +1,40 @@
 package com.example.projects.mdir.view.base
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.listener.OnFileClickListener
 
-abstract class BaseAdapter(val context: Context, val items: List<FileItem>) : RecyclerView.Adapter<BaseViewHolder>() {
+abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<BaseViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        TODO("Not yet implemented")
+    var isPortrait = true // ORIENTATION_PORTRAIT
+    var clickListener : OnFileClickListener? = null
+    val items = mutableListOf<FileItem>()
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+        with(holder) {
+            val item : FileItem =  items[position]
+            val color = baseContext.getColor(item.type.color)
+
+            onBind(item, color, isPortrait)
+
+            itemView.setOnClickListener {
+                clickListener?.onClickFileItem(item)
+            }
+            itemView.setOnTouchListener { _, event ->
+                onTouch(baseContext, event, item)
+                return@setOnTouchListener false
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        TODO("Not yet implemented")
+    fun setFileItems(list: List<FileItem>) {
+        items.clear()
+        items.addAll(list)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = items.count()
-
 }

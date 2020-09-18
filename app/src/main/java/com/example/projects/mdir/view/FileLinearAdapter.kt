@@ -1,27 +1,19 @@
 package com.example.projects.mdir.view
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.databinding.ItemFileBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItem
-import com.example.projects.mdir.listener.OnFileClickListener
+import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
-class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<FileLinearAdapter.ViewHolder>() {
-
-    private val items = mutableListOf<FileItem>()
-    var isPortrait = true // ORIENTATION_PORTRAIT
-
-    var clickListener : OnFileClickListener? = null
+class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext = context) {
 
     class ViewHolder(private val binding: ItemFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
@@ -64,35 +56,4 @@ class FileLinearAdapter(private val context: Context) : RecyclerView.Adapter<Fil
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
             = ViewHolder(ItemFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-
-    override fun getItemCount(): Int = items.size
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d(TAG, "onBindViewHolder Position:$position Portrait:$isPortrait")
-        with(holder) {
-            val item : FileItem =  items[position]
-            val color = context.getColor(item.type.color)
-
-            onBind(item, color, isPortrait)
-
-            itemView.setOnClickListener { clickListener?.onClickFileItem(item) }
-            itemView.setOnTouchListener { _, event ->
-                onTouch(context, event, item)
-                return@setOnTouchListener false
-            }
-        }
-    }
-
-    fun setFileItems(list: List<FileItem>) {
-        Log.d(TAG, "setFileItems")
-        items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    companion object {
-        const val TAG = "FileLinearAdapter"
-    }
-
 }
