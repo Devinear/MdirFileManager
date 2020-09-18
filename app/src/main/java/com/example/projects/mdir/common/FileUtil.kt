@@ -1,6 +1,7 @@
 package com.example.projects.mdir.common
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Environment
 import com.example.projects.R
@@ -111,7 +112,8 @@ object FileUtil {
                         if(isAddItem) {
                             var image : BitmapDrawable? = null
                             if(type == FileType.Image) {
-                                image = BitmapDrawable.createFromPath(it.absolutePath) as BitmapDrawable
+                                val bitmap = BitmapFactory.decodeFile(it.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } )
+                                image = BitmapDrawable(context.resources, bitmap)
                             }
                             items.add(FileItem(name = getFileName(it.name), type = type,
                                     ext = getFileExt(it.name), byteSize = it.length(),
