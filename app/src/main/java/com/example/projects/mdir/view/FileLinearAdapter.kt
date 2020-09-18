@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import com.example.projects.databinding.ItemFileBinding
+import com.example.projects.databinding.ItemLinearFileBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItem
@@ -15,7 +15,7 @@ import com.example.projects.mdir.view.base.BaseViewHolder
 
 class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext = context) {
 
-    class ViewHolder(private val binding: ItemFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
+    class ViewHolder(private val binding: ItemLinearFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
         override fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
             binding.run {
@@ -55,5 +55,5 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(ItemFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            = ViewHolder(ItemLinearFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 }
