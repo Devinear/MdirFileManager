@@ -104,6 +104,10 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
             else -> {
                 adapterGrid.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
                 adapterGrid.notifyDataSetChanged()
+                if(binding.recycler.layoutManager is GridLayoutManager) {
+                    val spanCount : Int = newConfig.screenWidthDp / GRID_ITEM_WIDTH_DP +1
+                    (binding.recycler.layoutManager as GridLayoutManager).spanCount = spanCount
+                }
             }
         }
     }
@@ -206,7 +210,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                 layoutType = LayoutType.Grid
                 with(binding) {
                     btGrid.text = "GRID"
-                    recycler.layoutManager = GridLayoutManager(this@FileManagerActivity, 3)
+                    recycler.layoutManager = GridLayoutManager( this@FileManagerActivity, resources.configuration.screenWidthDp / GRID_ITEM_WIDTH_DP +1)
                     recycler.adapter = adapterGrid.apply {
                         clickListener = this@FileManagerActivity
                         isPortrait = adapterLinear.isPortrait
@@ -238,6 +242,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     fun onClickDoc() = refreshDir(isShowType = ShowType.Doc)
 
     companion object {
+        const val GRID_ITEM_WIDTH_DP = 150
         const val TAG = "FileManagerActivity"
         const val REQUEST_CODE = 1
     }
