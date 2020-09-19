@@ -5,7 +5,10 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -66,7 +69,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
         adapterLinear.apply {
             clickListener = this@FileManagerActivity
-            isPortrait = (windowManager.defaultDisplay.rotation == Surface.ROTATION_0) or (windowManager.defaultDisplay.rotation == Surface.ROTATION_180)
+            isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
             refreshDir()
         }
     }
