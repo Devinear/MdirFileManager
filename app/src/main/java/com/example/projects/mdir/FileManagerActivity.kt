@@ -115,24 +115,6 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.hide_show -> {
-                isHideShow = !isHideShow
-                item.isChecked = isHideShow
-                refreshDir()
-                true
-            }
-            else -> { false }
-        }
-    }
-
     override fun onClickFileItem(item: FileItem) {
         when (item.type) {
             FileType.UpDir -> {
