@@ -207,6 +207,11 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         refreshDir(isHome = true)
     }
 
+    fun onClickHiddenFolder() {
+        isHideShow = !isHideShow
+        refreshDir()
+    }
+
     fun onClickGrid() {
         when (layoutType) {
             LayoutType.Linear -> {

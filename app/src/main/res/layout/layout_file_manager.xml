@@ -32,6 +32,37 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/lay_top_inner" >
 
+            <Button
+                android:id="@+id/bt_home_"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:fontFamily="@font/dos_m"
+                android:text="HOME"
+                android:textSize="@dimen/recycler_item_text_size"
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickHome()}" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/black" />
+
+            <Button
+                android:id="@+id/bt_hide_show"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:fontFamily="@font/dos_m"
+                android:text="Hidden Folder"
+                android:textSize="@dimen/recycler_item_text_size"
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickHiddenFolder()}" />
+
         </LinearLayout>
 
         <LinearLayout
