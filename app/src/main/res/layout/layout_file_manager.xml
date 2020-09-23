@@ -58,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
-                android:text="Hidden Folder"
+                android:text="Find"
                 android:textSize="@dimen/recycler_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickFind()}" />
@@ -77,7 +77,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
-                android:text="Hidden Folder"
+                android:text="Favorite"
                 android:textSize="@dimen/recycler_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickFavorite()}" />
@@ -96,7 +96,7 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
-                android:text="Hidden Folder"
+                android:text="Setting"
                 android:textSize="@dimen/recycler_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickSetting()}" />
