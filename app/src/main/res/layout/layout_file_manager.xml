@@ -52,7 +52,7 @@
                 android:background="@android:color/black" />
 
             <Button
-                android:id="@+id/bt_hide_show"
+                android:id="@+id/bt_find"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
@@ -61,7 +61,45 @@
                 android:text="Hidden Folder"
                 android:textSize="@dimen/recycler_item_text_size"
                 android:textColor="@android:color/white"
-                android:onClick="@{()->activity.onClickHiddenFolder()}" />
+                android:onClick="@{()->activity.onClickFind()}" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/black" />
+
+            <Button
+                android:id="@+id/bt_favorite"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:fontFamily="@font/dos_m"
+                android:text="Hidden Folder"
+                android:textSize="@dimen/recycler_item_text_size"
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickFavorite()}" />
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/black" />
+
+            <Button
+                android:id="@+id/bt_setting"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:fontFamily="@font/dos_m"
+                android:text="Hidden Folder"
+                android:textSize="@dimen/recycler_item_text_size"
+                android:textColor="@android:color/white"
+                android:onClick="@{()->activity.onClickSetting()}" />
 
         </LinearLayout>
 
