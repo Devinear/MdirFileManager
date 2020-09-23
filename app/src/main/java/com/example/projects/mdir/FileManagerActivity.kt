@@ -5,9 +5,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -192,6 +189,19 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     fun onClickHiddenFolder() {
         isHideShow = !isHideShow
         refreshDir()
+    }
+
+    fun onClickFavorite() {
+        // 즐겨찾기 폴더
+    }
+
+    fun onClickSetting() {
+        // 숨겨진 시스템 파일 표시
+        // 시작 폴더 설정
+    }
+
+    fun onClickFind() {
+        // 검색 기능
     }
 
     fun onClickGrid() {
