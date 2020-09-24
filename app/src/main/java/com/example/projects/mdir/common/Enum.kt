@@ -12,8 +12,9 @@ enum class FileType(@ColorRes val color : Int, val abbr: String /*abbreviation*/
     Image(R.color.type_yellow_1, "", 6, R.drawable.outline_insert_photo_white_48),
     Video(R.color.type_blue_2, "", 7, R.drawable.outline_slideshow_white_48),
     Audio(R.color.type_blue_1, "", 8, R.drawable.outline_audiotrack_white_48),
-    Document(R.color.type_yellow_2, "", 9, R.drawable.outline_text_snippet_white_48),
-    Zip(R.color.type_green_1, "", 10, R.drawable.outline_save_white_48)
+    Document(R.color.type_yellow_2, "", 9, R.drawable.outline_description_white_48),
+    Zip(R.color.type_green_1, "", 10, R.drawable.outline_save_white_48),
+    APK(R.color.type_green_2, "", 11, R.drawable.outline_android_white_48)
 }
 
 enum class ExtType {
@@ -22,6 +23,7 @@ enum class ExtType {
     Audio,
     Document,
     Zip,
+    Apk,
     Default
 }
 

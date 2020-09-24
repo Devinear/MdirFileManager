@@ -68,6 +68,8 @@ object FileUtil {
                 ExtType.Document
             "zip", "7z", "rar" ->
                 ExtType.Zip
+            "apk" ->
+                ExtType.Apk
             else ->
                 ExtType.Default
         }
@@ -80,6 +82,7 @@ object FileUtil {
             ExtType.Video -> FileType.Video
             ExtType.Document -> FileType.Document
             ExtType.Zip -> FileType.Zip
+            ExtType.Apk -> FileType.APK
             else -> FileType.Default
         }
     }
