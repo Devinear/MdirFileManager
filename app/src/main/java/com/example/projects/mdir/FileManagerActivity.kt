@@ -150,6 +150,15 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     override fun onLongClickFile(item: FileItem) {
         Toast.makeText(this, "onLongClickFile - ${item.name}", Toast.LENGTH_SHORT).show()
+
+        // 이동, 복사, 상세정보, 공유, 삭제
+
+        // 즐겨찾기 설정
+        // 이름변경
+
+        Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG)
+            .setAction("AA", {})
+            .show()
     }
 
     private fun refreshDir(isHome: Boolean = false, isShowType: ShowType = ShowType.All) {
