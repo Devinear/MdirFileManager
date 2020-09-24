@@ -36,3 +36,13 @@ enum class LayoutType {
     Linear,
     Grid
 }
+
+// Android - '내 파일' 카테고리
+enum class Category {
+    Image,
+    Movie,
+    Audio,
+    Document,
+    Download,
+    APK
+}
