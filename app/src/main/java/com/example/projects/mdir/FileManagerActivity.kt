@@ -3,6 +3,7 @@ package com.example.projects.mdir
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +23,7 @@ import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
+import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
 class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
@@ -133,17 +135,27 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                 Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
 
                 val sendIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
+                    action = Intent.ACTION_VIEW
                     type = when(FileUtil.getFileExtType(item.ext)) {
                         ExtType.Image -> "image/*"
                         ExtType.Video -> "video/*"
                         ExtType.Audio -> "audio/*"
                         else -> "application/*"
                     }
-                    putExtra(Intent.EXTRA_STREAM, File("$currentPath/${item.name}").toURI())
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    setDataAndType(
+                        Uri.fromFile(File("$currentPath/${item.name}")), when(FileUtil.getFileExtType(item.ext)) {
+                        ExtType.Image -> "image/*"
+                        ExtType.Video -> "video/*"
+                        ExtType.Audio -> "audio/*"
+                        else -> "application/*"
+                    })
+//                    putExtra(Intent.EXTRA_STREAM, File("$currentPath/${item.name}").toURI())
                 }
                 // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
-                startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
+//                startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
+                startActivity(sendIntent)
             }
         }
     }
