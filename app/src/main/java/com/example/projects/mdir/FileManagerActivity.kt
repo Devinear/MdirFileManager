@@ -112,7 +112,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         }
     }
 
-    override fun onClickFileItem(item: FileItem) {
+    override fun onClickFile(item: FileItem) {
         when (item.type) {
             FileType.UpDir -> {
                 if(currentPath == FileUtil.ROOT) {
@@ -146,6 +146,10 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                 startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
             }
         }
+    }
+
+    override fun onLongClickFile(item: FileItem) {
+        Toast.makeText(this, "onLongClickFile - ${item.name}", Toast.LENGTH_SHORT).show()
     }
 
     private fun refreshDir(isHome: Boolean = false, isShowType: ShowType = ShowType.All) {
@@ -193,15 +197,18 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     fun onClickFavorite() {
         // 즐겨찾기 폴더
+        Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
     }
 
     fun onClickSetting() {
         // 숨겨진 시스템 파일 표시
         // 시작 폴더 설정
+        Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show()
     }
 
     fun onClickFind() {
         // 검색 기능
+        Toast.makeText(this, "Find", Toast.LENGTH_SHORT).show()
     }
 
     fun onClickGrid() {
