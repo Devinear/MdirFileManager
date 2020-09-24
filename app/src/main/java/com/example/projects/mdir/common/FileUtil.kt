@@ -17,7 +17,7 @@ object FileUtil {
     fun getFileName(name: String) : String {
         // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
         val lastIndex = name.lastIndexOf('.')
-        return if(lastIndex < 2)
+        return if(lastIndex < 1)
             name
         else
             name.substring(0, lastIndex)
@@ -26,7 +26,7 @@ object FileUtil {
     fun getFileExt(name: String) : String {
         // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
         val lastIndex = name.lastIndexOf('.')
-        return if(lastIndex < 2)
+        return if(lastIndex < 1)
             ""
         else
             name.substring(lastIndex+1).toUpperCase(Locale.ROOT)
