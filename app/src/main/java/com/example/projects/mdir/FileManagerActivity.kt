@@ -164,7 +164,20 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         // 이름변경
 
         Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG)
-            .setAction("AA", {})
+            .setAction("SHARE") {
+                val sendIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = when (FileUtil.getFileExtType(item.ext)) {
+                        ExtType.Image -> "image/*"
+                        ExtType.Video -> "video/*"
+                        ExtType.Audio -> "audio/*"
+                        else -> "application/*"
+                    }
+                    putExtra(Intent.EXTRA_STREAM, File("$currentPath/${item.name}").toURI())
+                }
+                // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
+                startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
+            }
             .show()
     }
 
