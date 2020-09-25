@@ -3,7 +3,6 @@ package com.example.projects.mdir
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
@@ -132,30 +132,17 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
             }
             else -> {
                 // 일반 파일
-                Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
-
-                val sendIntent = Intent().apply {
+//                Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
+                startActivity(Intent().apply {
                     action = Intent.ACTION_VIEW
-                    type = when(FileUtil.getFileExtType(item.ext)) {
-                        ExtType.Image -> "image/*"
-                        ExtType.Video -> "video/*"
-                        ExtType.Audio -> "audio/*"
-                        else -> "application/*"
-                    }
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK // setFlags
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     setDataAndType(
-                        Uri.fromFile(File("$currentPath/${item.name}")), when(FileUtil.getFileExtType(item.ext)) {
-                        ExtType.Image -> "image/*"
-                        ExtType.Video -> "video/*"
-                        ExtType.Audio -> "audio/*"
-                        else -> "application/*"
-                    })
-//                    putExtra(Intent.EXTRA_STREAM, File("$currentPath/${item.name}").toURI())
-                }
-                // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
-//                startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
-                startActivity(sendIntent)
+                        FileProvider.getUriForFile(this@FileManagerActivity,
+                            "${this@FileManagerActivity.packageName}.provider", File("$currentPath/${item.name}.${item.ext}")),
+                        FileUtil.getMimeType(item.ext))
+                })
             }
         }
     }
