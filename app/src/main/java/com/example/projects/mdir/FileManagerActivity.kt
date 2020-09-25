@@ -2,6 +2,7 @@ package com.example.projects.mdir
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -132,8 +133,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
             }
             else -> {
                 // 일반 파일
-//                Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
-                startActivity(Intent().apply {
+                val intent = Intent().apply {
                     action = Intent.ACTION_VIEW
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK // setFlags
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -142,7 +142,15 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                         FileProvider.getUriForFile(this@FileManagerActivity,
                             "${this@FileManagerActivity.packageName}.provider", File("$currentPath/${item.name}.${item.ext}")),
                         FileUtil.getMimeType(item.ext))
-                })
+                }
+
+                // 해당 Intent를 처리할 수 있는 앱이 있는지 확인
+                val resolveInfo : List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
+                val isIntentSafe = resolveInfo.isNotEmpty()
+                if(isIntentSafe)
+                    startActivity(intent)
+                else
+                    Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
             }
         }
     }
