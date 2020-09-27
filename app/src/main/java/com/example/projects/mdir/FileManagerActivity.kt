@@ -278,7 +278,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     fun onClickDoc() = refreshDir(isShowType = ShowType.Doc)
 
     companion object {
-        const val GRID_ITEM_WIDTH_DP = 150
+        const val GRID_ITEM_WIDTH_DP = 120
         const val TAG = "FileManagerActivity"
         const val REQUEST_CODE = 1
     }
