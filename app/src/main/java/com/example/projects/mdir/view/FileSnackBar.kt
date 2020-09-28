@@ -20,12 +20,12 @@ class FileSnackBar(context: Context, val item: FileItem, val path: String) : Vie
     }
 
     init {
-        view.findViewById<TextView>(R.id.bt_rename).setOnClickListener {
+        view.findViewById<TextView>(R.id.bt_snack_rename).setOnClickListener {
             Toast.makeText(context, "RENAME", Toast.LENGTH_SHORT).show()
         }
-        view.findViewById<TextView>(R.id.bt_copy).setOnClickListener {  }
-        view.findViewById<TextView>(R.id.bt_share).setOnClickListener { share() }
-        view.findViewById<TextView>(R.id.bt_delete).setOnClickListener {  }
+        view.findViewById<TextView>(R.id.bt_snack_copy).setOnClickListener {  }
+        view.findViewById<TextView>(R.id.bt_snack_share).setOnClickListener { share() }
+        view.findViewById<TextView>(R.id.bt_snack_delete).setOnClickListener {  }
         view.findViewById<TextView>(R.id.bt_snack_favorite).setOnClickListener {  }
     }
 
