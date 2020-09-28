@@ -7,7 +7,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -26,6 +25,7 @@ import com.example.projects.mdir.common.LayoutType
 import com.example.projects.mdir.common.ShowType
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
+import com.example.projects.mdir.repository.FavoriteRepository
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 import com.example.projects.mdir.view.FileSnackBar
@@ -168,7 +168,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         // 즐겨찾기 설정
         // 이름변경
         val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
-        layout.findViewById<TextView>(R.id.snackbar_text).visibility = View.INVISIBLE
+//        layout.findViewById<TextView>(R.id.snackbar_text).visibility = View.INVISIBLE
+        layout.removeAllViews()
 
         // 기존의 SnackBar가 아닌 CustomView를 연결
         val customView = FileSnackBar(context = this, item = item, path = currentPath).view
@@ -178,7 +179,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         snackBar.show()
     }
 
-    private fun refreshDir(isHome: Boolean = false, isShowType: ShowType = ShowType.All) {
+    private fun refreshDir(isHome: Boolean = false, isShowType: ShowType = ShowType.All, isFavorite: Boolean = false) {
         Log.d(TAG, "refreshDir IsHome:$isHome IsShowType:$isShowType")
         if(currentPath.isEmpty() || isHome) {
             currentPath = FileUtil.ROOT
@@ -186,7 +187,18 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         }
 
         listFileItem.clear()
-        listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow, isShowType))
+        if(!isFavorite) {
+            listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow, isShowType))
+        }
+        else {
+            val items = mutableListOf<FileItem>()
+            FavoriteRepository.INSTANCE.getAll().forEach {
+                val item = FileUtil.convertFileItem(context = this, path = it)
+                if(item != null)
+                    items.add(item)
+            }
+            listFileItem.addAll(items)
+        }
 
         var dirs = 0
         var files = 0
@@ -223,7 +235,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     fun onClickFavorite() {
         // 즐겨찾기 폴더
-        Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
+        refreshDir(isFavorite = true)
     }
 
     fun onClickSetting() {

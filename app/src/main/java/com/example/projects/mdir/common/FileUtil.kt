@@ -167,6 +167,32 @@ object FileUtil {
         }
     }
 
+    fun convertFileItem(context: Context, path: String) : FileItem? {
+        val file = File(path)
+        if(file.exists()) {
+            val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
+            var image : BitmapDrawable? = null
+            if(file.isDirectory) {
+                val subs = file.listFiles { it -> it.isFile && getFileExtType(it.extension) == ExtType.Image }
+                if(subs.isNotEmpty())
+                    image = BitmapDrawable(context.resources,
+                        BitmapFactory.decodeFile(subs[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
+
+                return FileItem(name = file.name, type = FileType.Dir,
+                    ext = "", byteSize = 0L, time = time.format(Date(file.lastModified())), drawable = image)
+            }
+            else {
+                val type = toFileType(getFileExtType(file.extension)) // getFileExt(it.name)
+                if(type == FileType.Image)
+                    image = BitmapDrawable(context.resources, BitmapFactory.decodeFile(file.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
+
+                return FileItem(name = getFileName(file.name), type = type,
+                    ext = getFileExt(file.name), byteSize = file.length(), time = time.format(Date(file.lastModified())), drawable = image)
+            }
+        }
+        return null
+    }
+
     fun getChildFileItems(context: Context, path: String, isHideShow: Boolean, isShowType: ShowType = ShowType.All) : List<FileItem> {
         val items = mutableListOf<FileItem>()
 
