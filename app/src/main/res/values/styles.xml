@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="SnackBarTextView" parent="@android:style/Widget.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/snack_bar_item_padding</item>
+        <item name="android:fontFamily">@font/dos_m</item>
+        <item name="android:textSize">@dimen/snack_bar_item_text_size</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">@null</item>
+    </style>
+
 </resources>
