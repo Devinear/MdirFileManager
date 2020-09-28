@@ -49,7 +49,13 @@ class FileSnackBar(context: Context, val item: FileItem, val path: String) : Vie
     fun delete() = Toast.makeText(context, "DELETE", Toast.LENGTH_SHORT).show()
 
     fun favorite() {
-        val ret = FavoriteRepository.INSTANCE.add("$path/${item.name}")
-        Toast.makeText(context, "FAVORITE[$ret][${FavoriteRepository.INSTANCE.size()}]", Toast.LENGTH_SHORT).show()
+        val full = "$path/${item.name}"
+        when {
+            FavoriteRepository.INSTANCE.contains(full)
+                -> FavoriteRepository.INSTANCE.remove(full)
+            else
+                -> FavoriteRepository.INSTANCE.add(full)
+        }
+        Toast.makeText(context, "FAVORITE [${FavoriteRepository.INSTANCE.size()}]", Toast.LENGTH_SHORT).show()
     }
 }
