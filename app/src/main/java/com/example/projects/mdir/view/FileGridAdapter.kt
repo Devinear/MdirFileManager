@@ -22,7 +22,7 @@ class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = 
 
                 if(item.drawable != null) {
                     ivImage.setImageDrawable(item.drawable)
-                    ivImage.scaleType = ImageView.ScaleType.FIT_CENTER
+                    ivImage.scaleType = ImageView.ScaleType.CENTER_CROP
                 }
                 else {
                     ivImage.setImageResource(item.type.drawableRes)
