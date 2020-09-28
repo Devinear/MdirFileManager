@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -19,11 +20,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFileManagerBinding
-import com.example.projects.mdir.common.*
+import com.example.projects.mdir.common.FileType
+import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.common.LayoutType
+import com.example.projects.mdir.common.ShowType
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
+import com.example.projects.mdir.view.FileSnackBar
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
@@ -47,6 +52,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     private var currentPath: String = ""
     private var isHideShow : Boolean = false
     private var layoutType = LayoutType.Linear
+
+    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -163,22 +170,31 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         // 즐겨찾기 설정
         // 이름변경
 
-        Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG)
-            .setAction("SHARE") {
-                val sendIntent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    type = when (FileUtil.getFileExtType(item.ext)) {
-                        ExtType.Image -> "image/*"
-                        ExtType.Video -> "video/*"
-                        ExtType.Audio -> "audio/*"
-                        else -> "application/*"
-                    }
-                    putExtra(Intent.EXTRA_STREAM, File("$currentPath/${item.name}").toURI())
-                }
-                // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
-                startActivity(Intent.createChooser(sendIntent, "공유: ${item.name}.${item.ext}"))
-            }
-            .show()
+//        val snackbar = Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG)
+//            .setAction("SHARE") {
+//                val sendIntent = Intent().apply {
+//                    action = Intent.ACTION_SEND
+//                    type = when (FileUtil.getFileExtType(item.ext)) {
+//                        ExtType.Image -> "image/*"
+//                        ExtType.Video -> "video/*"
+//                        ExtType.Audio -> "audio/*"
+//                        else -> "application/*"
+//                    }
+//                    putExtra(Intent.EXTRA_STREAM, File("$currentPath/${item.name}").toURI())
+//                }
+//                // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
+//                startActivity(Intent.createChooser(sendIntent, "Share: ${item.name}.${item.ext}"))
+//            }
+
+        val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+        layout.findViewById<TextView>(R.id.snackbar_text).visibility = View.INVISIBLE
+
+        // 기존의 SnackBar가 아닌 CustomView를 연결
+        val customView = FileSnackBar(this).view
+        layout.setPadding(0, 0, 0, 0)
+        layout.addView(customView, 0)
+
+        snackBar.show()
     }
 
     private fun refreshDir(isHome: Boolean = false, isShowType: ShowType = ShowType.All) {
