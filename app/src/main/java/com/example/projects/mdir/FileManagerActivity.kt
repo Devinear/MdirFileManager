@@ -134,7 +134,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                 updateFileList()
             }
             FileType.Dir -> {
-                currentPath = "$currentPath/${item.name}"
+//                currentPath = "$currentPath/${item.name}"
+                currentPath = item.path
                 livePath.value = "..${currentPath.removePrefix(FileUtil.ROOT)}"
                 updateFileList()
             }

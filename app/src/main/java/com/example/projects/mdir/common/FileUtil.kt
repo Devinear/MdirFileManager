@@ -178,7 +178,7 @@ object FileUtil {
                     image = BitmapDrawable(context.resources,
                         BitmapFactory.decodeFile(subs[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
 
-                return FileItem(name = file.name, type = FileType.Dir,
+                return FileItem(name = file.name, path = file.absolutePath, type = FileType.Dir,
                     ext = "", byteSize = 0L, time = time.format(Date(file.lastModified())), drawable = image)
             }
             else {
@@ -186,7 +186,7 @@ object FileUtil {
                 if(type == FileType.Image)
                     image = BitmapDrawable(context.resources, BitmapFactory.decodeFile(file.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
 
-                return FileItem(name = getFileName(file.name), type = type,
+                return FileItem(name = getFileName(file.name), path = file.absolutePath, type = type,
                     ext = getFileExt(file.name), byteSize = file.length(), time = time.format(Date(file.lastModified())), drawable = image)
             }
         }
@@ -199,7 +199,7 @@ object FileUtil {
         val file = File(path)
         if(file.exists()) {
             items.clear()
-            items.add(FileItem(name = "..", type = FileType.UpDir, ext = "", byteSize = 0L, time = "00-00-00 00:00"))
+            items.add(FileItem(name = "..", path = file.absolutePath, type = FileType.UpDir, ext = "", byteSize = 0L, time = "00-00-00 00:00"))
             val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
 
             file.listFiles()?.forEach {
@@ -212,7 +212,7 @@ object FileUtil {
                                 BitmapFactory.decodeFile(subList[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
                         }
                         items.add(
-                            FileItem(name = it.name, type = FileType.Dir,
+                            FileItem(name = it.name, path = it.absolutePath, type = FileType.Dir,
                                 ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())), drawable = image)
                         )
                     } else {
@@ -230,7 +230,7 @@ object FileUtil {
                                 val bitmap = BitmapFactory.decodeFile(it.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } )
                                 image = BitmapDrawable(context.resources, bitmap)
                             }
-                            items.add(FileItem(name = getFileName(it.name), type = type,
+                            items.add(FileItem(name = getFileName(it.name), path = it.absolutePath, type = type,
                                     ext = getFileExt(it.name), byteSize = it.length(),
                                     time = time.format(Date(it.lastModified())), drawable = image))
                         }
