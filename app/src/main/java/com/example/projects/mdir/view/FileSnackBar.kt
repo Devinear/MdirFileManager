@@ -3,10 +3,12 @@ package com.example.projects.mdir.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import com.example.projects.R
+import com.example.projects.databinding.LayoutSnackbarBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItem
@@ -15,21 +17,24 @@ import java.io.File
 @SuppressLint("ViewConstructor")
 class FileSnackBar(context: Context, val item: FileItem, val path: String) : View(context) {
 
-    val view : View by lazy {
-        inflate(context, R.layout.layout_snackbar, null)
-    }
+    private lateinit var binding : LayoutSnackbarBinding
+
+//    val view : View by lazy {
+//        inflate(context, R.layout.layout_snackbar, null)
+//    }
+    val view : View
+        get() = binding.root
 
     init {
-        view.findViewById<TextView>(R.id.bt_snack_rename).setOnClickListener {
-            Toast.makeText(context, "RENAME", Toast.LENGTH_SHORT).show()
-        }
-        view.findViewById<TextView>(R.id.bt_snack_copy).setOnClickListener {  }
-        view.findViewById<TextView>(R.id.bt_snack_share).setOnClickListener { share() }
-        view.findViewById<TextView>(R.id.bt_snack_delete).setOnClickListener {  }
-        view.findViewById<TextView>(R.id.bt_snack_favorite).setOnClickListener {  }
+        val inflater : LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        binding = DataBindingUtil.inflate(inflater, R.layout.layout_snackbar, null, false)
     }
 
-    private fun share() {
+    fun rename() = Toast.makeText(context, "RENAME", Toast.LENGTH_SHORT).show()
+
+    fun copy() = Toast.makeText(context, "COPY", Toast.LENGTH_SHORT).show()
+
+    fun share() {
         // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
         context.startActivity(Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
@@ -42,4 +47,8 @@ class FileSnackBar(context: Context, val item: FileItem, val path: String) : Vie
             putExtra(Intent.EXTRA_STREAM, File("$path/${item.name}").toURI())
         }, "Share: ${item.name}.${item.ext}"))
     }
+
+    fun delete() = Toast.makeText(context, "DELETE", Toast.LENGTH_SHORT).show()
+
+    fun favorite() = Toast.makeText(context, "FAVORITE", Toast.LENGTH_SHORT).show()
 }
