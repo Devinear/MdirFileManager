@@ -12,22 +12,20 @@ import com.example.projects.databinding.LayoutSnackbarBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.repository.FavoriteRepository
 import java.io.File
 
 @SuppressLint("ViewConstructor")
 class FileSnackBar(context: Context, val item: FileItem, val path: String) : View(context) {
 
-    private lateinit var binding : LayoutSnackbarBinding
+    private var binding : LayoutSnackbarBinding =
+        DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_snackbar, null, false)
 
-//    val view : View by lazy {
-//        inflate(context, R.layout.layout_snackbar, null)
-//    }
     val view : View
         get() = binding.root
 
     init {
-        val inflater : LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        binding = DataBindingUtil.inflate(inflater, R.layout.layout_snackbar, null, false)
+        binding.snackbar = this
     }
 
     fun rename() = Toast.makeText(context, "RENAME", Toast.LENGTH_SHORT).show()
@@ -50,5 +48,8 @@ class FileSnackBar(context: Context, val item: FileItem, val path: String) : Vie
 
     fun delete() = Toast.makeText(context, "DELETE", Toast.LENGTH_SHORT).show()
 
-    fun favorite() = Toast.makeText(context, "FAVORITE", Toast.LENGTH_SHORT).show()
+    fun favorite() {
+        val ret = FavoriteRepository.INSTANCE.add("$path/${item.name}")
+        Toast.makeText(context, "FAVORITE[$ret][${FavoriteRepository.INSTANCE.size()}]", Toast.LENGTH_SHORT).show()
+    }
 }
