@@ -77,7 +77,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         adapterLinear.apply {
             clickListener = this@FileManagerActivity
             isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-            refreshDir()
+            updateFileList()
         }
     }
 
@@ -99,7 +99,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                     finish()
                 }
             }
-            refreshDir()
+            updateFileList()
         }
     }
 
@@ -131,12 +131,12 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                 }
                 currentPath = FileUtil.getUpDirPath(currentPath)
                 livePath.value = "..${currentPath.removePrefix(FileUtil.ROOT)}"
-                refreshDir()
+                updateFileList()
             }
             FileType.Dir -> {
                 currentPath = "$currentPath/${item.name}"
                 livePath.value = "..${currentPath.removePrefix(FileUtil.ROOT)}"
-                refreshDir()
+                updateFileList()
             }
             else -> {
                 // 일반 파일
@@ -179,8 +179,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         snackBar.show()
     }
 
-    private fun refreshDir(isHome: Boolean = false, isShowType: ShowType = ShowType.All, isFavorite: Boolean = false) {
-        Log.d(TAG, "refreshDir IsHome:$isHome IsShowType:$isShowType")
+    private fun updateFileList(isHome: Boolean = false, isShowType: ShowType = ShowType.All, isFavorite: Boolean = false) {
+        Log.d(TAG, "updateFileList IsHome:$isHome IsShowType:$isShowType")
         if(currentPath.isEmpty() || isHome) {
             currentPath = FileUtil.ROOT
             livePath.value = ".."
@@ -225,18 +225,18 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     fun onClickHome() {
         Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show()
-        refreshDir(isHome = true)
+        updateFileList(isHome = true)
     }
 
     fun onClickHiddenFolder() {
         isHideShow = !isHideShow
-        refreshDir()
+        updateFileList()
     }
 
     fun onClickFavorite() {
         // 즐겨찾기 폴더
 //        Toast.makeText(this, "Favorite", Toast.LENGTH_SHORT).show()
-        refreshDir(isFavorite = true)
+        updateFileList(isFavorite = true)
     }
 
     fun onClickSetting() {
@@ -260,7 +260,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                     recycler.adapter = adapterGrid.apply {
                         clickListener = this@FileManagerActivity
                         isPortrait = adapterLinear.isPortrait
-                        refreshDir()
+                        updateFileList()
                     }
                 }
             }
@@ -272,20 +272,20 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                     recycler.adapter = adapterLinear.apply {
                         clickListener = this@FileManagerActivity
                         isPortrait = adapterGrid.isPortrait
-                        refreshDir()
+                        updateFileList()
                     }
                 }
             }
         }
     }
 
-    fun onClickAll() = refreshDir(isShowType = ShowType.All)
+    fun onClickAll() = updateFileList(isShowType = ShowType.All)
 
-    fun onClickImage() = refreshDir(isShowType = ShowType.Img)
+    fun onClickImage() = updateFileList(isShowType = ShowType.Img)
 
-    fun onClickZip() = refreshDir(isShowType = ShowType.Zip)
+    fun onClickZip() = updateFileList(isShowType = ShowType.Zip)
 
-    fun onClickDoc() = refreshDir(isShowType = ShowType.Doc)
+    fun onClickDoc() = updateFileList(isShowType = ShowType.Doc)
 
     companion object {
         const val GRID_ITEM_WIDTH_DP = 120
