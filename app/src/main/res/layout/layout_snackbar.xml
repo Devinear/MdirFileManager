@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/black">
 
         <TextView
@@ -20,7 +20,8 @@
             android:onClick="@{()->snackbar.rename()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/bt_snack_copy"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             style="@style/SnackBarTextView"
@@ -29,7 +30,8 @@
             android:onClick="@{()->snackbar.copy()}"
             app:layout_constraintStart_toEndOf="@id/bt_snack_rename"
             app:layout_constraintEnd_toStartOf="@id/bt_snack_share"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             style="@style/SnackBarTextView"
@@ -38,7 +40,8 @@
             android:onClick="@{()->snackbar.share()}"
             app:layout_constraintStart_toEndOf="@id/bt_snack_copy"
             app:layout_constraintEnd_toStartOf="@id/bt_snack_delete"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             style="@style/SnackBarTextView"
@@ -47,7 +50,8 @@
             android:onClick="@{()->snackbar.delete()}"
             app:layout_constraintStart_toEndOf="@id/bt_snack_share"
             app:layout_constraintEnd_toStartOf="@id/bt_snack_favorite"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             style="@style/SnackBarTextView"
@@ -56,7 +60,8 @@
             android:onClick="@{()->snackbar.favorite()}"
             app:layout_constraintStart_toEndOf="@id/bt_snack_delete"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
