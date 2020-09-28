@@ -4,4 +4,8 @@
     <string name="menu_hide_show">숨김 폴더/파일 표시</string>
     <string name="string_m_dir">M Dir</string>
     <string name="string_map">MAP</string>
+    <string name="string_uppercase_rename">RENAME</string>
+    <string name="string_uppercase_copy">COPY</string>
+    <string name="string_uppercase_share">SHARE</string>
+    <string name="string_uppercase_delete">DELETE</string>
 </resources>
