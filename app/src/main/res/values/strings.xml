@@ -8,4 +8,5 @@
     <string name="string_uppercase_copy">COPY</string>
     <string name="string_uppercase_share">SHARE</string>
     <string name="string_uppercase_delete">DELETE</string>
+    <string name="string_uppercase_favorite">FAVORITE</string>
 </resources>
