@@ -179,12 +179,18 @@ object FileUtil {
             file.listFiles()?.forEach {
                 if (isHideShow || it.name[0] != '.') {
                     if (it.isDirectory) {
+                        var image : BitmapDrawable? = null
+                        val subList = it.listFiles { file -> file.isFile && getFileExtType(file.extension) == ExtType.Image }
+                        if(subList.isNotEmpty()) {
+                            image = BitmapDrawable(context.resources,
+                                BitmapFactory.decodeFile(subList[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
+                        }
                         items.add(
                             FileItem(name = it.name, type = FileType.Dir,
-                            ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())))
+                                ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())), drawable = image)
                         )
                     } else {
-                        val type = toFileType(getFileExtType(getFileExt(it.name)))
+                        val type = toFileType(getFileExtType(it.extension)) // getFileExt(it.name)
                         val isAddItem = (isShowType == ShowType.All) ||
                                 when(type) {
                                     FileType.Image    -> isShowType == ShowType.Img
