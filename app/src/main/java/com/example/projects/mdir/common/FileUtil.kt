@@ -179,7 +179,7 @@ object FileUtil {
                         BitmapFactory.decodeFile(subs[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
 
                 return FileItem(name = file.name, path = file.absolutePath, type = FileType.Dir,
-                    ext = "", byteSize = 0L, time = time.format(Date(file.lastModified())), drawable = image)
+                    ext = "", byteSize = 0L, time = time.format(Date(file.lastModified())), drawable = image, childCount = file.list()?.size?:0)
             }
             else {
                 val type = toFileType(getFileExtType(file.extension)) // getFileExt(it.name)
@@ -187,7 +187,7 @@ object FileUtil {
                     image = BitmapDrawable(context.resources, BitmapFactory.decodeFile(file.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
 
                 return FileItem(name = getFileName(file.name), path = file.absolutePath, type = type,
-                    ext = getFileExt(file.name), byteSize = file.length(), time = time.format(Date(file.lastModified())), drawable = image)
+                    ext = getFileExt(file.name), byteSize = file.length(), time = time.format(Date(file.lastModified())), drawable = image, childCount = file.list()?.size?:0)
             }
         }
         return null
@@ -213,7 +213,7 @@ object FileUtil {
                         }
                         items.add(
                             FileItem(name = it.name, path = it.absolutePath, type = FileType.Dir,
-                                ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())), drawable = image)
+                                ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())), drawable = image, childCount = it.list()?.size?:0)
                         )
                     } else {
                         val type = toFileType(getFileExtType(it.extension)) // getFileExt(it.name)
@@ -232,7 +232,7 @@ object FileUtil {
                             }
                             items.add(FileItem(name = getFileName(it.name), path = it.absolutePath, type = type,
                                     ext = getFileExt(it.name), byteSize = it.length(),
-                                    time = time.format(Date(it.lastModified())), drawable = image))
+                                    time = time.format(Date(it.lastModified())), drawable = image, childCount = it.list()?.size?:0))
                         }
                     }
                 }
