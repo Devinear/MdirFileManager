@@ -17,7 +17,7 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
 
     class ViewHolder(private val binding: ItemLinearFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
-        override fun onBind(item: FileItem, color: Int, isPortrait: Boolean) {
+        override fun onBind(item: FileItem, color: Int) {
             binding.run {
                 tvName.text = item.name
                 tvTime.text = item.time
@@ -31,8 +31,7 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
                 }
                 tvName.setTextColor(color)
                 tvType.setTextColor(color)
-                tvSize.visibility = if(isPortrait) View.GONE else View.VISIBLE
-                tvTime.visibility = if(isPortrait) View.GONE else if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
+                tvTime.visibility = if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
             }
         }
 
