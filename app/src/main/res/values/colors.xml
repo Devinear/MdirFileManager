@@ -3,6 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="DimGray">#696969</color>
 
     <color name="type_storage">#001398</color>
     <color name="type_dir">#FC3B41</color>
