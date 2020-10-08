@@ -12,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
         android:background="@android:color/black" >
 
         <TextView
@@ -60,8 +61,8 @@
             android:fontFamily="@font/dos_m"
             android:textSize="17dp"
             android:singleLine="true"
-            android:textColor="#FFFFFF"
-            tools:textColor="#FFFFFF"
+            android:textColor="#696969"
+            tools:textColor="#696969"
             tools:text="SIZE"
             app:layout_constraintTop_toTopOf="@id/tv_time"
             app:layout_constraintBottom_toBottomOf="@id/tv_time"
@@ -79,8 +80,8 @@
             android:fontFamily="@font/dos_m"
             android:textSize="17dp"
             android:singleLine="true"
-            android:textColor="#FFFFFF"
-            tools:textColor="#FFFFFF"
+            android:textColor="#696969"
+            tools:textColor="#696969"
             tools:text="TIME"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             app:layout_constraintBottom_toBottomOf="parent"
