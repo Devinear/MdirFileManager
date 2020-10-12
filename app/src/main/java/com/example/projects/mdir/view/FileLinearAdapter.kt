@@ -22,14 +22,22 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
             binding.run {
                 tvName.text = item.name
                 tvTime.text = item.time
-                if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
-                    tvType.text = item.type.abbr
-                    val child = item.childCount
-                    tvSize.text = if(child > 1) "$child" + context.getString(R.string.sub_items) else "$child" + context.getString(R.string.sub_item)
-                }
-                else {
-                    tvType.text = item.ext
-                    tvSize.text = FileUtil.getFileSize(item.byteSize)
+                when (item.type) {
+                    FileType.UpDir -> {
+                        tvType.text = item.type.abbr
+                        tvSize.text = ""
+                    }
+                    FileType.Dir -> {
+                        tvType.text = item.type.abbr
+                        tvSize.apply {
+                            val child = item.childCount
+                            text = if(child > 1) "$child" + context.getString(R.string.sub_items) else "$child" + context.getString(R.string.sub_item)
+                        }
+                    }
+                    else -> {
+                        tvType.text = item.ext
+                        tvSize.text = FileUtil.getFileSize(item.byteSize)
+                    }
                 }
                 tvName.setTextColor(color)
                 tvType.setTextColor(color)
