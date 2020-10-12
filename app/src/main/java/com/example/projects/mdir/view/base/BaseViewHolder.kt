@@ -7,6 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.mdir.data.FileItem
 
 abstract class BaseViewHolder(val viewDataBinding: ViewDataBinding) : RecyclerView.ViewHolder(viewDataBinding.root) {
-    abstract fun onBind(item: FileItem, color: Int)
+    abstract fun onBind(context: Context, item: FileItem, color: Int)
     abstract fun onTouch(context: Context, event: MotionEvent, item: FileItem)
 }

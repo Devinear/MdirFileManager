@@ -18,7 +18,7 @@ abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<Base
             val item : FileItem =  items[position]
             val color = baseContext.getColor(item.type.color)
 
-            onBind(item, color)
+            onBind(baseContext, item, color)
 
             itemView.setOnClickListener {
                 clickListener?.onClickFile(item)

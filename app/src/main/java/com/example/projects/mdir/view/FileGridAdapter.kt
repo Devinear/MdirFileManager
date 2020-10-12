@@ -15,7 +15,7 @@ class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = 
 
     class ViewHolder(private val binding: ItemGridFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
-        override fun onBind(item: FileItem, color: Int) {
+        override fun onBind(context: Context, item: FileItem, color: Int) {
             binding.run {
                 tvName.text = item.name
                 tvName.setTextColor(color)

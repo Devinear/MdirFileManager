@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import com.example.projects.R
 import com.example.projects.databinding.ItemLinearFileBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
@@ -17,13 +18,14 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
 
     class ViewHolder(private val binding: ItemLinearFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
-        override fun onBind(item: FileItem, color: Int) {
+        override fun onBind(context: Context, item: FileItem, color: Int) {
             binding.run {
                 tvName.text = item.name
                 tvTime.text = item.time
                 if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
                     tvType.text = item.type.abbr
-                    tvSize.text = "${item.childCount}개"
+                    val child = item.childCount
+                    tvSize.text = if(child > 1) "$child" + context.getString(R.string.sub_items) else "$child" + context.getString(R.string.sub_items)
                 }
                 else {
                     tvType.text = item.ext
