@@ -23,7 +23,7 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
                 tvTime.text = item.time
                 if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
                     tvType.text = item.type.abbr
-                    tvSize.text = ""
+                    tvSize.text = "${item.childCount}개"
                 }
                 else {
                     tvType.text = item.ext
