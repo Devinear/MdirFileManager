@@ -25,7 +25,7 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
                 if((item.type == FileType.Dir) or (item.type == FileType.UpDir)) {
                     tvType.text = item.type.abbr
                     val child = item.childCount
-                    tvSize.text = if(child > 1) "$child" + context.getString(R.string.sub_items) else "$child" + context.getString(R.string.sub_items)
+                    tvSize.text = if(child > 1) "$child" + context.getString(R.string.sub_items) else "$child" + context.getString(R.string.sub_item)
                 }
                 else {
                     tvType.text = item.ext
