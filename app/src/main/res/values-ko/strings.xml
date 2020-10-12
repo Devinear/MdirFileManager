@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_hide_show">숨김 폴더/파일 표시</string>
+    <string name="sub_item">" 개"</string>
+    <string name="sub_items">" 개"</string>
+</resources>

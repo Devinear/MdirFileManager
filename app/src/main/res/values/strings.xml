@@ -1,12 +1,16 @@
 <resources>
-    <string name="app_name">MdirFileManager</string>
-    <string name="date_format_pattern">yy-MM-dd HH:mm</string>
-    <string name="menu_hide_show">숨김 폴더/파일 표시</string>
-    <string name="string_m_dir">M Dir</string>
-    <string name="string_map">MAP</string>
-    <string name="string_uppercase_rename">RENAME</string>
-    <string name="string_uppercase_copy">COPY</string>
-    <string name="string_uppercase_share">SHARE</string>
-    <string name="string_uppercase_delete">DELETE</string>
-    <string name="string_uppercase_favorite">FAVORITE</string>
+    <string name="app_name" translatable="false">MdirFileManager</string>
+    <string name="date_format_pattern" translatable="false">yy-MM-dd HH:mm</string>
+    <string name="string_m_dir" translatable="false">M Dir</string>
+    <string name="string_map" translatable="false">MAP</string>
+
+    <string name="string_uppercase_rename" translatable="false">RENAME</string>
+    <string name="string_uppercase_copy" translatable="false">COPY</string>
+    <string name="string_uppercase_share" translatable="false">SHARE</string>
+    <string name="string_uppercase_delete" translatable="false">DELETE</string>
+    <string name="string_uppercase_favorite" translatable="false">FAVORITE</string>
+
+    <string name="menu_hide_show">Show hidden folder/files</string>
+    <string name="sub_item">" item"</string>
+    <string name="sub_items">" items"</string>
 </resources>
