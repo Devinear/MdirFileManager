@@ -58,13 +58,13 @@ object FileUtil {
 
     fun getFileExtType(ext: String) : ExtType {
         return when (ext.toLowerCase()) {
-            "jpg", "jpeg", "png", "bmp" ->
+            "jpg", "jpeg", "png", "bmp", "gif", "heif" ->
                 ExtType.Image
-            "3gp", "mp4", "webm", "mkv", "ts" ->
+            "3gp", "mp4", "webm", "mkv", "ts", "avi", "wmv" ->
                 ExtType.Video
-            "m4a", "aac", "flac", "gsm", "mp3" ->
+            "m4a", "aac", "flac", "gsm", "mp3", "amr", "ogg" ->
                 ExtType.Audio
-            "doc", "hwp", "xls", "ppt", "docx", "xlsx", "pptx", "pdf" ->
+            "doc", "hwp", "xls", "ppt", "docx", "xlsx", "pptx", "pdf", "txt" ->
                 ExtType.Document
             "zip", "7z", "rar" ->
                 ExtType.Zip
