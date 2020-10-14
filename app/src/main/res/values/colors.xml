@@ -12,11 +12,14 @@
     <color name="type_yellow_1">#EFF344</color>
     <color name="type_yellow_2">#818325</color> // 0x81 0x83 0x25
     <color name="type_red_1">#A44501</color>
+    <color name="type_red_2">#D2691E</color> // Chocolate #D2691E
+    <color name="type_red_3">#DEB887</color> // BurlyWood #D2691E
     <color name="type_blue_1">#149B9A</color>
     <color name="type_blue_2">#128383</color>
     <color name="type_blue_3">#128383</color>
     <color name="type_green_1">#4CF943</color>
     <color name="type_green_2">#139902</color>
+    <color name="type_violet">#8A2BE2</color> // BlueViolet
 
     <color name="title_main">#C4C2C2</color>
     <color name="title_sub">#387D7C</color>
