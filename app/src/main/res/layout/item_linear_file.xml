@@ -12,9 +12,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
+        android:layout_height="@dimen/recycler_linear_port_item_height"
         android:background="@android:color/black" >
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_name" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -31,14 +41,14 @@
             tools:text="NAME"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tv_size"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_image"
             app:layout_constraintEnd_toStartOf="@id/tv_type" />
 
         <TextView
             android:id="@+id/tv_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintHorizontal_weight="0.3"
             android:layout_marginEnd="@dimen/recycler_item_margin_default"
             android:textAlignment="viewEnd"
             android:fontFamily="@font/dos_m"
@@ -55,7 +65,7 @@
             android:id="@+id/tv_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintHorizontal_weight="0.2"
+            app:layout_constraintHorizontal_weight="0.3"
             android:layout_marginEnd="@dimen/recycler_item_margin_default"
             android:textAlignment="viewEnd"
             android:fontFamily="@font/dos_m"
@@ -85,18 +95,18 @@
             tools:text="TIME"
             app:layout_constraintTop_toBottomOf="@id/tv_name"
             app:layout_constraintBottom_toTopOf="@id/vi_divider"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
             app:layout_constraintEnd_toStartOf="@id/tv_size" />
 
         <View
             android:id="@+id/vi_divider"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_weight="1"
             android:layout_height="1dp"
             android:layout_marginTop="5dp"
-            android:layout_marginStart="@dimen/recycler_item_margin_default"
-            android:layout_marginEnd="@dimen/recycler_item_margin_default"
             android:background="@color/DimGray"
-            app:layout_constraintTop_toBottomOf="@id/tv_time"
+            app:layout_constraintStart_toStartOf="@id/tv_name"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
