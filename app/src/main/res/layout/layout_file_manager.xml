@@ -23,7 +23,7 @@
         <LinearLayout
             android:id="@+id/lay_top_outer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recycler_linear_item_height"
+            android:layout_height="@dimen/recycler_linear_land_item_height"
             android:paddingStart="@dimen/layout_padding_default_size"
             android:paddingEnd="@dimen/layout_padding_default_size"
             android:orientation="horizontal"
@@ -106,7 +106,7 @@
         <LinearLayout
             android:id="@+id/lay_top_inner"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recycler_linear_item_height"
+            android:layout_height="@dimen/recycler_linear_land_item_height"
             android:background="@color/title_main"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -152,7 +152,7 @@
         <LinearLayout
             android:id="@+id/lay_bottom_inner"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recycler_linear_item_height"
+            android:layout_height="@dimen/recycler_linear_land_item_height"
             android:paddingStart="@dimen/layout_padding_default_size"
             android:paddingEnd="@dimen/layout_padding_default_size"
             android:orientation="horizontal"
@@ -242,7 +242,7 @@
         <LinearLayout
             android:id="@+id/lay_bottom_outer"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recycler_linear_item_height"
+            android:layout_height="@dimen/recycler_linear_land_item_height"
             android:orientation="horizontal"
             android:background="@color/title_sub"
             app:layout_constraintTop_toBottomOf="@id/lay_bottom_inner"
