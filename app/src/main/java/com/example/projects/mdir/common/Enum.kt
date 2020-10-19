@@ -48,3 +48,10 @@ enum class Category {
     Download,
     APK
 }
+
+enum class ShowFragment {
+    Home,
+    Browser,
+    Find,
+    Favorite
+}
