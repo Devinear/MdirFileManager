@@ -16,15 +16,13 @@ import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import com.example.projects.R
 import com.example.projects.databinding.ActivityFileManagerBinding
-import com.example.projects.mdir.common.FileType
-import com.example.projects.mdir.common.FileUtil
-import com.example.projects.mdir.common.LayoutType
-import com.example.projects.mdir.common.ShowType
+import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 import com.example.projects.mdir.view.FileSnackBar
+import com.example.projects.mdir.view.fragment.HomeFragment
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
@@ -59,7 +57,7 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_file_manager)
 
-
+        showFragment()
 
 //        binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
 //        binding.apply {
@@ -89,6 +87,13 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                 REQUEST_CODE
             )
         }
+    }
+
+    private fun showFragment(type: ShowFragment = ShowFragment.Home) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.la_frame, HomeFragment())
+            addToBackStack(null)
+        }.commit()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
