@@ -6,7 +6,6 @@ import android.content.pm.ResolveInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,17 +14,14 @@ import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
-import com.example.projects.databinding.LayoutFileManagerBinding
+import com.example.projects.databinding.ActivityFileManagerBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.common.LayoutType
 import com.example.projects.mdir.common.ShowType
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
-import com.example.projects.mdir.repository.FavoriteRepository
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 import com.example.projects.mdir.view.FileSnackBar
@@ -34,7 +30,8 @@ import java.io.File
 
 class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
-    private lateinit var binding : LayoutFileManagerBinding
+//    private lateinit var binding : LayoutFileManagerBinding
+    private lateinit var binding : ActivityFileManagerBinding
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapterLinear = FileLinearAdapter(this)
@@ -60,25 +57,29 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
         super.onCreate(savedInstanceState)
         checkPermission()
 
-        binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
-        binding.apply {
-            recycler.adapter = adapterLinear
-            recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
-            layoutType = LayoutType.Linear
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_file_manager)
 
-            // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
-            lifecycleOwner = this@FileManagerActivity
-            activity = this@FileManagerActivity
 
-            // Bind Item
-            items = listFileItem
-        }
 
-        adapterLinear.apply {
-            clickListener = this@FileManagerActivity
-            isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-            updateFileList()
-        }
+//        binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
+//        binding.apply {
+//            recycler.adapter = adapterLinear
+//            recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
+//            layoutType = LayoutType.Linear
+//
+//            // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
+//            lifecycleOwner = this@FileManagerActivity
+//            activity = this@FileManagerActivity
+//
+//            // Bind Item
+//            items = listFileItem
+//        }
+//
+//        adapterLinear.apply {
+//            clickListener = this@FileManagerActivity
+//            isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+//            updateFileList()
+//        }
     }
 
     private fun checkPermission() {
@@ -105,21 +106,21 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        Log.d(TAG, "onConfigurationChanged ORIENTATION:${newConfig.orientation}")
-        when (layoutType) {
-            LayoutType.Linear -> {
-                adapterLinear.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
-                adapterLinear.notifyDataSetChanged()
-            }
-            else -> {
-                adapterGrid.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
-                adapterGrid.notifyDataSetChanged()
-                if(binding.recycler.layoutManager is GridLayoutManager) {
-                    val spanCount : Int = newConfig.screenWidthDp / GRID_ITEM_WIDTH_DP +1
-                    (binding.recycler.layoutManager as GridLayoutManager).spanCount = spanCount
-                }
-            }
-        }
+//        Log.d(TAG, "onConfigurationChanged ORIENTATION:${newConfig.orientation}")
+//        when (layoutType) {
+//            LayoutType.Linear -> {
+//                adapterLinear.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
+//                adapterLinear.notifyDataSetChanged()
+//            }
+//            else -> {
+//                adapterGrid.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
+//                adapterGrid.notifyDataSetChanged()
+//                if(binding.recycler.layoutManager is GridLayoutManager) {
+//                    val spanCount : Int = newConfig.screenWidthDp / GRID_ITEM_WIDTH_DP +1
+//                    (binding.recycler.layoutManager as GridLayoutManager).spanCount = spanCount
+//                }
+//            }
+//        }
     }
 
     override fun onClickFile(item: FileItem) {
@@ -182,46 +183,46 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
     private fun updateFileList(isHome: Boolean = false, isShowType: ShowType = ShowType.All, isFavorite: Boolean = false) {
         Log.d(TAG, "updateFileList IsHome:$isHome IsShowType:$isShowType")
-        if(currentPath.isEmpty() || isHome) {
-            currentPath = FileUtil.ROOT
-            livePath.value = ".."
-        }
-
-        listFileItem.clear()
-        if(!isFavorite) {
-            listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow, isShowType))
-        }
-        else {
-            val items = mutableListOf<FileItem>()
-            FavoriteRepository.INSTANCE.getAll().forEach {
-                val item = FileUtil.convertFileItem(context = this, path = it)
-                if(item != null)
-                    items.add(item)
-            }
-            listFileItem.addAll(items)
-        }
-
-        var dirs = 0
-        var files = 0
-        var images = 0
-        listFileItem.forEach {
-            when(it.type) {
-                FileType.UpDir -> { }
-                FileType.Dir -> { dirs += 1 }
-                FileType.Image -> {
-                    images += 1
-                    files += 1
-                }
-                else -> { files += 1 }
-            }
-        }
-        liveDirs.value = dirs
-        liveFiles.value = files
-        liveImages.value = images
-
-        liveShow.value = isShowType.toString()
-        binding.tvImgs.visibility = if(images > 0 && isShowType == ShowType.All) View.VISIBLE else View.GONE
-        binding.tvImgsName.visibility = if(images > 0 && isShowType == ShowType.All) View.VISIBLE else View.GONE
+//        if(currentPath.isEmpty() || isHome) {
+//            currentPath = FileUtil.ROOT
+//            livePath.value = ".."
+//        }
+//
+//        listFileItem.clear()
+//        if(!isFavorite) {
+//            listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow, isShowType))
+//        }
+//        else {
+//            val items = mutableListOf<FileItem>()
+//            FavoriteRepository.INSTANCE.getAll().forEach {
+//                val item = FileUtil.convertFileItem(context = this, path = it)
+//                if(item != null)
+//                    items.add(item)
+//            }
+//            listFileItem.addAll(items)
+//        }
+//
+//        var dirs = 0
+//        var files = 0
+//        var images = 0
+//        listFileItem.forEach {
+//            when(it.type) {
+//                FileType.UpDir -> { }
+//                FileType.Dir -> { dirs += 1 }
+//                FileType.Image -> {
+//                    images += 1
+//                    files += 1
+//                }
+//                else -> { files += 1 }
+//            }
+//        }
+//        liveDirs.value = dirs
+//        liveFiles.value = files
+//        liveImages.value = images
+//
+//        liveShow.value = isShowType.toString()
+//        binding.tvImgs.visibility = if(images > 0 && isShowType == ShowType.All) View.VISIBLE else View.GONE
+//        binding.tvImgsName.visibility = if(images > 0 && isShowType == ShowType.All) View.VISIBLE else View.GONE
     }
 
     fun onClickHome() {
@@ -252,32 +253,32 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     }
 
     fun onClickGrid() {
-        when (layoutType) {
-            LayoutType.Linear -> {
-                layoutType = LayoutType.Grid
-                with(binding) {
-                    btGrid.text = "GRID"
-                    recycler.layoutManager = GridLayoutManager( this@FileManagerActivity, resources.configuration.screenWidthDp / GRID_ITEM_WIDTH_DP +1)
-                    recycler.adapter = adapterGrid.apply {
-                        clickListener = this@FileManagerActivity
-                        isPortrait = adapterLinear.isPortrait
-                        updateFileList()
-                    }
-                }
-            }
-            else -> {
-                layoutType = LayoutType.Linear
-                with(binding) {
-                    btGrid.text = "LIST"
-                    recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
-                    recycler.adapter = adapterLinear.apply {
-                        clickListener = this@FileManagerActivity
-                        isPortrait = adapterGrid.isPortrait
-                        updateFileList()
-                    }
-                }
-            }
-        }
+//        when (layoutType) {
+//            LayoutType.Linear -> {
+//                layoutType = LayoutType.Grid
+//                with(binding) {
+//                    btGrid.text = "GRID"
+//                    recycler.layoutManager = GridLayoutManager( this@FileManagerActivity, resources.configuration.screenWidthDp / GRID_ITEM_WIDTH_DP +1)
+//                    recycler.adapter = adapterGrid.apply {
+//                        clickListener = this@FileManagerActivity
+//                        isPortrait = adapterLinear.isPortrait
+//                        updateFileList()
+//                    }
+//                }
+//            }
+//            else -> {
+//                layoutType = LayoutType.Linear
+//                with(binding) {
+//                    btGrid.text = "LIST"
+//                    recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
+//                    recycler.adapter = adapterLinear.apply {
+//                        clickListener = this@FileManagerActivity
+//                        isPortrait = adapterGrid.isPortrait
+//                        updateFileList()
+//                    }
+//                }
+//            }
+//        }
     }
 
     fun onClickAll() = updateFileList(isShowType = ShowType.All)
