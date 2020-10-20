@@ -46,7 +46,8 @@ enum class Category {
     Audio,
     Document,
     Download,
-    APK
+    APK,
+    Zip
 }
 
 enum class ShowFragment {
