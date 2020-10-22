@@ -20,7 +20,7 @@
             app:layout_constraintEnd_toStartOf="@id/bt_home_movie" >
             <ImageView
                 style="@style/HomeCategoryImage"
-                android:src="@drawable/outline_insert_photo_white_48" />
+                android:src="@drawable/outline_insert_photo_white_36" />
             <TextView
                 style="@style/HomeCategoryText"
                 android:text="Image" />
@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toStartOf="@id/bt_home_audio" >
             <ImageView
                 style="@style/HomeCategoryImage"
-                android:src="@drawable/outline_slideshow_white_48" />
+                android:src="@drawable/outline_slideshow_white_36" />
             <TextView
                 style="@style/HomeCategoryText"
                 android:text="Video" />
@@ -50,7 +50,7 @@
             app:layout_constraintEnd_toStartOf="@id/bt_home_document" >
             <ImageView
                 style="@style/HomeCategoryImage"
-                android:src="@drawable/outline_audiotrack_white_48" />
+                android:src="@drawable/outline_audiotrack_white_36" />
             <TextView
                 style="@style/HomeCategoryText"
                 android:text="Audio" />
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent" >
             <ImageView
                 style="@style/HomeCategoryImage"
-                android:src="@drawable/outline_description_white_48" />
+                android:src="@drawable/outline_description_white_36" />
             <TextView
                 style="@style/HomeCategoryText"
                 android:text="Document" />
@@ -80,7 +80,7 @@
             app:layout_constraintEnd_toEndOf="@id/bt_home_image" >
             <ImageView
                 style="@style/HomeCategoryImage"
-                android:src="@drawable/outline_arrow_downward_white_48" />
+                android:src="@drawable/outline_arrow_downward_white_36" />
             <TextView
                 style="@style/HomeCategoryText"
                 android:text="Download" />
@@ -95,7 +95,7 @@
             app:layout_constraintEnd_toEndOf="@id/bt_home_movie" >
             <ImageView
                 style="@style/HomeCategoryImage"
-                android:src="@drawable/outline_android_white_48" />
+                android:src="@drawable/outline_android_white_36" />
             <TextView
                 style="@style/HomeCategoryText"
                 android:text="APK" />
@@ -110,7 +110,7 @@
             app:layout_constraintEnd_toEndOf="@id/bt_home_audio" >
             <ImageView
                 style="@style/HomeCategoryImage"
-                android:src="@drawable/outline_save_white_48" />
+                android:src="@drawable/outline_save_white_36" />
             <TextView
                 style="@style/HomeCategoryText"
                 android:text="ZIP" />
