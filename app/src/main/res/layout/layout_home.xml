@@ -79,7 +79,14 @@
                 app:layout_constraintTop_toBottomOf="@id/la_favorite"
                 app:layout_constraintBottom_toTopOf="@id/la_storage" >
 
-        </LinearLayout>
+                <TextView
+                    style="@style/HomeTitleTextView"
+                    android:id="@+id/tv_category"
+                    android:text="Category" />
+
+                <include layout="@layout/layout_home_category" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/la_storage"
