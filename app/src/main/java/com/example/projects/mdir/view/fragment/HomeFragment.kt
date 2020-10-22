@@ -28,8 +28,13 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.setContentView(activity, R.layout.layout_home)
-
+//        binding = DataBindingUtil.setContentView(activity, R.layout.layout_home)
+        binding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.layout_home,
+            container,
+            false
+        )
         return binding.root
     }
 

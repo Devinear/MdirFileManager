@@ -11,25 +11,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import com.example.projects.R
-import com.example.projects.databinding.ActivityFileManagerBinding
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
-import com.example.projects.mdir.view.FileSnackBar
 import com.example.projects.mdir.view.fragment.HomeFragment
-import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
-class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener {
 
 //    private lateinit var binding : LayoutFileManagerBinding
-    private lateinit var binding : ActivityFileManagerBinding
+//    private lateinit var binding : ActivityFileManagerBinding
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapterLinear = FileLinearAdapter(this)
@@ -48,16 +44,15 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     private var isHideShow : Boolean = false
     private var layoutType = LayoutType.Linear
 
-    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
+//    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         checkPermission()
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_file_manager)
+//        binding = DataBindingUtil.setContentView(this, R.layout.activity_file_manager)
 
-        showFragment()
 
 //        binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
 //        binding.apply {
@@ -83,15 +78,16 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
     private fun checkPermission() {
         val permissions = Array(1) { "android.permission.WRITE_EXTERNAL_STORAGE" }
         if (ContextCompat.checkSelfPermission(this, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissions,
-                REQUEST_CODE
-            )
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
+        }
+        else {
+            showFragment()
         }
     }
 
     private fun showFragment(type: ShowFragment = ShowFragment.Home) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.la_frame, HomeFragment())
+            replace(R.id.fragment_container, HomeFragment())
             addToBackStack(null)
         }.commit()
     }
@@ -105,7 +101,8 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
                     finish()
                 }
             }
-            updateFileList()
+            showFragment()
+//            updateFileList()
         }
     }
 
@@ -174,16 +171,16 @@ class FileManagerActivity : AppCompatActivity(), OnFileClickListener {
 
         // 즐겨찾기 설정
         // 이름변경
-        val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
-//        layout.findViewById<TextView>(R.id.snackbar_text).visibility = View.INVISIBLE
-        layout.removeAllViews()
-
-        // 기존의 SnackBar가 아닌 CustomView를 연결
-        val customView = FileSnackBar(context = this, item = item, path = currentPath).view
-        layout.setPadding(0, 0, 0, 0)
-        layout.addView(customView, 0)
-
-        snackBar.show()
+//        val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+////        layout.findViewById<TextView>(R.id.snackbar_text).visibility = View.INVISIBLE
+//        layout.removeAllViews()
+//
+//        // 기존의 SnackBar가 아닌 CustomView를 연결
+//        val customView = FileSnackBar(context = this, item = item, path = currentPath).view
+//        layout.setPadding(0, 0, 0, 0)
+//        layout.addView(customView, 0)
+//
+//        snackBar.show()
     }
 
     private fun updateFileList(isHome: Boolean = false, isShowType: ShowType = ShowType.All, isFavorite: Boolean = false) {
