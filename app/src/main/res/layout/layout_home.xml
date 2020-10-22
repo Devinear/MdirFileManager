@@ -4,74 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.example.projects.mdir.data.FileItem" />
+        <import type="com.example.projects.mdir.common.FileType" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black">
+        android:fillViewport="true" >
 
-        <LinearLayout
-            android:id="@+id/la_recent"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/colorDimGray"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/la_favorite" >
+            android:background="@android:color/black">
 
-            <TextView
-                android:id="@+id/tv_recent"
+            <LinearLayout
+                style="@style/HomeLinearLayout"
+                tools:ignore="MissingConstraints"
+                android:id="@+id/la_recent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/la_favorite" >
+
+                <TextView
+                    style="@style/HomeTitleTextView"
+                    android:id="@+id/tv_recent"
+                    android:text="Recent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/re_recent"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/home_item_height"
+                    tools:listitem="@layout/item_recent"/>
+
+                <ImageButton
+                    android:id="@+id/ib_recent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/outline_arrow_drop_down_white_24"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/HomeLinearLayout"
+                tools:ignore="MissingConstraints"
+                android:id="@+id/la_favorite"
+                app:layout_constraintTop_toBottomOf="@id/la_recent"
+                app:layout_constraintBottom_toTopOf="@id/la_category">
+
+                <TextView
+                    style="@style/HomeTitleTextView"
+                    android:id="@+id/tv_favorite"
+                    android:text="Favorite" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/re_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/home_item_height"
+                    tools:listitem="@layout/item_recent"/>
+
+                <ImageButton
+                    android:id="@+id/ib_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/outline_arrow_drop_down_white_24"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/HomeLinearLayout"
+                tools:ignore="MissingConstraints"
+                android:id="@+id/la_category"
+                app:layout_constraintTop_toBottomOf="@id/la_favorite"
+                app:layout_constraintBottom_toTopOf="@id/la_storage" >
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/la_storage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/dos_m"
-                android:text="Recent"
-                android:textSize="@dimen/home_title_text_size"
-                android:textColor="@android:color/white" />
-            
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/re_recent"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/home_item_height"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:listitem="@layout/item_recent"/>
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/la_category" >
 
-            <ImageButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/la_favorite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/la_recent"
-            app:layout_constraintBottom_toTopOf="@id/la_category" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/la_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/la_favorite"
-            app:layout_constraintBottom_toTopOf="@id/la_storage" >
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/la_storage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/la_category"
-            app:layout_constraintBottom_toBottomOf="parent" >
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </layout>
