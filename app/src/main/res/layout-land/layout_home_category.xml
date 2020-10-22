@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@color/colorHomeLayout" >
 
-        <!-- First -->
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_image"
@@ -62,7 +61,7 @@
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/bt_home_image"
             app:layout_constraintStart_toEndOf="@id/bt_home_audio"
-            app:layout_constraintEnd_toEndOf="parent" >
+            app:layout_constraintEnd_toStartOf="@id/bt_home_download" >
             <ImageView
                 style="@style/HomeCategoryImage"
                 android:src="@drawable/outline_description_white_48" />
@@ -71,13 +70,13 @@
                 android:text="Document" />
         </LinearLayout>
 
-        <!-- Second -->
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_download"
-            app:layout_constraintTop_toBottomOf="@id/bt_home_image"
-            app:layout_constraintStart_toStartOf="@id/bt_home_image"
-            app:layout_constraintEnd_toEndOf="@id/bt_home_image" >
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@id/bt_home_image"
+            app:layout_constraintStart_toEndOf="@id/bt_home_document"
+            app:layout_constraintEnd_toStartOf="@id/bt_home_apk" >
             <ImageView
                 style="@style/HomeCategoryImage"
                 android:src="@drawable/outline_arrow_downward_white_48" />
@@ -90,9 +89,9 @@
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_apk"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintTop_toBottomOf="@id/bt_home_movie"
-            app:layout_constraintStart_toStartOf="@id/bt_home_movie"
-            app:layout_constraintEnd_toEndOf="@id/bt_home_movie" >
+            app:layout_constraintTop_toTopOf="@id/bt_home_image"
+            app:layout_constraintStart_toEndOf="@id/bt_home_download"
+            app:layout_constraintEnd_toStartOf="@id/bt_home_zip" >
             <ImageView
                 style="@style/HomeCategoryImage"
                 android:src="@drawable/outline_android_white_48" />
@@ -105,9 +104,9 @@
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_zip"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintTop_toBottomOf="@id/bt_home_audio"
-            app:layout_constraintStart_toStartOf="@id/bt_home_audio"
-            app:layout_constraintEnd_toEndOf="@id/bt_home_audio" >
+            app:layout_constraintTop_toTopOf="@id/bt_home_image"
+            app:layout_constraintStart_toEndOf="@id/bt_home_apk"
+            app:layout_constraintEnd_toEndOf="parent" >
             <ImageView
                 style="@style/HomeCategoryImage"
                 android:src="@drawable/outline_save_white_48" />
