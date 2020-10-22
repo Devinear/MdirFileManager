@@ -42,7 +42,7 @@ enum class LayoutType {
 // Android - '내 파일' 카테고리
 enum class Category {
     Image,
-    Movie,
+    Video,
     Audio,
     Document,
     Download,
