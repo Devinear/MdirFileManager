@@ -5,8 +5,6 @@
     <color name="colorAccent">#03DAC5</color>
 
     <!-- Color Values -->
-    <color name="colorDimGray">#696969</color>
-    <color name="colorDarkGray">#A9A9A9</color>
     <color name="colorChocolate">#D2691E</color>
     <color name="colorBurlyWood">#DEB887</color>
     <color name="colorBlueViolet">#8A2BE2</color>
@@ -16,6 +14,25 @@
     <color name="colorMediumVioletRed">#C71585</color>
     <color name="colorPaleGoldenRod">#EEE8AA</color>
     <color name="colorAliceBlue">#F0F8FF</color>
+    <color name="colorMediumSeaGreen">#3CB371</color>
+    <color name="colorSteelBlue">#4682B4</color>
+    <color name="colorMediumAquaMarine">#66CDAA</color>
+    <color name="colorLemonChiffon">#FFFACD</color>
+    <color name="colorHoneyDew">#F0FFF0</color>
+    <color name="colorGrey">#808080</color>
+    <color name="colorLightGray">#D3D3D3</color>
+    <color name="colorDimGray">#696969</color>
+    <color name="colorDarkGray">#A9A9A9</color>
+    <color name="colorSlateGray">#708090</color>
+    <color name="colorDarkSlateGray">#2F4F4F</color>
+    <color name="color10Gray">#101010</color> // rgb(16,16,16)
+    <color name="color20Gray">#202020</color> // rgb(32,32,32)
+    <color name="color30Gray">#303030</color> // rgb(48,48,48)
+
+    <!-- Home Fragment -->
+    <color name="colorHomeText">@android:color/white</color>
+    <color name="colorHomeLayout">@color/color30Gray</color>
+
 
     <color name="type_storage">#001398</color>
     <color name="type_dir">#FC3B41</color>
