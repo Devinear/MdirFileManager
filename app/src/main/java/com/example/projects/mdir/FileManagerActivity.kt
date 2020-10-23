@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -46,6 +47,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 
 //    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
+    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
@@ -73,6 +76,19 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //            isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 //            updateFileList()
 //        }
+
+        initUi()
+    }
+
+    private fun initUi() {
+        toolbar.apply {
+//            setBackgroundColor(ContextCompat.getColor(context, R.color.colorHomeLayout))
+            setTitleTextColor(ContextCompat.getColor(context, R.color.colorHomeText))
+        }.also {
+            setSupportActionBar(it.apply {
+                title = "HOME HOMMM"
+            })
+        }
     }
 
     private fun checkPermission() {
