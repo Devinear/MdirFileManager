@@ -63,4 +63,19 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CollapsingToolbar.CollapsedTitleStyle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/dos_m</item>
+    </style>
+
+    <style name="CollapsingToolbar.ExpandedTitleStyle" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:fontFamily">@font/dos_m</item>
+    </style>
+
+
 </resources>
