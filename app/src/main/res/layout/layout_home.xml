@@ -101,6 +101,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/la_category" >
 
+                <TextView
+                    style="@style/HomeTitleTextView"
+                    android:id="@+id/tv_storage"
+                    android:text="Storage" />
+                
+                <include layout="@layout/item_home_storage" />
+                
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
