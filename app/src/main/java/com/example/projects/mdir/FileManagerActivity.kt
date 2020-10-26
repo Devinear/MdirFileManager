@@ -6,6 +6,8 @@ import android.content.pm.ResolveInfo
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +23,8 @@ import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 import com.example.projects.mdir.view.fragment.HomeFragment
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.io.File
 
 class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener {
@@ -88,6 +92,20 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
             setSupportActionBar(it.apply {
                 title = "HOME HOMMM"
             })
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu) ;
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.action_settings -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
