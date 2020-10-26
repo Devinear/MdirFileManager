@@ -27,7 +27,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.io.File
 
-class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener {
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener, AppBarLayout.OnOffsetChangedListener {
 
 //    private lateinit var binding : LayoutFileManagerBinding
 //    private lateinit var binding : ActivityFileManagerBinding
@@ -93,6 +93,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                 title = "HOME HOMMM"
             })
         }
+    }
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+        TODO("Not yet implemented")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
