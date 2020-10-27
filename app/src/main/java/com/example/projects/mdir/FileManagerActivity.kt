@@ -90,7 +90,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
             setTitleTextColor(ContextCompat.getColor(context, R.color.colorHomeText))
         }.also {
             setSupportActionBar(it.apply {
-                title = "HOME HOMMM"
+                title = "Retro File"
             })
         }
 
