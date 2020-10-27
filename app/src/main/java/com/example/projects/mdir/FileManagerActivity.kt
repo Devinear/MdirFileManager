@@ -24,7 +24,6 @@ import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 import com.example.projects.mdir.view.fragment.HomeFragment
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.io.File
 
 class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener, AppBarLayout.OnOffsetChangedListener {
@@ -52,6 +51,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
+    private val appbar by lazy { findViewById<AppBarLayout>(R.id.appbar) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -93,6 +93,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                 title = "HOME HOMMM"
             })
         }
+
+        appbar.setExpanded(false)
     }
 
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
