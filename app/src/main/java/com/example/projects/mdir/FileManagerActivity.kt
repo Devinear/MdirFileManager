@@ -101,13 +101,44 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         TODO("Not yet implemented")
     }
 
+    private lateinit var menu: Menu
+    var isShowList = true
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu) ;
+        if(menu == null) return false
+        this.menu = menu
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        // Browser Fragment 보기 모드 변경 메뉴
+        val isShowBrowserFragment = true
+        if(!isShowBrowserFragment) {
+            menu?.findItem(R.id.action_list)?.isVisible = false
+            menu?.findItem(R.id.action_grid)?.isVisible = false
+        }
+        else {
+            menu?.findItem(R.id.action_list)?.isVisible = !isShowList
+            menu?.findItem(R.id.action_grid)?.isVisible = isShowList
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
+            R.id.action_list -> {
+                isShowList = true
+                menu.findItem(R.id.action_list)?.isVisible = false
+                menu.findItem(R.id.action_grid)?.isVisible = true
+                true
+            }
+            R.id.action_grid -> {
+                isShowList = false
+                menu.findItem(R.id.action_list)?.isVisible = true
+                menu.findItem(R.id.action_grid)?.isVisible = false
+                true
+            }
             R.id.action_settings -> {
                 true
             }
