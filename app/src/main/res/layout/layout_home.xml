@@ -5,8 +5,18 @@
     tools:context="com.example.projects.mdir.view.fragment.HomeFragment">
 
     <data>
+        <import type="com.example.projects.mdir.view.HomeViewModel" />
+        <import type="com.example.projects.mdir.view.fragment.HomeFragment" />
+
         <import type="com.example.projects.mdir.data.FileItem" />
         <import type="com.example.projects.mdir.common.FileType" />
+
+        <variable
+            name="fragment"
+            type="HomeFragment" />
+        <variable
+            name="vm"
+            type="HomeViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -106,8 +116,10 @@
                     android:id="@+id/tv_storage"
                     android:text="Storage" />
                 
-                <include layout="@layout/item_home_storage" />
-                
+                <include
+                    layout="@layout/item_home_storage"
+                    app:viewModel="@{vm}" />
+
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

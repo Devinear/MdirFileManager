@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/recycler_linear_port_item_height"
-    android:onClick="@{}"
-    tools:background="@color/color30Gray">
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.projects.mdir.view.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycler_linear_port_item_height"
+        android:onClick="@{()->viewModel.onClickStorage()}"
+        tools:background="@color/color30Gray">
 
         <ImageView
             android:id="@+id/iv_image"
@@ -61,4 +69,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
