@@ -30,6 +30,7 @@
     <color name="color30Gray">#303030</color> // rgb(48,48,48)
 
     <!-- Home Fragment -->
+    <color name="colorBackground">@android:color/black</color>
     <color name="colorHomeText">@android:color/white</color>
     <color name="colorHomeLayout">@color/color30Gray</color>
 
