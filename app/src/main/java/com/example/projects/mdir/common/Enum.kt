@@ -50,9 +50,16 @@ enum class Category {
     Zip
 }
 
-enum class ShowFragment {
+enum class FragmentType {
     Home,
     Browser,
+    Setting
+}
+
+enum class BrowserType {
+    Storage,
+    Category,
     Find,
-    Favorite
+    Favorite,
+    Recent
 }
