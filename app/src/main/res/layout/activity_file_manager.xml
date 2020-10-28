@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/black"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -21,9 +20,21 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleTextAppearance="@style/CollapsingToolbar.ExpandedTitleStyle"
             app:collapsedTitleTextAppearance="@style/CollapsingToolbar.CollapsedTitleStyle"
-            app:expandedTitleGravity="center"
+            app:expandedTitleGravity="start"
+            app:contentScrim="@color/colorBackground"
             android:fitsSystemWindows="true" >
+            <!--app:expandedTitleGravity="center"-->
             <!--app:contentScrim="@color/colorHomeLayout"-->
+
+            <ImageView
+                android:id="@+id/iv_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/appbar_iu"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.1"
+                android:fitsSystemWindows="true" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
