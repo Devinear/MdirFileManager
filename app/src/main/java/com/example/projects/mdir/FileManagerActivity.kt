@@ -22,7 +22,9 @@ import com.example.projects.mdir.data.FileItem
 import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
+import com.example.projects.mdir.view.fragment.BrowserFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
+import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
 import java.io.File
 
@@ -47,6 +49,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     private var currentPath: String = ""
     private var isHideShow : Boolean = false
     private var layoutType = LayoutType.Linear
+
+    private var showFragment = FragmentType.Home
 
 //    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
@@ -140,6 +144,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                 true
             }
             R.id.action_settings -> {
+                changeFragment(FragmentType.Browser)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -152,14 +157,29 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
         }
         else {
-            showFragment()
+            changeFragment()
         }
     }
 
-    private fun showFragment(type: ShowFragment = ShowFragment.Home) {
+    private fun changeFragment(type: FragmentType = FragmentType.Home) {
+        val oldFragment = showFragment
+        showFragment = type
+
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, HomeFragment())
-            addToBackStack(null)
+            when(showFragment) {
+                FragmentType.Home -> {
+                    replace(R.id.fragment_container, HomeFragment.INSTANCE)
+                    addToBackStack(null)
+                }
+                FragmentType.Browser -> {
+                    replace(R.id.fragment_container, BrowserFragment.INSTANCE)
+                    addToBackStack(HomeFragment.toString())
+                }
+                FragmentType.Setting -> {
+                    replace(R.id.fragment_container, SettingFragment.INSTANCE)
+                    addToBackStack(HomeFragment.toString())
+                }
+            }
         }.commit()
     }
 
@@ -172,7 +192,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                     finish()
                 }
             }
-            showFragment()
+            changeFragment()
 //            updateFileList()
         }
     }
@@ -352,6 +372,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //                }
 //            }
 //        }
+    }
+
+    fun requestStorage() {
+        changeFragment(FragmentType.Browser)
     }
 
     fun onClickAll() = updateFileList(isShowType = ShowType.All)

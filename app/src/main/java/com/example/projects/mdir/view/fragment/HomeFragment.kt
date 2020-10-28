@@ -38,5 +38,9 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-
+    companion object {
+        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            HomeFragment()
+        }
+    }
 }

@@ -13,4 +13,10 @@ class BrowserFragment : Fragment() {
     val liveShow = MutableLiveData<String>()
 
     fun onClickHome() = Unit
+
+    companion object {
+        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            BrowserFragment()
+        }
+    }
 }
