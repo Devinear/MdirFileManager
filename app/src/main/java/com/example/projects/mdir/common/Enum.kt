@@ -57,6 +57,7 @@ enum class FragmentType {
 }
 
 enum class BrowserType {
+    None,
     Storage,
     Category,
     Find,

@@ -172,7 +172,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                     addToBackStack(null)
                 }
                 FragmentType.Browser -> {
-                    replace(R.id.fragment_container, BrowserFragment.INSTANCE)
+                    replace(R.id.fragment_container, BrowserFragment.newInstance(BrowserType.Category))
                     addToBackStack(HomeFragment.toString())
                 }
                 FragmentType.Setting -> {

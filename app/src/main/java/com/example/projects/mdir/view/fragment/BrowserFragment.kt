@@ -12,8 +12,26 @@ import androidx.lifecycle.MutableLiveData
 import com.example.projects.R
 import com.example.projects.databinding.LayoutBrowserBinding
 import com.example.projects.mdir.FileManagerActivity
+import com.example.projects.mdir.common.BrowserType
+import com.example.projects.mdir.view.BrowserData
 
 class BrowserFragment : Fragment() {
+
+    companion object {
+        private const val PATH = "path"
+        private const val TYPE = "type"
+
+//        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+//            BrowserFragment()
+//        }
+
+        fun newInstance(type: BrowserType, path: String = "") = BrowserFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(TYPE, BrowserData(type))
+                putString(PATH, path)
+            }
+        }
+    }
 
     private lateinit var binding : LayoutBrowserBinding
     private lateinit var activity : Activity
@@ -24,9 +42,16 @@ class BrowserFragment : Fragment() {
     val liveImages = MutableLiveData<Int>()
     val liveShow = MutableLiveData<String>()
 
+    val browserType by lazy { requireArguments().getParcelable<BrowserData>(TYPE)?.type?:BrowserType.None }
+    val browserPath by lazy { requireArguments().getString(PATH)?:"" }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity = getActivity() as FileManagerActivity
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
@@ -45,9 +70,5 @@ class BrowserFragment : Fragment() {
 
     fun onClickHome() = Unit
 
-    companion object {
-        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-            BrowserFragment()
-        }
-    }
+
 }
