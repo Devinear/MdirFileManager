@@ -16,6 +16,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.projects.R
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItem
@@ -28,10 +31,16 @@ import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
 import java.io.File
 
-class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener, AppBarLayout.OnOffsetChangedListener {
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener, AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner {
 
 //    private lateinit var binding : LayoutFileManagerBinding
 //    private lateinit var binding : ActivityFileManagerBinding
+
+    private val viewModelStore = ViewModelStore()
+    private lateinit var viewModel: FileViewModel
+//    private val viewModel : FileViewModel by lazy {
+//        ViewModelProviders.of(this).get(FileViewModel::class.java)
+//    }
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapterLinear = FileLinearAdapter(this)
@@ -85,6 +94,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //            updateFileList()
 //        }
 
+        viewModel = ViewModelProvider(
+            this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        ).get(FileViewModel::class.java)
+
         initUi()
     }
 
@@ -101,6 +114,15 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         appbar.setExpanded(false)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModelStore.clear()
+    }
+
+    /* ViewModelStoreOwner */
+    override fun getViewModelStore(): ViewModelStore = viewModelStore
+
+    /* AppBarLayout.OnOffsetChangedListener */
     override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
         TODO("Not yet implemented")
     }
