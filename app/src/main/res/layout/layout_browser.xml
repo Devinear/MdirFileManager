@@ -30,15 +30,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/recycler" >
 
-            <Button
-                android:id="@+id/bt_home"
+            <ImageButton
+                android:id="@+id/ib_home"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
-                android:text="PATH"
-                android:textSize="@dimen/recycler_item_text_size"
-                android:textColor="@android:color/white"
+                android:src="@drawable/outline_smartphone_white_24"
                 android:onClick="@{()->fragment.onClickHome()}" />
 
             <TextView
