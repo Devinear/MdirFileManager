@@ -405,6 +405,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     }
 
     fun requestStorage() {
+        // 차후에 드라이브를 추가하게되면 타입을 늘리자.
+        Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
+        changeFragment(FragmentType.Browser)
+    }
+
+    fun requestCategory(type: Category) {
+        Toast.makeText(this, "Category[${type.name}]", Toast.LENGTH_SHORT).show()
         changeFragment(FragmentType.Browser)
     }
 

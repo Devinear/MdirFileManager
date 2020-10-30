@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.example.projects.mdir.common.Category" />
+
+        <variable name="activity"
+            type="com.example.projects.mdir.FileManagerActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,10 +17,11 @@
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_image"
+            android:onClick="@{()->activity.requestCategory(Category.Image)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/bt_home_movie" >
+            app:layout_constraintEnd_toStartOf="@id/bt_home_video" >
             <ImageView
                 style="@style/HomeCategoryImage"
                 android:src="@drawable/outline_insert_photo_white_36" />
@@ -27,7 +32,8 @@
 
         <LinearLayout
             style="@style/HomeCategoryLayout"
-            android:id="@+id/bt_home_movie"
+            android:id="@+id/bt_home_video"
+            android:onClick="@{()->activity.requestCategory(Category.Video)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/bt_home_image"
             app:layout_constraintStart_toEndOf="@id/bt_home_image"
@@ -43,9 +49,10 @@
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_audio"
+            android:onClick="@{()->activity.requestCategory(Category.Audio)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/bt_home_image"
-            app:layout_constraintStart_toEndOf="@id/bt_home_movie"
+            app:layout_constraintStart_toEndOf="@id/bt_home_video"
             app:layout_constraintEnd_toStartOf="@id/bt_home_document" >
             <ImageView
                 style="@style/HomeCategoryImage"
@@ -58,6 +65,7 @@
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_document"
+            android:onClick="@{()->activity.requestCategory(Category.Document)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/bt_home_image"
             app:layout_constraintStart_toEndOf="@id/bt_home_audio"
@@ -73,6 +81,7 @@
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_download"
+            android:onClick="@{()->activity.requestCategory(Category.Download)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/bt_home_image"
             app:layout_constraintStart_toEndOf="@id/bt_home_document"
@@ -88,6 +97,7 @@
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_apk"
+            android:onClick="@{()->activity.requestCategory(Category.APK)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/bt_home_image"
             app:layout_constraintStart_toEndOf="@id/bt_home_download"
@@ -103,6 +113,7 @@
         <LinearLayout
             style="@style/HomeCategoryLayout"
             android:id="@+id/bt_home_zip"
+            android:onClick="@{()->activity.requestCategory(Category.Zip)}"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/bt_home_image"
             app:layout_constraintStart_toEndOf="@id/bt_home_apk"

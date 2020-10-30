@@ -5,18 +5,15 @@
     tools:context="com.example.projects.mdir.view.fragment.HomeFragment">
 
     <data>
-        <import type="com.example.projects.mdir.view.HomeViewModel" />
-        <import type="com.example.projects.mdir.view.fragment.HomeFragment" />
-
         <import type="com.example.projects.mdir.data.FileItem" />
         <import type="com.example.projects.mdir.common.FileType" />
 
-        <variable
-            name="fragment"
-            type="HomeFragment" />
-        <variable
-            name="vm"
-            type="HomeViewModel" />
+        <variable name="activity"
+            type="com.example.projects.mdir.FileManagerActivity" />
+        <variable name="fragment"
+            type="com.example.projects.mdir.view.fragment.HomeFragment" />
+        <variable name="vm"
+            type="com.example.projects.mdir.FileViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -99,7 +96,9 @@
                     android:id="@+id/tv_category"
                     android:text="Category" />
 
-                <include layout="@layout/layout_home_category" />
+                <include
+                    layout="@layout/layout_home_category"
+                    app:activity="@{activity}" />
 
             </LinearLayout>
 
@@ -117,8 +116,8 @@
                     android:text="Storage" />
                 
                 <include
-                    layout="@layout/item_home_storage"
-                    app:viewModel="@{vm}" />
+                    layout="@layout/layout_home_storage"
+                    app:activity="@{activity}" />
 
             </LinearLayout>
 

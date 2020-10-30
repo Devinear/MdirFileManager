@@ -8,20 +8,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.projects.R
 import com.example.projects.databinding.LayoutHomeBinding
 import com.example.projects.mdir.FileManagerActivity
-import com.example.projects.mdir.view.HomeViewModel
+import com.example.projects.mdir.FileViewModel
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding : LayoutHomeBinding
-    private lateinit var viewModel : HomeViewModel
     private lateinit var activity : Activity
+
+    private val activityViewModel : FileViewModel by lazy {
+        ViewModelProvider(requireActivity(), object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                FileViewModel(requireActivity().application) as T
+        }).get(FileViewModel::class.java)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = HomeViewModel(context = context)
         activity = getActivity() as FileManagerActivity
     }
 
@@ -36,7 +43,8 @@ class HomeFragment : Fragment() {
             container,
             false
         )
-        binding.vm = viewModel
+        binding.vm = activityViewModel
+        binding.activity = activity as FileManagerActivity
         return binding.root
     }
 
