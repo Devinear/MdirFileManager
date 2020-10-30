@@ -192,6 +192,9 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         val oldFragment = showFragment
         showFragment = type
 
+        // 모든 Fragment 제거
+        supportFragmentManager.fragments.removeAll { true }
+
         supportFragmentManager.beginTransaction().apply {
             when(showFragment) {
                 FragmentType.Home -> {
