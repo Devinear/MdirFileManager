@@ -59,7 +59,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     private var isHideShow : Boolean = false
     private var layoutType = LayoutType.Linear
 
-    private var showFragment = FragmentType.Home
+    private var showFragment = FragmentType.None
 
 //    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
