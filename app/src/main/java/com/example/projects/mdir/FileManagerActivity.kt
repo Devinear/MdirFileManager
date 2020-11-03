@@ -114,6 +114,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         appbar.setExpanded(false)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(showFragment == FragmentType.Home) {
+            finish()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         viewModelStore.clear()
@@ -184,22 +191,23 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     }
 
     private fun changeFragment(type: FragmentType = FragmentType.Home) {
-        val oldFragment = showFragment
         showFragment = type
-
         supportFragmentManager.beginTransaction().apply {
             when(showFragment) {
                 FragmentType.Home -> {
                     replace(R.id.fragment_container, HomeFragment.INSTANCE)
                     addToBackStack(null)
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false) // BackKey 비활성화
                 }
                 FragmentType.Browser -> {
                     replace(R.id.fragment_container, BrowserFragment.newInstance(BrowserType.Category))
                     addToBackStack(HomeFragment.toString())
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 FragmentType.Setting -> {
                     replace(R.id.fragment_container, SettingFragment.INSTANCE)
                     addToBackStack(HomeFragment.toString())
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
             }
         }.commit()
