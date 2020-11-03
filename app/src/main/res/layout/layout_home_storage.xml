@@ -5,15 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <data>
-        <variable
-            name="viewModel"
-            type="com.example.projects.mdir.view.HomeViewModel" />
+        <variable name="activity"
+            type="com.example.projects.mdir.FileManagerActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_linear_port_item_height"
-        android:onClick="@{()->viewModel.onClickStorage()}"
+        android:onClick="@{()->activity.requestStorage()}"
         tools:background="@color/color30Gray">
 
         <ImageView

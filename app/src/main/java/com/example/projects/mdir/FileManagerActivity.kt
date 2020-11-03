@@ -60,7 +60,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     private var isHideShow : Boolean = false
     private var layoutType = LayoutType.Linear
 
-    private var showFragment = FragmentType.Home
+    private var showFragment = FragmentType.None
 
 //    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
@@ -147,13 +147,19 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         // Browser Fragment 보기 모드 변경 메뉴
-        if(showFragment == FragmentType.Home || showFragment == FragmentType.Find) {
-            menu?.findItem(R.id.action_list)?.isVisible = false
-            menu?.findItem(R.id.action_grid)?.isVisible = false
-        }
-        else {
-            menu?.findItem(R.id.action_list)?.isVisible = !isShowList
-            menu?.findItem(R.id.action_grid)?.isVisible = isShowList
+        when(showFragment) {
+            FragmentType.Home -> {
+                menu?.findItem(R.id.action_list)?.isVisible = false
+                menu?.findItem(R.id.action_grid)?.isVisible = false
+            }
+            FragmentType.Browser -> {
+                menu?.findItem(R.id.action_list)?.isVisible = !isShowList
+                menu?.findItem(R.id.action_grid)?.isVisible = isShowList
+            }
+            FragmentType.Setting -> {
+                menu?.findItem(R.id.action_list)?.isVisible = false
+                menu?.findItem(R.id.action_grid)?.isVisible = false
+            }
         }
         menu?.findItem(R.id.action_find)?.isVisible =
             (showFragment != FragmentType.Find) && (showFragment != FragmentType.Setting)
@@ -198,6 +204,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 
     private fun changeFragment(type: FragmentType = FragmentType.Home) {
         showFragment = type
+
+        // 모든 Fragment 제거
+        supportFragmentManager.fragments.removeAll { true }
+
         supportFragmentManager.beginTransaction().apply {
             when(showFragment) {
                 FragmentType.Home -> {
@@ -416,6 +426,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     }
 
     fun requestStorage() {
+        // 차후에 드라이브를 추가하게되면 타입을 늘리자.
+        Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
+        changeFragment(FragmentType.Browser)
+    }
+
+    fun requestCategory(type: Category) {
+        Toast.makeText(this, "Category[${type.name}]", Toast.LENGTH_SHORT).show()
         changeFragment(FragmentType.Browser)
     }
 

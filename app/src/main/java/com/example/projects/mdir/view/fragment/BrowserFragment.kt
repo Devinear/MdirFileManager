@@ -48,10 +48,7 @@ class BrowserFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity = getActivity() as FileManagerActivity
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        activity.invalidateOptionsMenu()
     }
 
     override fun onCreateView(
