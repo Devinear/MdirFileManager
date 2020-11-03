@@ -147,22 +147,16 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         // Browser Fragment 보기 모드 변경 메뉴
-        when(showFragment) {
-            FragmentType.Home -> {
-                menu?.findItem(R.id.action_list)?.isVisible = false
-                menu?.findItem(R.id.action_grid)?.isVisible = false
-            }
-            FragmentType.Browser -> {
-                menu?.findItem(R.id.action_list)?.isVisible = !isShowList
-                menu?.findItem(R.id.action_grid)?.isVisible = isShowList
-            }
-            FragmentType.Setting -> {
-                menu?.findItem(R.id.action_list)?.isVisible = false
-                menu?.findItem(R.id.action_grid)?.isVisible = false
-            }
+        if(showFragment == FragmentType.Browser) {
+            menu?.findItem(R.id.action_find)?.isVisible = true
+            menu?.findItem(R.id.action_list)?.isVisible = !isShowList
+            menu?.findItem(R.id.action_grid)?.isVisible = isShowList
         }
-        menu?.findItem(R.id.action_find)?.isVisible =
-            (showFragment != FragmentType.Find) && (showFragment != FragmentType.Setting)
+        else {
+            menu?.findItem(R.id.action_find)?.isVisible = showFragment == FragmentType.Home
+            menu?.findItem(R.id.action_list)?.isVisible = false
+            menu?.findItem(R.id.action_grid)?.isVisible = false
+        }
         return true
     }
 
