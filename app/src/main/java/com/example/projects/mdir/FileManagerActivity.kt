@@ -26,6 +26,7 @@ import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 import com.example.projects.mdir.view.fragment.BrowserFragment
+import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
 import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
@@ -201,6 +202,11 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                 }
                 FragmentType.Browser -> {
                     replace(R.id.fragment_container, BrowserFragment.newInstance(BrowserType.Category))
+                    addToBackStack(HomeFragment.toString())
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                FragmentType.Find -> {
+                    replace(R.id.fragment_container, FindFragment.INSTANCE)
                     addToBackStack(HomeFragment.toString())
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }

@@ -53,6 +53,7 @@ enum class Category {
 enum class FragmentType {
     Home,
     Browser,
+    Find,
     Setting
 }
 
