@@ -29,10 +29,15 @@
     <color name="color20Gray">#202020</color> // rgb(32,32,32)
     <color name="color30Gray">#303030</color> // rgb(48,48,48)
 
-    <!-- Home Fragment -->
     <color name="colorBackground">@android:color/black</color>
+
+    <!-- Home Fragment -->
     <color name="colorHomeText">@android:color/white</color>
     <color name="colorHomeLayout">@color/color30Gray</color>
+
+    <!-- Find Fragment -->
+    <color name="colorFilterText">@android:color/white</color>
+    <color name="colorFilterLayout">@color/color30Gray</color>
 
 
     <color name="type_storage">#001398</color>
