@@ -3,12 +3,17 @@ package com.example.projects.mdir.view
 import android.os.Parcel
 import android.os.Parcelable
 import com.example.projects.mdir.common.BrowserType
+import com.example.projects.mdir.common.Category
 
 class BrowserData() : Parcelable {
 
     private lateinit var _type : BrowserType
     val type
         get() = _type
+
+    private var _category : Category? = null
+    val category
+        get() = _category
 
     constructor(parcel: Parcel) : this() {
         val input = parcel.readInt()
@@ -21,8 +26,9 @@ class BrowserData() : Parcelable {
         }
     }
 
-    constructor(type: BrowserType) : this() {
+    constructor(type: BrowserType, category: Category? = null) : this() {
         this._type = type
+        this._category = category
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
