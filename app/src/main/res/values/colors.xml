@@ -36,8 +36,16 @@
     <color name="colorHomeLayout">@color/color30Gray</color>
 
     <!-- Find Fragment -->
-    <color name="colorFilterText">@android:color/white</color>
+    <color name="colorFindTitleText">@android:color/white</color>
     <color name="colorFilterLayout">@color/color30Gray</color>
+    <color name="colorFilterText">@android:color/white</color>
+
+    <color name="colorFilterButtonTextCommon">@android:color/white</color>
+    <color name="colorFilterButtonTextPressed">@color/color20Gray</color>
+    <color name="colorFilterButtonCommon">@color/color10Gray</color>
+    <color name="colorFilterButtonPressed">@color/colorLightSteelBlue</color>
+    <color name="colorFilterButtonBorderPressed">@color/colorSteelBlue</color>
+
 
 
     <color name="type_storage">#001398</color>

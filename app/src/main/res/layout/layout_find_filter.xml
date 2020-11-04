@@ -8,6 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:background="@color/colorFilterLayout">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -21,6 +22,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_before_1"
             android:text="어제"
+            android:layout_marginBottom="20dp"
             style="@style/FindFilterButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_time"
@@ -31,8 +33,8 @@
             android:text="지난 7일"
             style="@style/FindFilterButton"
             app:layout_constraintStart_toEndOf="@id/bt_before_1"
-            app:layout_constraintTop_toBottomOf="@id/tv_time"
-            app:layout_constraintBottom_toTopOf="@id/tv_type" />
+            app:layout_constraintTop_toTopOf="@id/bt_before_1"
+            app:layout_constraintBottom_toBottomOf="@id/bt_before_1" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_before_30"
@@ -53,6 +55,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bt_image"
             android:text="이미지"
+            android:layout_marginBottom="10dp"
             style="@style/FindFilterButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_type"
