@@ -23,7 +23,10 @@ class MainActivity : AppCompatActivity() {
 //            startActivity(Intent(this, MapActivity::class.java))
 //        }
 
-        Handler().postDelayed({startActivity(Intent(this, FileManagerActivity::class.java))}, 100)
+        Handler().postDelayed({
+            startActivity(Intent(this, FileManagerActivity::class.java))
+            finish()
+        }, 100)
 
 //        setContentView(R.layout.activity_main)
 //        btMdir = findViewById(R.id.btn_mdir)
