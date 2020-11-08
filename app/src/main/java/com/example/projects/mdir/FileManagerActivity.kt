@@ -196,7 +196,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         }
     }
 
-    private fun changeFragment(type: FragmentType = FragmentType.Home) {
+    private fun changeFragment(type: FragmentType = FragmentType.Home, category: Category? = null) {
         showFragment = type
 
         // 모든 Fragment 제거
@@ -210,7 +210,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                     supportActionBar?.setDisplayHomeAsUpEnabled(false) // BackKey 비활성화
                 }
                 FragmentType.Browser -> {
-                    replace(R.id.fragment_container, BrowserFragment.newInstance(BrowserType.Category))
+                    replace(R.id.fragment_container, BrowserFragment.newInstance(BrowserType.Category, category))
                     addToBackStack(HomeFragment.toString())
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
@@ -422,12 +422,12 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     fun requestStorage() {
         // 차후에 드라이브를 추가하게되면 타입을 늘리자.
         Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
-        changeFragment(FragmentType.Browser)
+        changeFragment(type = FragmentType.Browser)
     }
 
     fun requestCategory(type: Category) {
         Toast.makeText(this, "Category[${type.name}]", Toast.LENGTH_SHORT).show()
-        changeFragment(FragmentType.Browser)
+        changeFragment(type = FragmentType.Browser, category = type)
     }
 
     fun onClickAll() = updateFileList(isShowType = ShowType.All)
