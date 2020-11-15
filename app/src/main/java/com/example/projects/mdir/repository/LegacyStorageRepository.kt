@@ -3,8 +3,13 @@ package com.example.projects.mdir.repository
 import android.content.Context
 import androidx.documentfile.provider.DocumentFile
 import com.example.projects.mdir.data.FileItem
+import java.io.File
 
 class LegacyStorageRepository : AbsStorageRepository() {
+
+    override fun loadDirectory(file: File): MutableList<FileItem> {
+        return super.loadDirectory(file)
+    }
 
     override fun loadDirectory(path: String): MutableList<FileItem> {
         return super.loadDirectory(path)
