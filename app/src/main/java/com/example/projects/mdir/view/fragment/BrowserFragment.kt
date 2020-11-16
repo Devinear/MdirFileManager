@@ -81,6 +81,9 @@ class BrowserFragment : Fragment() {
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
         livePath.value = if (browserData?.type == BrowserType.Storage) "$browserPath" else "> ${browserData?.category?.name}"
+
+        viewModel.onClickStorage()
+
         return binding.root
     }
 
