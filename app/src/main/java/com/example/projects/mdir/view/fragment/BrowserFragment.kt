@@ -10,9 +10,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.example.projects.R
 import com.example.projects.databinding.LayoutBrowserBinding
 import com.example.projects.mdir.FileManagerActivity
+import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.view.BrowserData
@@ -34,6 +36,10 @@ class BrowserFragment : Fragment() {
                 putString(PATH, path)
             }
         }
+    }
+
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(FileViewModel::class.java)
     }
 
     private lateinit var binding : LayoutBrowserBinding

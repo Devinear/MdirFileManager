@@ -11,9 +11,9 @@ abstract class AbsStorageRepository {
     internal var sortOrder : SortOrder = SortOrder.Ascending
     internal var query : String = ""
 
-    open fun loadDirectory(file: File) = mutableListOf<FileItem>()
-    open fun loadDirectory(path: String) = mutableListOf<FileItem>()
-    open fun loadDirectory(tree: DocumentFile, context: Context) = mutableListOf<FileItem>()
+    open fun loadDirectory(context: Context, file: File) = mutableListOf<FileItem>()
+    open fun loadDirectory(context: Context, path: String) = mutableListOf<FileItem>()
+    open fun loadDirectory(context: Context, tree: DocumentFile) = mutableListOf<FileItem>()
 
     fun sort(sortBy: SortBy, sortOrder: SortOrder) {
         this.sortBy = sortBy

@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.repository.AbsStorageRepository
+import com.example.projects.mdir.repository.LegacyStorageRepository
 
 class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
@@ -26,6 +28,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 //    private val _category = MutableLiveData<Category>()
 //    val category: LiveData<Category>
 //        get() = _category
+
+    private val repository: AbsStorageRepository by lazy {
+        LegacyStorageRepository()
+    }
 
     private var rootUri: Uri = Uri.EMPTY
 
