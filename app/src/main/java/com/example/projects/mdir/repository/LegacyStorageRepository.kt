@@ -23,23 +23,17 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
         val listLoadDirs = mutableListOf<FileItem>()
 
-        val list = file.listFiles()
-        val listDirs = mutableListOf<FileItem>()
-        val listFiles = mutableListOf<FileItem>()
-
-        val time = SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.KOREA)
-
-        list.forEach {
+        file.listFiles()?.forEach {
             var image : BitmapDrawable? = null
             if (it.isDirectory) {
                 val subList = it.listFiles { file -> file.isFile && FileUtil.getFileExtType(file.extension) == ExtType.Image }
-                if(subList.isNotEmpty()) {
+                subList?.takeIf { subList.isNotEmpty() }?.apply {
                     image = BitmapDrawable(context.resources,
                         BitmapFactory.decodeFile(subList[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
                 }
                 val item = FileItem(name = it.name, path = it.absolutePath, type = FileType.Dir,
-                    ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())), drawable = image, childCount = it.list()?.size?:0)
-                listDirs.add(item)
+                    ext = "", byteSize = 0L, time = TIME.format(Date(it.lastModified())), drawable = image, childCount = it.list()?.size?:0)
+                listLoadDirs.add(item)
             }
             else {
                 val type = FileUtil.toFileType(FileUtil.getFileExtType(file.extension))
@@ -47,23 +41,14 @@ class LegacyStorageRepository : AbsStorageRepository() {
                     image = BitmapDrawable(context.resources, BitmapFactory.decodeFile(file.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
 
                 val item = FileItem(name = FileUtil.getFileName(file.name), path = file.absolutePath, type = type,
-                    ext = FileUtil.getFileExt(file.name), byteSize = file.length(), time = time.format(Date(file.lastModified())), drawable = image, childCount = file.list()?.size?:0)
-                listFiles.add(item)
+                    ext = FileUtil.getFileExt(file.name), byteSize = file.length(), time = TIME.format(Date(file.lastModified())), drawable = image, childCount = file.list()?.size?:0)
+                listLoadDirs.add(item)
             }
-//            it.takeIf { it.isDirectory }?.apply {
-//
-//                var image : BitmapDrawable? = null
-//                val subList = it.listFiles { file -> file.isFile && FileUtil.getFileExtType(file.extension) == ExtType.Image }
-//                if(subList.isNotEmpty()) {
-//                    image = BitmapDrawable(context.resources,
-//                        BitmapFactory.decodeFile(subList[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
-//                }
-//                val item = FileItem(name = it.name, path = it.absolutePath, type = FileType.Dir,
-//                    ext = "", byteSize = 0L, time = time.format(Date(it.lastModified())), drawable = image, childCount = it.list()?.size?:0)
-//                listDirs.add(item)
-//            }
         }
-
         return listLoadDirs
+    }
+
+    companion object {
+        private val TIME = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA)
     }
 }
