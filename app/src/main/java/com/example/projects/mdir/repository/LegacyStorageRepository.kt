@@ -47,6 +47,30 @@ class LegacyStorageRepository : AbsStorageRepository() {
         return listLoadDirs
     }
 
+    private fun sort(list: MutableList<FileItemEx>) {
+        list.sortWith(kotlin.Comparator { o1, o2 ->
+            when(sortPairFir.first) {
+                is SortBy.Name -> {
+                    o1.name.compareTo(o2.name)
+                }
+                is SortBy.Date -> {
+                    (o1.lastModified() - o2.lastModified()).toInt()
+                }
+                is SortBy.Size -> {
+                    (o1.length() - o2.length()).toInt()
+                }
+                else/*is SortBy.Type*/ -> {
+                    o1.exType.sort - o2.exType.sort
+                }
+            }
+//            when {
+//                o1.type.sort != o2.type.sort  -> { o1.type.sort - o2.type.sort }
+//                o1.ext.compareTo(o2.ext) != 0 -> { o1.ext.compareTo(o2.ext) }
+//                else -> { o1.name.compareTo(o2.name) }
+//            }
+        })
+    }
+
     companion object {
         private val TIME = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA)
     }
