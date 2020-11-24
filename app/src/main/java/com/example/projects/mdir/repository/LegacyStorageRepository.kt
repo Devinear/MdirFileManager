@@ -45,18 +45,19 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
     private fun sort(list: MutableList<FileItemEx>) {
         list.sortWith(kotlin.Comparator { o1, o2 ->
+            val ascending = if(sortPairFir.second == SortOrder.Ascending) 1 else -1
             when(sortPairFir.first) {
                 is SortBy.Name -> {
-                    o1.name.compareTo(o2.name)
+                    o1.name.compareTo(o2.name) * ascending
                 }
                 is SortBy.Date -> {
-                    (o1.lastModified() - o2.lastModified()).toInt()
+                    (o1.lastModified() - o2.lastModified()).toInt() * ascending
                 }
                 is SortBy.Size -> {
-                    (o1.length() - o2.length()).toInt()
+                    (o1.length() - o2.length()).toInt() * ascending
                 }
                 else/*is SortBy.Type*/ -> {
-                    o1.exType.sort - o2.exType.sort
+                    o1.exType.sort - o2.exType.sort * ascending
                 }
             }
 //            when {
