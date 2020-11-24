@@ -38,24 +38,24 @@ class LegacyStorageRepository : AbsStorageRepository() {
                 listLoadDirs.add(FileItemEx(it.absolutePath).apply { drawable = image })
             }
         }
-        sort(listLoadDirs)
+        innerSort(listLoadDirs)
 
         return listLoadDirs
     }
 
-    private fun sort(list: MutableList<FileItemEx>) {
+    private fun innerSort(list: MutableList<FileItemEx>) {
         list.sortWith(kotlin.Comparator { o1, o2 ->
-            innerSort(o1, o2, sortPairFir).let {
+            innerComparator(o1, o2, sortPairFir).let {
                 // 1차 정렬 결과가 동등하다면 2차 정렬을 실행함.
                 if(it != 0)
                     return@Comparator it
                 else
-                    return@Comparator innerSort(o1, o2, sortPairSec)
+                    return@Comparator innerComparator(o1, o2, sortPairSec)
             }
         })
     }
 
-    private fun innerSort(o1: FileItemEx, o2: FileItemEx, option: Pair<SortBy, SortOrder>) : Int {
+    private fun innerComparator(o1: FileItemEx, o2: FileItemEx, option: Pair<SortBy, SortOrder>) : Int {
         val ascending = if(option.second == SortOrder.Ascending) 1 else -1
         return when(option.first) {
             is SortBy.Name -> o1.name.compareTo(o2.name) * ascending
