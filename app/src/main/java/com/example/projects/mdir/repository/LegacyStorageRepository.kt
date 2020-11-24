@@ -45,27 +45,24 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
     private fun sort(list: MutableList<FileItemEx>) {
         list.sortWith(kotlin.Comparator { o1, o2 ->
-            val ascending = if(sortPairFir.second == SortOrder.Ascending) 1 else -1
-            when(sortPairFir.first) {
-                is SortBy.Name -> {
-                    o1.name.compareTo(o2.name) * ascending
-                }
-                is SortBy.Date -> {
-                    (o1.lastModified() - o2.lastModified()).toInt() * ascending
-                }
-                is SortBy.Size -> {
-                    (o1.length() - o2.length()).toInt() * ascending
-                }
-                else/*is SortBy.Type*/ -> {
-                    o1.exType.sort - o2.exType.sort * ascending
-                }
+            innerSort(o1, o2, sortPairFir).let {
+                // 1차 정렬 결과가 동등하다면 2차 정렬을 실행함.
+                if(it != 0)
+                    return@Comparator it
+                else
+                    return@Comparator innerSort(o1, o2, sortPairSec)
             }
-//            when {
-//                o1.type.sort != o2.type.sort  -> { o1.type.sort - o2.type.sort }
-//                o1.ext.compareTo(o2.ext) != 0 -> { o1.ext.compareTo(o2.ext) }
-//                else -> { o1.name.compareTo(o2.name) }
-//            }
         })
+    }
+
+    private fun innerSort(o1: FileItemEx, o2: FileItemEx, option: Pair<SortBy, SortOrder>) : Int {
+        val ascending = if(option.second == SortOrder.Ascending) 1 else -1
+        return when(option.first) {
+            is SortBy.Name -> o1.name.compareTo(o2.name) * ascending
+            is SortBy.Date -> (o1.lastModified() - o2.lastModified()).toInt() * ascending
+            is SortBy.Size -> (o1.length() - o2.length()).toInt() * ascending
+            else/*is SortBy.Type*/ -> o1.exType.sort - o2.exType.sort * ascending
+        }
     }
 
     companion object {
