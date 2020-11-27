@@ -5,7 +5,7 @@
     tools:context="com.example.projects.mdir.view.fragment.HomeFragment">
 
     <data>
-        <import type="com.example.projects.mdir.data.FileItem" />
+        <import type="com.example.projects.mdir.data.FileItemEx" />
         <import type="com.example.projects.mdir.common.FileType" />
 
         <variable name="activity"

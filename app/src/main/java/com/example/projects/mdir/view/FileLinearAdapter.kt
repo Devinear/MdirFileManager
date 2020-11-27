@@ -11,7 +11,7 @@ import com.example.projects.R
 import com.example.projects.databinding.ItemLinearFileBinding
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
-import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
@@ -19,25 +19,25 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
 
     class ViewHolder(private val binding: ItemLinearFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
-        override fun onBind(context: Context, item: FileItem, color: Int) {
+        override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
                 tvName.text = item.name
-                tvTime.text = item.time
-                when (item.type) {
+                tvTime.text = item.exTime
+                when (item.exType) {
                     FileType.UpDir -> {
-                        tvType.text = item.type.abbr
+                        tvType.text = item.exType.abbr
                         tvSize.text = ""
                     }
                     FileType.Dir -> {
-                        tvType.text = item.type.abbr
+                        tvType.text = item.exType.abbr
                         tvSize.apply {
-                            val child = item.childCount
+                            val child = item.listFiles()?.size?:0
                             text = if(child > 1) "$child" + context.getString(R.string.sub_items) else "$child" + context.getString(R.string.sub_item)
                         }
                     }
                     else -> {
-                        tvType.text = item.ext
-                        tvSize.text = FileUtil.getFileSize(item.byteSize)
+                        tvType.text = item.extension
+                        tvSize.text = FileUtil.getFileSize(item.length())
                     }
                 }
 
@@ -46,27 +46,27 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
                     ivImage?.scaleType = ImageView.ScaleType.CENTER_CROP
                 }
                 else {
-                    ivImage?.setImageResource(item.type.drawableRes)
+                    ivImage?.setImageResource(item.exType.drawableRes)
                     ivImage?.scaleType = ImageView.ScaleType.CENTER
                 }
 
                 tvName.setTextColor(color)
                 tvType.setTextColor(color)
-                tvTime.visibility = if(item.type == FileType.UpDir) View.INVISIBLE else View.VISIBLE
+                tvTime.visibility = if(item.exType == FileType.UpDir) View.INVISIBLE else View.VISIBLE
             }
         }
 
-        override fun onTouch(context: Context, event: MotionEvent, item: FileItem) {
+        override fun onTouch(context: Context, event: MotionEvent, item: FileItemEx) {
             binding.run {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         tvName.setTextColor(context.getColor(android.R.color.black))
                         tvType.setTextColor(context.getColor(android.R.color.black))
-                        root.setBackgroundResource(item.type.color)
+                        root.setBackgroundResource(item.exType.color)
                     }
                     MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
-                        tvName.setTextColor(context.getColor(item.type.color))
-                        tvType.setTextColor(context.getColor(item.type.color))
+                        tvName.setTextColor(context.getColor(item.exType.color))
+                        tvType.setTextColor(context.getColor(item.exType.color))
                         root.setBackgroundResource(android.R.color.black)
                     }
                 }

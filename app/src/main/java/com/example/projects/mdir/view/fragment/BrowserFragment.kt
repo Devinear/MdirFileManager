@@ -2,6 +2,7 @@ package com.example.projects.mdir.view.fragment
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,15 +12,21 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutBrowserBinding
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
+import com.example.projects.mdir.common.LayoutType
+import com.example.projects.mdir.data.FileItemEx
+import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.BrowserData
+import com.example.projects.mdir.view.FileGridAdapter
+import com.example.projects.mdir.view.FileLinearAdapter
 
-class BrowserFragment : Fragment() {
+class BrowserFragment : Fragment(), OnFileClickListener {
 
     companion object {
         private const val TAG = "[FR] BROWSER"
@@ -44,6 +51,11 @@ class BrowserFragment : Fragment() {
 
     private lateinit var binding : LayoutBrowserBinding
     private lateinit var activity : Activity
+
+    // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
+    private val adapterLinear by lazy { FileLinearAdapter(activity) }
+    private val adapterGrid by lazy { FileGridAdapter(activity) }
+    private var layoutType = LayoutType.Linear
 
     val livePath = MutableLiveData<String>()
     val liveDirs = MutableLiveData<Int>()
@@ -78,13 +90,31 @@ class BrowserFragment : Fragment() {
             lifecycleOwner = this@BrowserFragment
             fragment = this@BrowserFragment
 
+            recycler.adapter = adapterLinear
+            recycler.layoutManager = LinearLayoutManager(activity)
+            layoutType = LayoutType.Linear
+
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
+        adapterLinear.apply {
+            clickListener = this@BrowserFragment
+            isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+//            updateFileList()
+        }
+
         livePath.value = if (browserData?.type == BrowserType.Storage) "$browserPath" else "> ${browserData?.category?.name}"
 
         viewModel.onClickStorage()
 
         return binding.root
+    }
+
+    override fun onClickFile(item: FileItemEx) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLongClickFile(item: FileItemEx) {
+        TODO("Not yet implemented")
     }
 
     fun onClickHome() = Unit

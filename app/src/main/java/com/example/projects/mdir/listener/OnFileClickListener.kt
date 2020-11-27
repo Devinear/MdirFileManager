@@ -1,8 +1,8 @@
 package com.example.projects.mdir.listener
 
-import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.data.FileItemEx
 
 interface OnFileClickListener {
-    fun onClickFile(item: FileItem)
-    fun onLongClickFile(item: FileItem)
+    fun onClickFile(item: FileItemEx)
+    fun onLongClickFile(item: FileItemEx)
 }

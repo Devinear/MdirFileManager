@@ -5,14 +5,14 @@
 
     <data>
         <import type="androidx.databinding.ObservableArrayList" />
-        <import type="com.example.projects.mdir.data.FileItem" />
+        <import type="com.example.projects.mdir.data.FileItemEx" />
 
         <variable
             name="fragment"
             type="com.example.projects.mdir.view.fragment.BrowserFragment" />
         <variable
             name="items"
-            type="ObservableArrayList&lt;FileItem&gt;" />
+            type="ObservableArrayList&lt;FileItemEx&gt;" />
     </data>
 
 
