@@ -8,18 +8,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.FileUtil
-import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.AbsStorageRepository
 import com.example.projects.mdir.repository.LegacyStorageRepository
 
 class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
-    private val _files = MutableLiveData<List<FileItem>>()
-    val files: LiveData<List<FileItem>>
+    private val _files = MutableLiveData<List<FileItemEx>>()
+    val files: LiveData<List<FileItemEx>>
         get() = _files
 
-    private val _openDir = MutableLiveData<FileItem>()
-    val openDir: LiveData<FileItem>
+    private val _openDir = MutableLiveData<FileItemEx>()
+    val openDir: LiveData<FileItemEx>
         get() = _openDir
 
     private val _mode = MutableLiveData<BrowserType>()

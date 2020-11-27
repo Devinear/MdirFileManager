@@ -11,12 +11,12 @@ import com.example.projects.R
 import com.example.projects.databinding.LayoutSnackbarBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileUtil
-import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.FavoriteRepository
 import java.io.File
 
 @SuppressLint("ViewConstructor")
-class FileSnackBar(context: Context, val item: FileItem, val path: String) : View(context) {
+class FileSnackBar(context: Context, val item: FileItemEx, val path: String) : View(context) {
 
     private var binding : LayoutSnackbarBinding =
         DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_snackbar, null, false)
@@ -36,14 +36,14 @@ class FileSnackBar(context: Context, val item: FileItem, val path: String) : Vie
         // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
         context.startActivity(Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
-            type = when (FileUtil.getFileExtType(item.ext)) {
+            type = when (FileUtil.getFileExtType(item.extension)) {
                 ExtType.Image -> "image/*"
                 ExtType.Video -> "video/*"
                 ExtType.Audio -> "audio/*"
                 else -> "application/*"
             }
             putExtra(Intent.EXTRA_STREAM, File("$path/${item.name}").toURI())
-        }, "Share: ${item.name}.${item.ext}"))
+        }, "Share: ${item.name}.${item.extension}"))
     }
 
     fun delete() = Toast.makeText(context, "DELETE", Toast.LENGTH_SHORT).show()

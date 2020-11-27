@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.example.projects.databinding.ItemGridFileBinding
-import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
@@ -15,7 +15,7 @@ class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = 
 
     class ViewHolder(private val binding: ItemGridFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
 
-        override fun onBind(context: Context, item: FileItem, color: Int) {
+        override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
                 tvName.text = item.name
                 tvName.setTextColor(color)
@@ -25,21 +25,21 @@ class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = 
                     ivImage.scaleType = ImageView.ScaleType.CENTER_CROP
                 }
                 else {
-                    ivImage.setImageResource(item.type.drawableRes)
+                    ivImage.setImageResource(item.exType.drawableRes)
                     ivImage.scaleType = ImageView.ScaleType.CENTER
                 }
             }
         }
 
-        override fun onTouch(context: Context, event: MotionEvent, item: FileItem) {
+        override fun onTouch(context: Context, event: MotionEvent, item: FileItemEx) {
             binding.run {
                 when (event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         tvName.setTextColor(context.getColor(android.R.color.black))
-                        root.setBackgroundResource(item.type.color)
+                        root.setBackgroundResource(item.exType.color)
                     }
                     MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
-                        tvName.setTextColor(context.getColor(item.type.color))
+                        tvName.setTextColor(context.getColor(item.exType.color))
                         root.setBackgroundResource(android.R.color.black)
                     }
                 }

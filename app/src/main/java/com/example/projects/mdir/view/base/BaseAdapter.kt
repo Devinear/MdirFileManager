@@ -3,20 +3,20 @@ package com.example.projects.mdir.view.base
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.OnFileClickListener
 
 abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<BaseViewHolder>() {
 
     var isPortrait = true // ORIENTATION_PORTRAIT
     var clickListener : OnFileClickListener? = null
-    val items = mutableListOf<FileItem>()
+    val items = mutableListOf<FileItemEx>()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         with(holder) {
-            val item : FileItem =  items[position]
-            val color = baseContext.getColor(item.type.color)
+            val item : FileItemEx =  items[position]
+            val color = baseContext.getColor(item.exType.color)
 
             onBind(baseContext, item, color)
 
@@ -34,7 +34,7 @@ abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<Base
         }
     }
 
-    fun setFileItems(list: List<FileItem>) {
+    fun setFileItems(list: List<FileItemEx>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()

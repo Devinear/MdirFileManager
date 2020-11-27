@@ -21,10 +21,8 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.example.projects.R
 import com.example.projects.mdir.common.*
-import com.example.projects.mdir.data.FileItem
+import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.OnFileClickListener
-import com.example.projects.mdir.view.FileGridAdapter
-import com.example.projects.mdir.view.FileLinearAdapter
 import com.example.projects.mdir.view.fragment.BrowserFragment
 import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
@@ -44,8 +42,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //    }
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapterLinear = FileLinearAdapter(this)
-    private val adapterGrid = FileGridAdapter(this)
+//    private val adapterLinear = FileLinearAdapter(this)
+//    private val adapterGrid = FileGridAdapter(this)
 
     // UI
     val livePath = MutableLiveData<String>()
@@ -55,7 +53,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     val liveShow = MutableLiveData<String>()
 
     // Value
-    private val listFileItem = ObservableArrayList<FileItem>()
+    private val listFileItem = ObservableArrayList<FileItemEx>()
     private var currentPath: String = ""
     private var isHideShow : Boolean = false
     private var layoutType = LayoutType.Linear
@@ -261,8 +259,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //        }
     }
 
-    override fun onClickFile(item: FileItem) {
-        when (item.type) {
+    override fun onClickFile(item: FileItemEx) {
+        when (item.exType) {
             FileType.UpDir -> {
                 if(currentPath == FileUtil.ROOT) {
                     Toast.makeText(this, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
@@ -287,8 +285,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     setDataAndType(
                         FileProvider.getUriForFile(this@FileManagerActivity,
-                            "${this@FileManagerActivity.packageName}.provider", File("$currentPath/${item.name}.${item.ext}")),
-                        FileUtil.getMimeType(item.ext))
+                            "${this@FileManagerActivity.packageName}.provider", File("$currentPath/${item.name}.${item.extension}")),
+                        FileUtil.getMimeType(item.extension))
                 }
 
                 // 해당 Intent를 처리할 수 있는 앱이 있는지 확인
@@ -302,7 +300,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         }
     }
 
-    override fun onLongClickFile(item: FileItem) {
+    override fun onLongClickFile(item: FileItemEx) {
         // 이동, 복사, 상세정보, 공유, 삭제
 
         // 즐겨찾기 설정
@@ -331,7 +329,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //            listFileItem.addAll(FileUtil.getChildFileItems(this, currentPath, isHideShow, isShowType))
 //        }
 //        else {
-//            val items = mutableListOf<FileItem>()
+//            val items = mutableListOf<FileItemEx>()
 //            FavoriteRepository.INSTANCE.getAll().forEach {
 //                val item = FileUtil.convertFileItem(context = this, path = it)
 //                if(item != null)
