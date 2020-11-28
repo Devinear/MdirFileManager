@@ -24,9 +24,12 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
+//    dataBinding {
+//        enabled = true
+//    }
 
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
