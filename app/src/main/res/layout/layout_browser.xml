@@ -8,6 +8,9 @@
         <import type="com.example.projects.mdir.data.FileItemEx" />
 
         <variable
+            name="viewModel"
+            type="com.example.projects.mdir.FileViewModel" />
+        <variable
             name="fragment"
             type="com.example.projects.mdir.view.fragment.BrowserFragment" />
         <variable
@@ -61,6 +64,8 @@
             android:background="@android:color/black"
             app:layout_constraintTop_toBottomOf="@id/la_path"
             app:layout_constraintBottom_toTopOf="@id/la_info"
+            app:viewModel="@{viewModel}"
+            app:items="@{items}"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:spanCount="4"
             tools:listitem="@layout/item_grid_file" />
