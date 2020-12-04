@@ -19,9 +19,13 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("items", "viewModel")
-    fun setItems(recyclerView: RecyclerView, items: ObservableArrayList<FileItemEx>, viewModel: FileViewModel) {
-        (recyclerView.adapter as BaseAdapter).apply {
-            setFileItems(items)
+    fun setItems(recyclerView: RecyclerView, items: List<FileItemEx>?, viewModel: FileViewModel) {
+        (recyclerView.adapter as BaseAdapter).run {
+            items?.let {
+                setFileItems(it)
+            } ?: run{
+                viewModel.loadDirectory()
+            }
         }
     }
 }

@@ -89,6 +89,7 @@ class BrowserFragment : Fragment(), OnFileClickListener {
             // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
             lifecycleOwner = this@BrowserFragment
             fragment = this@BrowserFragment
+            viewModel = this@BrowserFragment.viewModel
 
             recycler.adapter = adapterLinear
             recycler.layoutManager = LinearLayoutManager(activity)

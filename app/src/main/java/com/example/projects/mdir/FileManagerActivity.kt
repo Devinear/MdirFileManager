@@ -262,18 +262,18 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     override fun onClickFile(item: FileItemEx) {
         when (item.exType) {
             FileType.UpDir -> {
-                if(currentPath == FileUtil.ROOT) {
+                if(currentPath == FileUtil.LEGACY_ROOT) {
                     Toast.makeText(this, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
                     return
                 }
                 currentPath = FileUtil.getUpDirPath(currentPath)
-                livePath.value = "..${currentPath.removePrefix(FileUtil.ROOT)}"
+                livePath.value = "..${currentPath.removePrefix(FileUtil.LEGACY_ROOT)}"
                 updateFileList()
             }
             FileType.Dir -> {
 //                currentPath = "$currentPath/${item.name}"
                 currentPath = item.path
-                livePath.value = "..${currentPath.removePrefix(FileUtil.ROOT)}"
+                livePath.value = "..${currentPath.removePrefix(FileUtil.LEGACY_ROOT)}"
                 updateFileList()
             }
             else -> {

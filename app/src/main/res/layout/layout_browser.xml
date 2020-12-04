@@ -65,11 +65,18 @@
             app:layout_constraintTop_toBottomOf="@id/la_path"
             app:layout_constraintBottom_toTopOf="@id/la_info"
             app:viewModel="@{viewModel}"
-            app:items="@{items}"
+            app:items="@{viewModel.files}"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:spanCount="4"
             tools:listitem="@layout/item_grid_file" />
-            <!--bind:item="@{items}" />-->
+            <!--
+            app:viewModel="@{viewModel}"
+            app:items="@{viewModel.files}"
+            -->
+            <!--
+            bind:item="@{items}"
+            />
+            -->
 
         <LinearLayout
             android:id="@+id/la_info"
