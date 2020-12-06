@@ -7,11 +7,13 @@ import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.AbsStorageRepository
 import com.example.projects.mdir.repository.LegacyStorageRepository
+import kotlinx.coroutines.launch
 import java.io.File
 
 class FileViewModel(val app: Application) : AndroidViewModel(app) {
@@ -51,8 +53,12 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun loadDirectory(path: String = "") {
-        rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
-        repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT)
+        viewModelScope.launch {
+            rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
+
+            // Dispatchers.IO ??
+            repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT)
+        }
     }
 
 }
