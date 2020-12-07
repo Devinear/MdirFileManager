@@ -57,7 +57,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
 
             // Dispatchers.IO ??
-            repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT)
+            _files.postValue(repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT))
         }
     }
 
