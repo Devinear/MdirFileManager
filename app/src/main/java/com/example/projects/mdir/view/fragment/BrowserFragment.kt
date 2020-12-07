@@ -103,7 +103,7 @@ class BrowserFragment : Fragment(), OnFileClickListener {
 //            updateFileList()
         }
 
-        livePath.value = if (browserData?.type == BrowserType.Storage) "$browserPath" else "> ${browserData?.category?.name}"
+        livePath.value = if (browserData?.type == BrowserType.Storage) browserPath else "> ${browserData?.category?.name}"
 
         viewModel.onClickStorage()
 
