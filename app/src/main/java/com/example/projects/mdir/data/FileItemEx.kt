@@ -24,7 +24,7 @@ class FileItemEx : File {
     }
 
     private fun convert() {
-        this.takeUnless { exists() }?: return
+        this.takeIf { exists() }?: return
 
         _exType = if(isDirectory) FileType.Dir else getFileType(getExtType(extension))
         _exTime = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(Date(lastModified()))
