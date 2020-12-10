@@ -53,8 +53,8 @@ class BrowserFragment : Fragment(), OnFileClickListener {
     private lateinit var activity : Activity
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapterLinear by lazy { FileLinearAdapter(activity) }
-    private val adapterGrid by lazy { FileGridAdapter(activity) }
+    private val adapterLinear by lazy { FileLinearAdapter(activity, viewModel) }
+    private val adapterGrid by lazy { FileGridAdapter(activity, viewModel) }
     private var layoutType = LayoutType.Linear
 
     val livePath = MutableLiveData<String>()

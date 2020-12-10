@@ -9,15 +9,21 @@ import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.example.projects.R
 import com.example.projects.databinding.ItemLinearFileBinding
+import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
-class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext = context) {
+class FileLinearAdapter(private val context: Context, val viewModel: FileViewModel) : BaseAdapter(baseContext = context) {
 
-    class ViewHolder(private val binding: ItemLinearFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
+    class ViewHolder(
+            private val binding: ItemLinearFileBinding,
+            viewModel: FileViewModel
+            ) : BaseViewHolder(
+            viewDataBinding = binding as ViewDataBinding, viewModel = viewModel
+    ) {
 
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
@@ -75,5 +81,7 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(ItemLinearFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            = ViewHolder(
+            ItemLinearFileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            , viewModel)
 }

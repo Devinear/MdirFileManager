@@ -61,4 +61,11 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun requestClickItem(item: FileItemEx) {
+
+    }
+
+    fun requestLongClickItem(item: FileItemEx) {
+
+    }
 }
