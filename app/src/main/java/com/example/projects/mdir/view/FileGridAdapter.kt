@@ -24,6 +24,7 @@ class FileGridAdapter(private val context: Context, val viewModel: FileViewModel
 
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
+                this.item = item
                 tvName.text = item.name
                 tvName.setTextColor(color)
 

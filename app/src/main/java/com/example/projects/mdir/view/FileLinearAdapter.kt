@@ -27,6 +27,7 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
 
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
+                this.item = item
                 tvName.text = item.name
                 tvTime.text = item.exTime
                 when (item.exType) {
