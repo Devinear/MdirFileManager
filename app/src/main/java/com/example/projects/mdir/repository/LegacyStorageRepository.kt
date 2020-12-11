@@ -38,7 +38,9 @@ class LegacyStorageRepository : AbsStorageRepository() {
                 listLoadDirs.add(FileItemEx(it.absolutePath).apply { drawable = image })
             }
         }
-        listLoadDirs.add(FileItemEx(path = file.absolutePath, isUpDir = true))
+        if(file.absolutePath != FileUtil.LEGACY_ROOT) {
+            listLoadDirs.add(FileItemEx(path = file.absolutePath, isUpDir = true))
+        }
         innerSort(listLoadDirs)
 
         return listLoadDirs
