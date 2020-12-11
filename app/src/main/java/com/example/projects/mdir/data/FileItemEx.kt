@@ -7,8 +7,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FileItemEx : File {
-    constructor(path: String) : super(path)
+class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
 
     private var _exType : FileType = FileType.None
     val exType : FileType; get() = _exType
@@ -26,9 +25,14 @@ class FileItemEx : File {
     private fun convert() {
         this.takeIf { exists() }?: return
 
-        _exType = if(isDirectory) FileType.Dir else getFileType(getExtType(extension))
-        _exTime = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(Date(lastModified()))
-        _isSystem = name.indexOf('.') == 0
+        if(isUpDir) {
+            _exType = FileType.UpDir
+        }
+        else {
+            _exType = if (isDirectory) FileType.Dir else getFileType(getExtType(extension))
+            _exTime = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(Date(lastModified()))
+            _isSystem = name.indexOf('.') == 0
+        }
     }
 
     private fun getFileType(ext: ExtType) : FileType =

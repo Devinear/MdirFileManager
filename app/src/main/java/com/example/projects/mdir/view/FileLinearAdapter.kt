@@ -28,14 +28,15 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
                 this.item = item
-                tvName.text = item.name
-                tvTime.text = item.exTime
+
                 when (item.exType) {
                     FileType.UpDir -> {
+                        tvName.text = ".."
                         tvType.text = item.exType.abbr
                         tvSize.text = ""
                     }
                     FileType.Dir -> {
+                        tvName.text = item.name
                         tvType.text = item.exType.abbr
                         tvSize.apply {
                             val child = item.listFiles()?.size?:0
@@ -43,10 +44,12 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
                         }
                     }
                     else -> {
+                        tvName.text = item.name
                         tvType.text = item.extension
                         tvSize.text = FileUtil.getFileSize(item.length())
                     }
                 }
+                tvTime.text = item.exTime
 
                 if(item.drawable != null) {
                     ivImage?.setImageDrawable(item.drawable)
