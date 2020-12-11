@@ -67,6 +67,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             // 부모 폴더
             FileType.UpDir -> {
                 if(item.absolutePath == FileUtil.LEGACY_ROOT) {
+                    Toast.makeText(app, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
                     return
                 }
                 rootUri = item.parent.toUri()
