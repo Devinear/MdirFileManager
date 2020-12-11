@@ -35,6 +35,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val mode: LiveData<BrowserType>
         get() = _mode
 
+    private var _isShowSystem : Boolean = false
+    val isShowSystem: Boolean
+        get() = _isShowSystem
+
 //    private val _category = MutableLiveData<Category>()
 //    val category: LiveData<Category>
 //        get() = _category
@@ -53,37 +57,43 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun onClickStorage() {
         repository.loadDirectory(app, FileUtil.LEGACY_ROOT)
-
         Toast.makeText(app, "STORAGE", Toast.LENGTH_SHORT).show()
     }
 
-    fun loadDirectory(path: String = "") {
+    fun loadDirectory(path: String = "", isShowSystem: Boolean = _isShowSystem) {
         viewModelScope.launch {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
 
             // Dispatchers.IO ??
-            _files.postValue(repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT))
+            val list = repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT)
+
+            // System Folder/File Hide
+            if(!isShowSystem) {
+                list.removeAll { item -> return@removeAll item.name[0] == '.' }
+            }
+
+            // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
+            if(path != FileUtil.LEGACY_ROOT) {
+                list.add(0, FileItemEx(path = path, isUpDir = true))
+            }
+
+            _files.postValue(list)
         }
+    }
+
+    fun requestShowSystem(isShowSystem: Boolean) {
+        _isShowSystem = isShowSystem
+        loadDirectory(rootUri.path?:FileUtil.LEGACY_ROOT, _isShowSystem)
     }
 
     fun requestClickItem(item: FileItemEx) {
         when (item.exType) {
             // 부모 폴더
-            FileType.UpDir -> {
-                if(item.absolutePath == FileUtil.LEGACY_ROOT) {
-                    Toast.makeText(app, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
-                    return
-                }
-                rootUri = item.parent.toUri()
-                _files.postValue(repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT))
-            }
+            FileType.UpDir -> loadDirectory(item.parent)
             // 일반 폴더
-            FileType.Dir -> {
-                rootUri = item.toUri()
-                _files.postValue(repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT))
-            }
+            FileType.Dir -> loadDirectory(item.path, false)
             // 일반 파일
-            else -> { requestExecute(item) }
+            else -> requestExecute(item)
         }
     }
 
