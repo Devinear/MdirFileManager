@@ -60,7 +60,7 @@ class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
         }
 
     private fun getExtType(ext: String) : ExtType =
-        when (ext.toLowerCase()) {
+        when (ext.toLowerCase(Locale.ROOT)) {
             "jpg", "jpeg", "png", "bmp", "gif", "heif" ->
                 ExtType.Image
             "3gp", "mp4", "webm", "mkv", "ts", "avi", "wmv" ->
