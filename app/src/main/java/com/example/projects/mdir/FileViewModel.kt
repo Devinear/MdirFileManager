@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.projects.mdir.common.BrowserType
+import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.AbsStorageRepository
@@ -62,7 +63,25 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun requestClickItem(item: FileItemEx) {
+        when (item.exType) {
+            // 부모 폴더
+            FileType.UpDir -> {
+                if(item.absolutePath == FileUtil.LEGACY_ROOT) {
+                    return
+                }
+                rootUri = item.parent.toUri()
+                _files.postValue(repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT))
+            }
+            // 일반 폴더
+            FileType.Dir -> {
+                rootUri = item.toUri()
+                _files.postValue(repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT))
+            }
+            // 일반 파일
+            else -> {
 
+            }
+        }
     }
 
     fun requestLongClickItem(item: FileItemEx) {
