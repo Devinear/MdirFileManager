@@ -36,7 +36,7 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
                         tvSize.text = ""
                     }
                     FileType.Dir -> {
-                        tvName.text = item.name
+                        tvName.text = item.simpleName
                         tvType.text = item.exType.abbr
                         tvSize.apply {
                             val child = item.listFiles()?.size?:0
@@ -44,7 +44,7 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
                         }
                     }
                     else -> {
-                        tvName.text = item.name
+                        tvName.text = item.simpleName
                         tvType.text = item.extension
                         tvSize.text = FileUtil.getFileSize(item.length())
                     }
