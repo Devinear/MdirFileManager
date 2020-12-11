@@ -1,8 +1,11 @@
 package com.example.projects.mdir
 
 import android.app.Application
+import android.content.Intent
+import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -80,7 +83,23 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             }
             // 일반 파일
             else -> {
+                val intent = Intent().apply {
+                    action = Intent.ACTION_VIEW
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK // setFlags
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    setDataAndType(
+                        FileProvider.getUriForFile(app, "${app.packageName}.provider", item),
+                        FileUtil.getMimeType(item.extension)
+                    )
+                }
 
+                // 해당 Intent를 처리할 수 있는 앱이 있는지 확인
+                val resolveInfo : List<ResolveInfo> = app.packageManager.queryIntentActivities(intent, 0)
+                when(resolveInfo.isNotEmpty()) {
+                    true -> app.startActivity(intent)
+                    else -> Toast.makeText(app, item.name, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
