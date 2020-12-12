@@ -63,9 +63,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     fun loadDirectory(path: String = "", isShowSystem: Boolean = _isShowSystem) {
         viewModelScope.launch {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
+            val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
             // Dispatchers.IO ??
-            val list = repository.loadDirectory(app, rootUri.path?:FileUtil.LEGACY_ROOT)
+            val list = repository.loadDirectory(app, curPath)
 
             // System Folder/File Hide
             if(!isShowSystem) {
@@ -73,8 +74,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             }
 
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
-            if(path != FileUtil.LEGACY_ROOT) {
-                list.add(0, FileItemEx(path = path, isUpDir = true))
+            if(curPath != FileUtil.LEGACY_ROOT) {
+                list.add(0, FileItemEx(path = curPath, isUpDir = true))
             }
 
             _files.postValue(list)
