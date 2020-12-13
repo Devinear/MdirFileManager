@@ -39,6 +39,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val isShowSystem: Boolean
         get() = _isShowSystem
 
+    private var _depthDir = MutableLiveData<List<String>>()
+    val depthDir: LiveData<List<String>>
+        get() = _depthDir
+
 //    private val _category = MutableLiveData<Category>()
 //    val category: LiveData<Category>
 //        get() = _category
@@ -78,6 +82,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                 list.add(0, FileItemEx(path = curPath, isUpDir = true))
             }
 
+            _depthDir.postValue(curPath.substringAfter(FileUtil.LEGACY_ROOT).split('/'))
+
             _files.postValue(list)
         }
     }
@@ -87,12 +93,21 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         loadDirectory(rootUri.path?:FileUtil.LEGACY_ROOT, _isShowSystem)
     }
 
+//    @ExperimentalStdlibApi
     fun requestClickItem(item: FileItemEx) {
         when (item.exType) {
             // 부모 폴더
-            FileType.UpDir -> loadDirectory(item.parent)
+            FileType.UpDir -> {
+//                _depthDir.value?.run {
+//                    if(size > 0) removeAt(size - 1)
+//                }
+                loadDirectory(item.parent)
+            }
             // 일반 폴더
-            FileType.Dir -> loadDirectory(item.path, false)
+            FileType.Dir -> {
+//                _depthDir.value?.add(item)
+                loadDirectory(item.path, false)
+            }
             // 일반 파일
             else -> requestExecute(item)
         }
