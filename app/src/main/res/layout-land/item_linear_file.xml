@@ -25,7 +25,7 @@
             android:fontFamily="@font/dos_m"
             android:textSize="@dimen/recycler_item_text_size"
             android:singleLine="true"
-            android:text="${item.name}"
+            android:text="${item.simpleName}"
             tools:textColor="#FFFFFF"
             tools:text="NAME"
             app:layout_constraintTop_toTopOf="parent"

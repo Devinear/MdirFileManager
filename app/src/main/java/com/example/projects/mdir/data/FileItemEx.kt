@@ -7,8 +7,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FileItemEx : File {
-    constructor(path: String) : super(path)
+class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
 
     private var _exType : FileType = FileType.None
     val exType : FileType; get() = _exType
@@ -17,6 +16,9 @@ class FileItemEx : File {
     private var _isSystem : Boolean = false
     val isSystem : Boolean; get() = _isSystem
 
+    private var _simpleName : String = ""
+    val simpleName : String; get() = _simpleName
+
     var drawable: BitmapDrawable? = null
 
     init {
@@ -24,11 +26,26 @@ class FileItemEx : File {
     }
 
     private fun convert() {
-        this.takeUnless { exists() }?: return
+        this.takeIf { exists() }?: return
 
-        _exType = if(isDirectory) FileType.Dir else getFileType(getExtType(extension))
-        _exTime = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(Date(lastModified()))
-        _isSystem = name.indexOf('.') == 0
+        if(isUpDir) {
+            _exType = FileType.UpDir
+        }
+        else {
+            _exType = if (isDirectory) FileType.Dir else getFileType(getExtType(extension))
+            _exTime = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(Date(lastModified()))
+            _isSystem = name.indexOf('.') == 0
+            _simpleName = if (isDirectory) name else getSimpleName(name)
+        }
+    }
+
+    private fun getSimpleName(name: String) : String {
+        // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함
+        val lastIndex = name.lastIndexOf('.')
+        return if(lastIndex < 1)
+            name
+        else
+            name.substring(0, lastIndex)
     }
 
     private fun getFileType(ext: ExtType) : FileType =
@@ -43,7 +60,7 @@ class FileItemEx : File {
         }
 
     private fun getExtType(ext: String) : ExtType =
-        when (ext.toLowerCase()) {
+        when (ext.toLowerCase(Locale.ROOT)) {
             "jpg", "jpeg", "png", "bmp", "gif", "heif" ->
                 ExtType.Image
             "3gp", "mp4", "webm", "mkv", "ts", "avi", "wmv" ->

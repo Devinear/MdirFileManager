@@ -53,8 +53,8 @@ class BrowserFragment : Fragment(), OnFileClickListener {
     private lateinit var activity : Activity
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapterLinear by lazy { FileLinearAdapter(activity) }
-    private val adapterGrid by lazy { FileGridAdapter(activity) }
+    private val adapterLinear by lazy { FileLinearAdapter(activity, viewModel) }
+    private val adapterGrid by lazy { FileGridAdapter(activity, viewModel) }
     private var layoutType = LayoutType.Linear
 
     val livePath = MutableLiveData<String>()
@@ -89,6 +89,11 @@ class BrowserFragment : Fragment(), OnFileClickListener {
             // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
             lifecycleOwner = this@BrowserFragment
             fragment = this@BrowserFragment
+            viewModel = this@BrowserFragment.viewModel
+
+            recycler.adapter = adapterLinear
+            recycler.layoutManager = LinearLayoutManager(activity)
+            layoutType = LayoutType.Linear
 
             recycler.adapter = adapterLinear
             recycler.layoutManager = LinearLayoutManager(activity)
@@ -102,8 +107,7 @@ class BrowserFragment : Fragment(), OnFileClickListener {
 //            updateFileList()
         }
 
-        livePath.value = if (browserData?.type == BrowserType.Storage) "$browserPath" else "> ${browserData?.category?.name}"
-
+        livePath.value = if (browserData?.type == BrowserType.Storage) browserPath else "> ${browserData?.category?.name}"
         viewModel.onClickStorage()
 
         return binding.root

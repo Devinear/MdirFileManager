@@ -9,26 +9,34 @@ import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.example.projects.R
 import com.example.projects.databinding.ItemLinearFileBinding
+import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
-class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext = context) {
+class FileLinearAdapter(private val context: Context, val viewModel: FileViewModel) : BaseAdapter(baseContext = context) {
 
-    class ViewHolder(private val binding: ItemLinearFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
+    class ViewHolder(
+            private val binding: ItemLinearFileBinding,
+            viewModel: FileViewModel
+            ) : BaseViewHolder(
+            viewDataBinding = binding as ViewDataBinding, viewModel = viewModel
+    ) {
 
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
-                tvName.text = item.name
-                tvTime.text = item.exTime
+                this.item = item
+
                 when (item.exType) {
                     FileType.UpDir -> {
+                        tvName.text = ".."
                         tvType.text = item.exType.abbr
                         tvSize.text = ""
                     }
                     FileType.Dir -> {
+                        tvName.text = item.simpleName
                         tvType.text = item.exType.abbr
                         tvSize.apply {
                             val child = item.listFiles()?.size?:0
@@ -36,10 +44,12 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
                         }
                     }
                     else -> {
+                        tvName.text = item.simpleName
                         tvType.text = item.extension
                         tvSize.text = FileUtil.getFileSize(item.length())
                     }
                 }
+                tvTime.text = item.exTime
 
                 if(item.drawable != null) {
                     ivImage?.setImageDrawable(item.drawable)
@@ -75,5 +85,7 @@ class FileLinearAdapter(private val context: Context) : BaseAdapter(baseContext 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(ItemLinearFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            = ViewHolder(
+            ItemLinearFileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            , viewModel)
 }

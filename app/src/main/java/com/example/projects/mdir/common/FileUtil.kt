@@ -12,7 +12,10 @@ import java.util.*
 
 object FileUtil {
 
-    var ROOT = Environment.getExternalStorageDirectory().absolutePath
+    val LEGACY_ROOT = Environment.getExternalStorageDirectory().absolutePath
+
+//    @JvmStatic
+//    val ROOT_URI by lazy { FileItemEx(ROOT).toUri() }
 
     fun getFileName(name: String) : String {
         // 확장자가 없는 숨겨진 파일(.로 시작하는)의 경우를 위함

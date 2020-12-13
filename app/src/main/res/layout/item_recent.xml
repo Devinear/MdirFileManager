@@ -37,7 +37,7 @@
             android:singleLine="true"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:text="${item.name}"
+            android:text="${item.simpleName}"
             android:background="@color/colorDimGray"
             tools:text="NAME"
             app:layout_constraintBottom_toBottomOf="parent"/>

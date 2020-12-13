@@ -7,17 +7,25 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.example.projects.databinding.ItemGridFileBinding
+import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
-class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = context) {
+class FileGridAdapter(private val context: Context, val viewModel: FileViewModel) : BaseAdapter(baseContext = context) {
 
-    class ViewHolder(private val binding: ItemGridFileBinding) : BaseViewHolder(viewDataBinding = binding as ViewDataBinding) {
+    class ViewHolder(
+            private val binding: ItemGridFileBinding,
+            viewModel: FileViewModel
+            ) : BaseViewHolder(
+            viewDataBinding = binding as ViewDataBinding,
+            viewModel = viewModel
+    ) {
 
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
-                tvName.text = item.name
+                this.item = item
+                tvName.text = item.simpleName
                 tvName.setTextColor(color)
 
                 if(item.drawable != null) {
@@ -48,5 +56,7 @@ class FileGridAdapter(private val context: Context) : BaseAdapter(baseContext = 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(ItemGridFileBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            = ViewHolder(
+            ItemGridFileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            , viewModel)
 }

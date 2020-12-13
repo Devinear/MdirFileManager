@@ -25,7 +25,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
         file.listFiles()?.forEach {
             var image : BitmapDrawable? = null
             if (it.isDirectory) {
-                val subList = it.listFiles { file -> file.isFile && FileUtil.getFileExtType(file.extension) == ExtType.Image }
+                val subList = it.listFiles { subFile -> subFile.isFile && FileUtil.getFileExtType(subFile.extension) == ExtType.Image }
                 subList?.takeIf { subList.isNotEmpty() }?.apply {
                     image = BitmapDrawable(context.resources,
                         BitmapFactory.decodeFile(subList[0].absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } ))
@@ -33,8 +33,8 @@ class LegacyStorageRepository : AbsStorageRepository() {
                 listLoadDirs.add(FileItemEx(it.absolutePath).apply { drawable = image })
             }
             else {
-                val type = FileUtil.toFileType(FileUtil.getFileExtType(file.extension))
-                image = if(type == FileType.Image) BitmapDrawable(context.resources, BitmapFactory.decodeFile(file.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } )) else null
+                val type = FileUtil.toFileType(FileUtil.getFileExtType(it.extension))
+                image = if(type == FileType.Image) BitmapDrawable(context.resources, BitmapFactory.decodeFile(it.absolutePath, BitmapFactory.Options().apply { inSampleSize = 4 } )) else null
                 listLoadDirs.add(FileItemEx(it.absolutePath).apply { drawable = image })
             }
         }

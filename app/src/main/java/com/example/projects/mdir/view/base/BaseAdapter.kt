@@ -20,13 +20,13 @@ abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<Base
 
             onBind(baseContext, item, color)
 
-            itemView.setOnClickListener {
-                clickListener?.onClickFile(item)
-            }
-            itemView.setOnLongClickListener {
-                clickListener?.onLongClickFile(item)
-                return@setOnLongClickListener true
-            }
+//            itemView.setOnClickListener {
+//                clickListener?.onClickFile(item)
+//            }
+//            itemView.setOnLongClickListener {
+//                clickListener?.onLongClickFile(item)
+//                return@setOnLongClickListener true
+//            }
             itemView.setOnTouchListener { _, event ->
                 onTouch(baseContext, event, item)
                 return@setOnTouchListener false
