@@ -26,6 +26,7 @@ abstract class BaseViewHolder(
             return@setOnLongClickListener true
         }
     }
+  
     abstract fun onBind(context: Context, item: FileItemEx, color: Int)
     abstract fun onTouch(context: Context, event: MotionEvent, item: FileItemEx)
 }

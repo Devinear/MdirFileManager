@@ -95,6 +95,10 @@ class BrowserFragment : Fragment(), OnFileClickListener {
             recycler.layoutManager = LinearLayoutManager(activity)
             layoutType = LayoutType.Linear
 
+            recycler.adapter = adapterLinear
+            recycler.layoutManager = LinearLayoutManager(activity)
+            layoutType = LayoutType.Linear
+
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
         adapterLinear.apply {
@@ -104,7 +108,6 @@ class BrowserFragment : Fragment(), OnFileClickListener {
         }
 
         livePath.value = if (browserData?.type == BrowserType.Storage) browserPath else "> ${browserData?.category?.name}"
-
         viewModel.onClickStorage()
 
         return binding.root
