@@ -42,7 +42,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:src="@drawable/outline_smartphone_white_24"
-                android:onClick="@{()->fragment.onClickHome()}" />
+                android:onClick="@{()->viewModel.requestHome()}" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"

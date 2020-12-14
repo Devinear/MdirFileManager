@@ -91,6 +91,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun requestHome() {
+        loadDirectory(FileUtil.LEGACY_ROOT)
+    }
+
     fun requestDepth(depth: String) {
         val request = "${FileUtil.LEGACY_ROOT}/${depth}".apply {
             replace("//", "/")
