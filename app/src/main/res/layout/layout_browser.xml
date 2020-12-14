@@ -24,16 +24,16 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/la_path"
+            android:id="@+id/la_depth_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recycler_linear_land_item_height"
+            android:layout_height="40dp"
             android:background="@color/title_main"
-            android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/recycler" >
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_home"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -44,16 +44,22 @@
                 android:src="@drawable/outline_smartphone_white_24"
                 android:onClick="@{()->fragment.onClickHome()}" />
 
-            <TextView
-                android:id="@+id/tv_path"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/dos_m"
-                android:text="@{fragment.livePath}"
-                android:textSize="@dimen/recycler_item_text_size"
-                android:textColor="@android:color/black"
-                tools:text=".."/>
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/title_main" >
+
+                <LinearLayout
+                    android:id="@+id/la_depth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    app:viewModel="@{viewModel}"
+                    app:depthList="@{viewModel.depthDir}" />
+
+            </HorizontalScrollView>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -62,7 +68,7 @@
             android:layout_height="0dp"
             app:layout_constraintVertical_weight="1"
             android:background="@android:color/black"
-            app:layout_constraintTop_toBottomOf="@id/la_path"
+            app:layout_constraintTop_toBottomOf="@id/la_depth_container"
             app:layout_constraintBottom_toTopOf="@id/la_info"
             app:viewModel="@{viewModel}"
             app:items="@{viewModel.files}"

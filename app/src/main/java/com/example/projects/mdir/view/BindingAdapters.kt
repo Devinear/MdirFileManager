@@ -1,8 +1,14 @@
 package com.example.projects.mdir.view
 
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
+import android.view.ContextThemeWrapper
+import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableArrayList
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projects.R
 import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
@@ -28,4 +34,33 @@ object BindingAdapters {
             }
         }
     }
+
+    @JvmStatic
+    @BindingAdapter("depthList", "viewModel")
+    fun setDepthList(linearLayout: LinearLayout, depths: List<String>?, viewModel: FileViewModel) {
+//        if(depths == null) return
+        depths ?: return
+        linearLayout.removeAllViews()
+
+        var path = ""
+        depths.forEach { nameDir ->
+            val symbolContext = ContextThemeWrapper(linearLayout.context, R.style.BrowserDepthSymbol)
+            linearLayout.addView(AppCompatTextView(symbolContext))
+
+            TransitionManager.beginDelayedTransition(linearLayout, ChangeBounds().apply {
+                duration = 500L
+            })
+
+            path = "$path/$nameDir"
+            val buttonContext = ContextThemeWrapper(linearLayout.context, R.style.BrowserDepthTextView)
+            linearLayout.addView(AppCompatTextView(buttonContext).apply {
+                text = nameDir
+                tag = path
+                setOnClickListener { viewModel.requestDepth(it.tag.toString()) }
+            })
+        }
+
+        return
+    }
+
 }

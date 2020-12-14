@@ -82,10 +82,17 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                 list.add(0, FileItemEx(path = curPath, isUpDir = true))
             }
 
-            _depthDir.postValue(curPath.substringAfter(FileUtil.LEGACY_ROOT).split('/'))
+            val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT).split('/').toMutableList().apply {
+                removeIf { it.isEmpty() }
+            }
+            _depthDir.postValue(depths)
 
             _files.postValue(list)
         }
+    }
+
+    fun requestDepth(depth: String) {
+
     }
 
     fun requestShowSystem(isShowSystem: Boolean) {
