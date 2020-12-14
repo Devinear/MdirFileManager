@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
@@ -106,6 +107,15 @@ class BrowserFragment : Fragment(), OnFileClickListener {
         livePath.value = if (browserData?.type == BrowserType.Storage) browserPath else "> ${browserData?.category?.name}"
         viewModel.onClickStorage()
 
+        (activity as FileManagerActivity).liveShowType.apply {
+            removeObservers(viewLifecycleOwner)
+            observe(viewLifecycleOwner, Observer { listMode ->
+                if(listMode)
+                    return@Observer
+                else
+                    return@Observer
+            })
+        }
         return binding.root
     }
 

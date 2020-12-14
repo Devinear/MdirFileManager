@@ -15,10 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.*
 import com.example.projects.R
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
@@ -135,6 +132,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 
     private lateinit var menu: Menu
     var isShowList = true
+    val liveShowType = MutableLiveData<Boolean>()
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         if(menu == null) return false
@@ -162,14 +160,16 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         return when(item.itemId) {
             R.id.action_list -> {
                 isShowList = true
-                menu.findItem(R.id.action_list)?.isVisible = false
-                menu.findItem(R.id.action_grid)?.isVisible = true
+                liveShowType.postValue(isShowList)
+                menu.findItem(R.id.action_list)?.isVisible = !isShowList
+                menu.findItem(R.id.action_grid)?.isVisible = isShowList
                 true
             }
             R.id.action_grid -> {
                 isShowList = false
-                menu.findItem(R.id.action_list)?.isVisible = true
-                menu.findItem(R.id.action_grid)?.isVisible = false
+                liveShowType.postValue(isShowList)
+                menu.findItem(R.id.action_list)?.isVisible = !isShowList
+                menu.findItem(R.id.action_grid)?.isVisible = isShowList
                 true
             }
             R.id.action_find -> {
@@ -211,6 +211,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                     replace(R.id.fragment_container, BrowserFragment.newInstance(BrowserType.Category, category))
                     addToBackStack(HomeFragment.toString())
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+                    liveShowType.postValue(isShowList)
                 }
                 FragmentType.Find -> {
                     replace(R.id.fragment_container, FindFragment.INSTANCE)
