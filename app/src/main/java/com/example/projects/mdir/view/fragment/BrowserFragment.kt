@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutBrowserBinding
@@ -21,8 +22,6 @@ import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.LayoutType
-import com.example.projects.mdir.data.FileItemEx
-import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.BrowserData
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
@@ -33,6 +32,7 @@ class BrowserFragment : Fragment() {
         private const val TAG = "[FR] BROWSER"
         private const val PATH = "path"
         private const val TYPE = "type"
+        private const val GRID_ITEM_WIDTH_DP = 120
 
 //        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 //            BrowserFragment()
@@ -99,9 +99,7 @@ class BrowserFragment : Fragment() {
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
         adapterLinear.apply {
-//            clickListener = this@BrowserFragment
             isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-//            updateFileList()
         }
 
         livePath.value = if (browserData?.type == BrowserType.Storage) browserPath else "> ${browserData?.category?.name}"
@@ -109,16 +107,34 @@ class BrowserFragment : Fragment() {
 
         (activity as FileManagerActivity).liveShowType.apply {
             removeObservers(viewLifecycleOwner)
-            observe(viewLifecycleOwner, Observer { listMode ->
-                if(listMode)
-                    return@Observer
-                else
-                    return@Observer
-            })
+            observe(viewLifecycleOwner, Observer { changeViewMode(isListMode = it) })
         }
         return binding.root
     }
 
     fun onClickHome() = Unit
+
+    private fun changeViewMode(isListMode: Boolean) {
+        layoutType = if( isListMode ) LayoutType.Linear else LayoutType.Grid
+        with(binding.recycler) {
+            when(layoutType) {
+                LayoutType.Linear -> {
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter = adapterLinear.apply {
+                        setFileItems(adapterGrid.items)
+                        isPortrait = adapterGrid.isPortrait
+                    }
+                }
+                LayoutType.Grid -> {
+                    layoutManager = GridLayoutManager(activity,
+                        resources.configuration.screenWidthDp / GRID_ITEM_WIDTH_DP +1)
+                    adapter = adapterGrid.apply {
+                        setFileItems(adapterLinear.items)
+                        isPortrait = adapterLinear.isPortrait
+                    }
+                }
+            }
+        }
+    }
 
 }
