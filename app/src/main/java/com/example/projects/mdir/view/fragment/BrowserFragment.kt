@@ -112,7 +112,23 @@ class BrowserFragment : Fragment() {
         return binding.root
     }
 
-    fun onClickHome() = Unit
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        when (layoutType) {
+            LayoutType.Linear -> {
+                // Adapter를 새로 설정하면 레이아웃을 새로 구성한다.
+                // Linear의 경우 port/land가 다른 레이아웃이다.
+                binding.recycler.adapter = adapterLinear
+            }
+            else -> {
+                if(binding.recycler.layoutManager is GridLayoutManager) {
+                    val spanCount : Int = newConfig.screenWidthDp / GRID_ITEM_WIDTH_DP +1
+                    (binding.recycler.layoutManager as GridLayoutManager).spanCount = spanCount
+                }
+            }
+        }
+    }
 
     private fun changeViewMode(isListMode: Boolean) {
         layoutType = if( isListMode ) LayoutType.Linear else LayoutType.Grid

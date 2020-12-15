@@ -242,25 +242,6 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-//        Log.d(TAG, "onConfigurationChanged ORIENTATION:${newConfig.orientation}")
-//        when (layoutType) {
-//            LayoutType.Linear -> {
-//                adapterLinear.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
-//                adapterLinear.notifyDataSetChanged()
-//            }
-//            else -> {
-//                adapterGrid.isPortrait = newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
-//                adapterGrid.notifyDataSetChanged()
-//                if(binding.recycler.layoutManager is GridLayoutManager) {
-//                    val spanCount : Int = newConfig.screenWidthDp / GRID_ITEM_WIDTH_DP +1
-//                    (binding.recycler.layoutManager as GridLayoutManager).spanCount = spanCount
-//                }
-//            }
-//        }
-    }
-
     override fun onClickFile(item: FileItemEx) {
         when (item.exType) {
             FileType.UpDir -> {
