@@ -27,7 +27,7 @@ import com.example.projects.mdir.view.BrowserData
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 
-class BrowserFragment : Fragment(), OnFileClickListener {
+class BrowserFragment : Fragment() {
 
     companion object {
         private const val TAG = "[FR] BROWSER"
@@ -99,7 +99,7 @@ class BrowserFragment : Fragment(), OnFileClickListener {
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
         adapterLinear.apply {
-            clickListener = this@BrowserFragment
+//            clickListener = this@BrowserFragment
             isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 //            updateFileList()
         }
@@ -117,14 +117,6 @@ class BrowserFragment : Fragment(), OnFileClickListener {
             })
         }
         return binding.root
-    }
-
-    override fun onClickFile(item: FileItemEx) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onLongClickFile(item: FileItemEx) {
-        TODO("Not yet implemented")
     }
 
     fun onClickHome() = Unit

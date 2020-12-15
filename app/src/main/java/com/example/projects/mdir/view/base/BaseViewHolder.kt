@@ -25,6 +25,11 @@ abstract class BaseViewHolder(
             viewModel.requestLongClickItem(item)
             return@setOnLongClickListener true
         }
+        itemView.setOnTouchListener { v, event ->
+            val item = (viewDataBinding as? ItemLinearFileBinding)?.item ?: (viewDataBinding as? ItemGridFileBinding)?.item ?: return@setOnTouchListener false
+            onTouch(v.context, event, item)
+            return@setOnTouchListener false
+        }
     }
   
     abstract fun onBind(context: Context, item: FileItemEx, color: Int)
