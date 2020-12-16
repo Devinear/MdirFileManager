@@ -56,7 +56,7 @@ class FileGridAdapter(private val context: Context, val viewModel: FileViewModel
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(
+    = ViewHolder(
             ItemGridFileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             , viewModel)
 }

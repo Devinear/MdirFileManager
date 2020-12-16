@@ -11,7 +11,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutBrowserBinding
@@ -20,18 +22,17 @@ import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.LayoutType
-import com.example.projects.mdir.data.FileItemEx
-import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.BrowserData
 import com.example.projects.mdir.view.FileGridAdapter
 import com.example.projects.mdir.view.FileLinearAdapter
 
-class BrowserFragment : Fragment(), OnFileClickListener {
+class BrowserFragment : Fragment() {
 
     companion object {
         private const val TAG = "[FR] BROWSER"
         private const val PATH = "path"
         private const val TYPE = "type"
+        private const val GRID_ITEM_WIDTH_DP = 120
 
 //        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 //            BrowserFragment()
@@ -95,32 +96,61 @@ class BrowserFragment : Fragment(), OnFileClickListener {
             recycler.layoutManager = LinearLayoutManager(activity)
             layoutType = LayoutType.Linear
 
-            recycler.adapter = adapterLinear
-            recycler.layoutManager = LinearLayoutManager(activity)
-            layoutType = LayoutType.Linear
-
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
         adapterLinear.apply {
-            clickListener = this@BrowserFragment
             isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-//            updateFileList()
         }
 
         livePath.value = if (browserData?.type == BrowserType.Storage) browserPath else "> ${browserData?.category?.name}"
         viewModel.onClickStorage()
 
+        (activity as FileManagerActivity).liveShowType.apply {
+            removeObservers(viewLifecycleOwner)
+            observe(viewLifecycleOwner, Observer { changeViewMode(isListMode = it) })
+        }
         return binding.root
     }
 
-    override fun onClickFile(item: FileItemEx) {
-        TODO("Not yet implemented")
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        when (layoutType) {
+            LayoutType.Linear -> {
+                // Adapter를 새로 설정하면 레이아웃을 새로 구성한다.
+                // Linear의 경우 port/land가 다른 레이아웃이다.
+                binding.recycler.adapter = adapterLinear
+            }
+            else -> {
+                if(binding.recycler.layoutManager is GridLayoutManager) {
+                    val spanCount : Int = newConfig.screenWidthDp / GRID_ITEM_WIDTH_DP +1
+                    (binding.recycler.layoutManager as GridLayoutManager).spanCount = spanCount
+                }
+            }
+        }
     }
 
-    override fun onLongClickFile(item: FileItemEx) {
-        TODO("Not yet implemented")
+    private fun changeViewMode(isListMode: Boolean) {
+        layoutType = if( isListMode ) LayoutType.Linear else LayoutType.Grid
+        with(binding.recycler) {
+            when(layoutType) {
+                LayoutType.Linear -> {
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter = adapterLinear.apply {
+                        setFileItems(adapterGrid.items)
+                        isPortrait = adapterGrid.isPortrait
+                    }
+                }
+                LayoutType.Grid -> {
+                    layoutManager = GridLayoutManager(activity,
+                        resources.configuration.screenWidthDp / GRID_ITEM_WIDTH_DP +1)
+                    adapter = adapterGrid.apply {
+                        setFileItems(adapterLinear.items)
+                        isPortrait = adapterLinear.isPortrait
+                    }
+                }
+            }
+        }
     }
-
-    fun onClickHome() = Unit
 
 }

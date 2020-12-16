@@ -23,7 +23,7 @@
         <activity
             android:name="com.example.projects.mdir.FileManagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:configChanges="screenSize"/>
+            android:configChanges="screenSize|orientation"/>
         <activity
             android:name="com.example.projects.maps.MapActivity"/>
 

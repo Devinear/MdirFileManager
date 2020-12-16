@@ -9,7 +9,6 @@ import com.example.projects.mdir.listener.OnFileClickListener
 abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<BaseViewHolder>() {
 
     var isPortrait = true // ORIENTATION_PORTRAIT
-    var clickListener : OnFileClickListener? = null
     val items = mutableListOf<FileItemEx>()
 
     @SuppressLint("ClickableViewAccessibility")
@@ -19,18 +18,6 @@ abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<Base
             val color = baseContext.getColor(item.exType.color)
 
             onBind(baseContext, item, color)
-
-//            itemView.setOnClickListener {
-//                clickListener?.onClickFile(item)
-//            }
-//            itemView.setOnLongClickListener {
-//                clickListener?.onLongClickFile(item)
-//                return@setOnLongClickListener true
-//            }
-            itemView.setOnTouchListener { _, event ->
-                onTouch(baseContext, event, item)
-                return@setOnTouchListener false
-            }
         }
     }
 

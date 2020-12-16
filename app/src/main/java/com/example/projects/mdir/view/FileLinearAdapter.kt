@@ -21,8 +21,9 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
     class ViewHolder(
             private val binding: ItemLinearFileBinding,
             viewModel: FileViewModel
-            ) : BaseViewHolder(
-            viewDataBinding = binding as ViewDataBinding, viewModel = viewModel
+    ) : BaseViewHolder(
+            viewDataBinding = binding as ViewDataBinding,
+            viewModel = viewModel
     ) {
 
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
@@ -85,7 +86,7 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder
-            = ViewHolder(
-            ItemLinearFileBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            , viewModel)
+    = ViewHolder(
+        ItemLinearFileBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+        viewModel)
 }
