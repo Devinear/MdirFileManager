@@ -11,10 +11,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.projects.mdir.common.BrowserType
-import com.example.projects.mdir.common.ExtType
-import com.example.projects.mdir.common.FileType
-import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.AbsStorageRepository
 import com.example.projects.mdir.repository.LegacyStorageRepository
@@ -43,25 +40,54 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val depthDir: LiveData<List<String>>
         get() = _depthDir
 
-//    private val _category = MutableLiveData<Category>()
-//    val category: LiveData<Category>
-//        get() = _category
+    private val _category = MutableLiveData<List<FileItemEx>>()
+    val category: LiveData<List<FileItemEx>>
+        get() = _category
 
     private val repository: AbsStorageRepository by lazy {
         LegacyStorageRepository()
     }
 
     private var rootUri: Uri = Uri.EMPTY
-//    private val rootUri: Uri by lazy { File(FileUtil.ROOT).toUri() }
 
     init {
         _mode.value = BrowserType.Storage
-//        rootUri = FileItemEx(FileUtil.ROOT).toUri()
     }
 
-    fun onClickStorage() {
-        repository.loadDirectory(app, FileUtil.LEGACY_ROOT)
-        Toast.makeText(app, "STORAGE", Toast.LENGTH_SHORT).show()
+    fun loadCategory(category: Category, isShowSystem: Boolean = _isShowSystem) {
+        viewModelScope.launch {
+            val listRoot = repository.loadDirectory(app, FileUtil.LEGACY_ROOT)
+            val type = FileUtil.toFileType(category = category)
+
+            val listCategory = mutableListOf<FileItemEx>()
+            if(type == FileType.None) {
+
+            }
+            else {
+                listRoot.forEach {
+                    val list = it.listFiles()
+                    if(list != null && list.isNotEmpty() && it.exType == FileType.Dir)
+                        loadFile(listRoot = list.toList(), listOut = listCategory, type = type)
+                    else if(it.exType == type)
+                        listCategory.add(it)
+                }
+            }
+//            _category.postValue(listCategory)
+            _files.postValue(listCategory)
+        }
+    }
+
+    private fun loadFile(listRoot: List<File>, listOut: MutableList<FileItemEx>, type: FileType) {
+        listRoot.forEach { file ->
+            FileItemEx(file.absolutePath).apply {
+                if(exType == FileType.Dir) {
+                    loadFile(listRoot = listFiles().toList(), listOut = listOut, type = type)
+                }
+                else if(exType == type) {
+                    listOut.add(this)
+                }
+            }
+        }
     }
 
     fun loadDirectory(path: String = "", isShowSystem: Boolean = _isShowSystem) {
@@ -107,21 +133,12 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         loadDirectory(rootUri.path?:FileUtil.LEGACY_ROOT, _isShowSystem)
     }
 
-//    @ExperimentalStdlibApi
     fun requestClickItem(item: FileItemEx) {
         when (item.exType) {
             // 부모 폴더
-            FileType.UpDir -> {
-//                _depthDir.value?.run {
-//                    if(size > 0) removeAt(size - 1)
-//                }
-                loadDirectory(item.parent)
-            }
+            FileType.UpDir -> { loadDirectory(item.parent) }
             // 일반 폴더
-            FileType.Dir -> {
-//                _depthDir.value?.add(item)
-                loadDirectory(item.path, false)
-            }
+            FileType.Dir -> { loadDirectory(item.path, false) }
             // 일반 파일
             else -> requestExecute(item)
         }

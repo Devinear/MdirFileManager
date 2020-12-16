@@ -8,7 +8,7 @@ import com.example.projects.mdir.listener.OnFileClickListener
 
 abstract class BaseAdapter(val baseContext: Context) : RecyclerView.Adapter<BaseViewHolder>() {
 
-    var isPortrait = true // ORIENTATION_PORTRAIT
+//    var isPortrait = true // ORIENTATION_PORTRAIT
     val items = mutableListOf<FileItemEx>()
 
     @SuppressLint("ClickableViewAccessibility")

@@ -170,6 +170,18 @@ object FileUtil {
         }
     }
 
+    fun toFileType(category: Category) : FileType {
+        return when(category) {
+            Category.Image -> FileType.Image
+            Category.Video -> FileType.Video
+            Category.Audio -> FileType.Audio
+            Category.Document -> FileType.Document
+            Category.APK -> FileType.APK
+            Category.Zip -> FileType.Zip
+            Category.Download -> FileType.None
+        }
+    }
+
     fun convertFileItem(context: Context, path: String) : FileItem? {
         val file = File(path)
         if(file.exists()) {

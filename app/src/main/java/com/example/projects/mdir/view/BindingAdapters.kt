@@ -29,8 +29,9 @@ object BindingAdapters {
         (recyclerView.adapter as BaseAdapter).run {
             items?.let {
                 setFileItems(it)
-            } ?: run{
-                viewModel.loadDirectory()
+                // BrowserFragment onCreateView에서 진행
+//            } ?: run{
+//                viewModel.loadDirectory()
             }
         }
     }

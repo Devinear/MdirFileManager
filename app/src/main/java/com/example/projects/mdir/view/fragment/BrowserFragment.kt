@@ -98,12 +98,11 @@ class BrowserFragment : Fragment() {
 
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
-        adapterLinear.apply {
-            isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-        }
 
-        livePath.value = if (browserData?.type == BrowserType.Storage) browserPath else "> ${browserData?.category?.name}"
-        viewModel.onClickStorage()
+        if(browserData?.type == BrowserType.Storage)
+            viewModel.loadDirectory()
+        else
+            viewModel.loadCategory(browserData?.category?:Category.Image)
 
         (activity as FileManagerActivity).liveShowType.apply {
             removeObservers(viewLifecycleOwner)
@@ -138,7 +137,7 @@ class BrowserFragment : Fragment() {
                     layoutManager = LinearLayoutManager(activity)
                     adapter = adapterLinear.apply {
                         setFileItems(adapterGrid.items)
-                        isPortrait = adapterGrid.isPortrait
+//                        isPortrait = adapterGrid.isPortrait
                     }
                 }
                 LayoutType.Grid -> {
@@ -146,7 +145,7 @@ class BrowserFragment : Fragment() {
                         resources.configuration.screenWidthDp / GRID_ITEM_WIDTH_DP +1)
                     adapter = adapterGrid.apply {
                         setFileItems(adapterLinear.items)
-                        isPortrait = adapterLinear.isPortrait
+//                        isPortrait = adapterLinear.isPortrait
                     }
                 }
             }
