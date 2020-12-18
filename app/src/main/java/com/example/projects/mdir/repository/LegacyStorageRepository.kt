@@ -3,6 +3,7 @@ package com.example.projects.mdir.repository
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
@@ -41,6 +42,11 @@ class LegacyStorageRepository : AbsStorageRepository() {
         innerSort(listLoadDirs)
 
         return listLoadDirs
+    }
+
+    override fun loadDirectory(context: Context, category: Category): MutableList<FileItemEx> {
+        val listLoadCategory = mutableListOf<FileItemEx>()
+        return listLoadCategory
     }
 
     private fun innerSort(list: MutableList<FileItemEx>) {
