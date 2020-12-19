@@ -13,11 +13,11 @@ abstract class AbsStorageRepository {
 
     internal var query : String = ""
 
-    open fun loadDirectory(context: Context, file: File) = mutableListOf<FileItemEx>()
-    open fun loadDirectory(context: Context, path: String) = mutableListOf<FileItemEx>()
-    open fun loadDirectory(context: Context, tree: DocumentFile) = mutableListOf<FileItemEx>()
+    open fun loadDirectory(context: Context, file: File, isShowSystem: Boolean) = mutableListOf<FileItemEx>()
+    open fun loadDirectory(context: Context, path: String, isShowSystem: Boolean) = mutableListOf<FileItemEx>()
+    open fun loadDirectory(context: Context, tree: DocumentFile, isShowSystem: Boolean) = mutableListOf<FileItemEx>()
 
-    open fun loadDirectory(context: Context, category: Category) = mutableListOf<FileItemEx>()
+    open fun loadDirectory(context: Context, path: String, category: Category, isShowSystem: Boolean) = mutableListOf<FileItemEx>()
 
     fun sort(sortBy: SortBy, sortOrder: SortOrder, sortBySec: SortBy = SortBy.Name, sortOrderSec: SortOrder = SortOrder.Ascending) {
         sortPairFir = Pair(sortBy, sortOrder)

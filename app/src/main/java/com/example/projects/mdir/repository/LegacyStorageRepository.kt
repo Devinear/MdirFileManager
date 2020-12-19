@@ -12,18 +12,24 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LegacyStorageRepository : AbsStorageRepository() {
 
-    override fun loadDirectory(context: Context, path: String): MutableList<FileItemEx> {
-        return loadDirectory(context, File(path))
+    override fun loadDirectory(context: Context, path: String, isShowSystem: Boolean): MutableList<FileItemEx> {
+        return loadDirectory(context, File(path), isShowSystem)
     }
 
-    override fun loadDirectory(context: Context, file: File): MutableList<FileItemEx> {
+    override fun loadDirectory(context: Context, file: File, isShowSystem: Boolean): MutableList<FileItemEx> {
         if(!file.exists()) return mutableListOf()
 
         val listLoadDirs = mutableListOf<FileItemEx>()
 
-        file.listFiles()?.forEach {
+        val list = file.listFiles().toMutableList()
+        if(!isShowSystem) {
+            list.removeAll { item -> return@removeAll item.name[0] == '.' }
+        }
+
+        list.forEach {
             var image : BitmapDrawable? = null
             if (it.isDirectory) {
                 val subList = it.listFiles { subFile -> subFile.isFile && FileUtil.getFileExtType(subFile.extension) == ExtType.Image }
@@ -44,9 +50,28 @@ class LegacyStorageRepository : AbsStorageRepository() {
         return listLoadDirs
     }
 
-    override fun loadDirectory(context: Context, category: Category): MutableList<FileItemEx> {
-        val listLoadCategory = mutableListOf<FileItemEx>()
-        return listLoadCategory
+    override fun loadDirectory(context: Context, path: String, category: Category, isShowSystem: Boolean): MutableList<FileItemEx> {
+        val root = File(path)
+        val requestType = FileUtil.toFileType(category = category)
+        if(!root.exists() || requestType == FileType.None) return mutableListOf()
+
+        val listCategory = mutableListOf<FileItemEx>()
+        loadFile(listRoot = root.listFiles().toMutableList(), listOut = listCategory, type = requestType, isShowSystem = isShowSystem)
+        return listCategory
+    }
+
+    private fun loadFile(listRoot: MutableList<File>, listOut: MutableList<FileItemEx>, type: FileType, isShowSystem: Boolean) {
+        if(!isShowSystem) {
+            listRoot.removeAll { item -> return@removeAll item.name[0] == '.' }
+        }
+        listRoot.forEach { file ->
+            FileItemEx(file.absolutePath).apply {
+                if(exType == FileType.Dir)
+                    loadFile(listRoot = listFiles().toMutableList(), listOut = listOut, type = type, isShowSystem = isShowSystem)
+                else if(exType == type)
+                    listOut.add(this)
+            }
+        }
     }
 
     private fun innerSort(list: MutableList<FileItemEx>) {

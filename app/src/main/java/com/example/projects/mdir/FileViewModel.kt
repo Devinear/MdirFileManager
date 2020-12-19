@@ -56,37 +56,15 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun loadCategory(category: Category, isShowSystem: Boolean = _isShowSystem) {
         viewModelScope.launch {
-            val listRoot = repository.loadDirectory(app, FileUtil.LEGACY_ROOT)
-            val type = FileUtil.toFileType(category = category)
-
-            val listCategory = mutableListOf<FileItemEx>()
-            if(type == FileType.None) {
-
+            if(category == Category.Download) {
+                loadDirectory(FileUtil.LEGACY_DOWNLOAD)
+                return@launch
             }
-            else {
-                listRoot.forEach {
-                    val list = it.listFiles()
-                    if(list != null && list.isNotEmpty() && it.exType == FileType.Dir)
-                        loadFile(listRoot = list.toList(), listOut = listCategory, type = type)
-                    else if(it.exType == type)
-                        listCategory.add(it)
-                }
-            }
-//            _category.postValue(listCategory)
+
+            val listCategory = repository.loadDirectory(
+                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _isShowSystem
+            )
             _files.postValue(listCategory)
-        }
-    }
-
-    private fun loadFile(listRoot: List<File>, listOut: MutableList<FileItemEx>, type: FileType) {
-        listRoot.forEach { file ->
-            FileItemEx(file.absolutePath).apply {
-                if(exType == FileType.Dir) {
-                    loadFile(listRoot = listFiles().toList(), listOut = listOut, type = type)
-                }
-                else if(exType == type) {
-                    listOut.add(this)
-                }
-            }
         }
     }
 
@@ -96,24 +74,19 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
             // Dispatchers.IO ??
-            val list = repository.loadDirectory(app, curPath)
-
-            // System Folder/File Hide
-            if(!isShowSystem) {
-                list.removeAll { item -> return@removeAll item.name[0] == '.' }
-            }
+            val list = repository.loadDirectory(app, curPath, _isShowSystem)
 
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
             if(curPath != FileUtil.LEGACY_ROOT) {
                 list.add(0, FileItemEx(path = curPath, isUpDir = true))
             }
-
-            val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT).split('/').toMutableList().apply {
-                removeIf { it.isEmpty() }
-            }
-            _depthDir.postValue(depths)
-
             _files.postValue(list)
+
+            val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT)
+                    .split('/')
+                    .toMutableList()
+                    .apply { removeIf { it.isEmpty() } }
+            _depthDir.postValue(depths)
         }
     }
 
