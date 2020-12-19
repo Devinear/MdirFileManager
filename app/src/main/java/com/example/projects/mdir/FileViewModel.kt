@@ -65,6 +65,9 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                     context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _isShowSystem
             )
             _files.postValue(listCategory)
+
+            // DEPTHS
+            _depthDir.postValue( MutableList(1) { category.name } )
         }
     }
 
@@ -73,7 +76,6 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
-            // Dispatchers.IO ??
             val list = repository.loadDirectory(app, curPath, _isShowSystem)
 
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
@@ -82,6 +84,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             }
             _files.postValue(list)
 
+            // DEPTHS
             val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT)
                     .split('/')
                     .toMutableList()
