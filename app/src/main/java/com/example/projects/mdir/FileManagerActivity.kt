@@ -208,7 +208,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                     supportActionBar?.setDisplayHomeAsUpEnabled(false) // BackKey 비활성화
                 }
                 FragmentType.Browser -> {
-                    replace(R.id.fragment_container, BrowserFragment.newInstance(BrowserType.Category, category))
+                    if(category == null)
+                        replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage))
+                    else
+                        replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Category, category = category))
                     addToBackStack(HomeFragment.toString())
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
