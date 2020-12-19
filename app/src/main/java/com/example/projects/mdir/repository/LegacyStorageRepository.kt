@@ -57,6 +57,8 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
         val listCategory = mutableListOf<FileItemEx>()
         loadFile(listRoot = root.listFiles().toMutableList(), listOut = listCategory, type = requestType, isShowSystem = isShowSystem)
+
+        simpleSort(listCategory)
         return listCategory
     }
 
@@ -85,6 +87,9 @@ class LegacyStorageRepository : AbsStorageRepository() {
             }
         })
     }
+
+    private fun simpleSort(list: MutableList<FileItemEx>, ascending: Boolean = true)
+            = list.sortWith(kotlin.Comparator { o1, o2 -> o1.name.compareTo(o2.name) * ( if(ascending) 1 else -1 ) })
 
     private fun innerComparator(o1: FileItemEx, o2: FileItemEx, option: Pair<SortBy, SortOrder>) : Int {
         val ascending = if(option.second == SortOrder.Ascending) 1 else -1
