@@ -13,6 +13,7 @@ import java.util.*
 object FileUtil {
 
     val LEGACY_ROOT = Environment.getExternalStorageDirectory().absolutePath
+    val LEGACY_DOWNLOAD = "$LEGACY_ROOT/Download"
 
 //    @JvmStatic
 //    val ROOT_URI by lazy { FileItemEx(ROOT).toUri() }
