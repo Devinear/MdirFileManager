@@ -1,23 +1,37 @@
 package com.example.projects.mdir.repository
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 
 class ThumbnailRepository {
 
     private val thumbs = mutableMapOf<String, Bitmap>()
 
-    fun insertThumb(path: String, thumb: Bitmap) {
-        thumbs[path].also {
-            it?.recycle()
-            thumb
+    private fun insertThumb(path: String, thumb: Bitmap) {
+        thumbs[path]?.recycle()
+        thumbs[path] = thumb
+    }
+
+    fun requestDrawable(context: Context, path: String) : BitmapDrawable? {
+        return if(isExist(path)) {
+            BitmapDrawable(context.resources, thumbs[path])
+        }
+        else {
+            try {
+                val bitmap = BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = 4 })
+                insertThumb(path = path, thumb = bitmap)
+                BitmapDrawable(context.resources, bitmap)
+            }
+            catch (e: Exception) {
+                e.printStackTrace()
+                return null
+            }
         }
     }
 
-    fun getThumb(path: String) : Bitmap? {
-        return thumbs[path]
-    }
-
-    fun isExist(path: String) : Boolean {
+    private fun isExist(path: String) : Boolean {
         return thumbs[path] != null
     }
 

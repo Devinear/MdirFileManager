@@ -92,6 +92,8 @@ class BrowserFragment : Fragment() {
             fragment = this@BrowserFragment
             viewModel = this@BrowserFragment.viewModel
 
+            owner = lifecycleOwner
+
             recycler.adapter = adapterLinear
             recycler.layoutManager = LinearLayoutManager(activity)
             layoutType = LayoutType.Linear

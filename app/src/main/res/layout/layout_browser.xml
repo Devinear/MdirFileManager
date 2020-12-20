@@ -16,6 +16,9 @@
         <variable
             name="items"
             type="ObservableArrayList&lt;FileItemEx&gt;" />
+        <variable
+            name="owner"
+            type="androidx.lifecycle.LifecycleOwner" />
     </data>
 
 
@@ -72,6 +75,7 @@
             app:layout_constraintBottom_toTopOf="@id/la_info"
             app:viewModel="@{viewModel}"
             app:items="@{viewModel.files}"
+            app:lifecycleOwner="@{owner}"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             tools:spanCount="4"
             tools:listitem="@layout/item_grid_file" />

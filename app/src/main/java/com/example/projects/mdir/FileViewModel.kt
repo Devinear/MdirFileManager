@@ -3,18 +3,18 @@ package com.example.projects.mdir
 import android.app.Application
 import android.content.Intent
 import android.content.pm.ResolveInfo
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.AbsStorageRepository
 import com.example.projects.mdir.repository.LegacyStorageRepository
+import com.example.projects.mdir.repository.ThumbnailRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -68,6 +68,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
             // DEPTHS
             _depthDir.postValue( MutableList(1) { category.name } )
+
+            loadThumbnail(listCategory)
+//            withContext(Dispatchers.IO) { loadThumbnail(listCategory) }
+//            Thread { loadThumbnail(listCategory) }.start()
         }
     }
 
@@ -90,6 +94,25 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                     .toMutableList()
                     .apply { removeIf { it.isEmpty() } }
             _depthDir.postValue(depths)
+
+            loadThumbnail(list)
+        }
+    }
+
+    fun loadThumbnail(list: MutableList<FileItemEx>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            list.forEach {
+                var image: BitmapDrawable? = null
+                if (it.isDirectory) {
+                    val subList = it.listFiles { subFile -> subFile.isFile && FileUtil.getFileExtType(subFile.extension) == ExtType.Image }
+                    subList?.takeIf { subList.isNotEmpty() }?.apply {
+                        image = ThumbnailRepository.INSTANCE.requestDrawable(app, subList[0].absolutePath)
+                    }
+                } else if (FileUtil.toFileType(FileUtil.getFileExtType(it.extension)) == FileType.Image) {
+                    image = ThumbnailRepository.INSTANCE.requestDrawable(app, it.absolutePath)
+                }
+                it.liveDrawable.postValue(image)
+            }
         }
     }
 
