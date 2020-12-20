@@ -1,6 +1,7 @@
 package com.example.projects.mdir.data
 
 import android.graphics.drawable.BitmapDrawable
+import androidx.lifecycle.MutableLiveData
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileType
 import java.io.File
@@ -19,7 +20,7 @@ class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
     private var _simpleName : String = ""
     val simpleName : String; get() = _simpleName
 
-    var drawable: BitmapDrawable? = null
+    var liveDrawable = MutableLiveData<BitmapDrawable>()
 
     init {
         convert()

@@ -52,8 +52,8 @@ class FileLinearAdapter(private val context: Context, val viewModel: FileViewMod
                 }
                 tvTime.text = item.exTime
 
-                if(item.drawable != null) {
-                    ivImage?.setImageDrawable(item.drawable)
+                if(item.liveDrawable.value != null) {
+                    ivImage?.setImageDrawable(item.liveDrawable.value)
                     ivImage?.scaleType = ImageView.ScaleType.CENTER_CROP
                 }
                 else {
