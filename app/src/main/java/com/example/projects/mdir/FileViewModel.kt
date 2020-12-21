@@ -99,17 +99,18 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun loadThumbnail(list: MutableList<FileItemEx>) {
+    private fun loadThumbnail(list: MutableList<FileItemEx>) {
         viewModelScope.launch(Dispatchers.IO) {
             list.forEach {
                 var image: BitmapDrawable? = null
+                val type = FileUtil.getFileExtType(it.extension)
                 if (it.isDirectory) {
                     val subList = it.listFiles { subFile -> subFile.isFile && FileUtil.getFileExtType(subFile.extension) == ExtType.Image }
                     subList?.takeIf { subList.isNotEmpty() }?.apply {
                         image = ThumbnailRepository.INSTANCE.requestDrawable(app, subList[0].absolutePath)
                     }
-                } else if (FileUtil.toFileType(FileUtil.getFileExtType(it.extension)) == FileType.Image) {
-                    image = ThumbnailRepository.INSTANCE.requestDrawable(app, it.absolutePath)
+                } else if (type == ExtType.Image || type == ExtType.Video || type == ExtType.Audio) {
+                    image = ThumbnailRepository.INSTANCE.requestDrawable(app, it.absolutePath, type)
                 }
                 it.liveDrawable.postValue(image)
             }

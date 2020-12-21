@@ -4,6 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.media.ThumbnailUtils
+import android.util.Size
+import com.example.projects.mdir.common.ExtType
+import java.io.File
 
 class ThumbnailRepository {
 
@@ -14,13 +18,16 @@ class ThumbnailRepository {
         thumbs[path] = thumb
     }
 
-    fun requestDrawable(context: Context, path: String) : BitmapDrawable? {
+    fun requestDrawable(context: Context, path: String, type: ExtType = ExtType.Image) : BitmapDrawable? {
         return if(isExist(path)) {
             BitmapDrawable(context.resources, thumbs[path])
         }
         else {
             try {
-                val bitmap = BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = 4 })
+                val bitmap = when(type) {
+                    ExtType.Video, ExtType.Audio -> ThumbnailUtils.createVideoThumbnail(File(path), Size(300, 400), null)
+                    else -> { BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = 4 }) }
+                }
                 insertThumb(path = path, thumb = bitmap)
                 BitmapDrawable(context.resources, bitmap)
             }
