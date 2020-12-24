@@ -69,9 +69,9 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             // DEPTHS
             _depthDir.postValue( MutableList(1) { category.name } )
 
-            loadThumbnail(listCategory)
-//            withContext(Dispatchers.IO) { loadThumbnail(listCategory) }
-//            Thread { loadThumbnail(listCategory) }.start()
+            requestThumbnail(listCategory)
+//            withContext(Dispatchers.IO) { requestThumbnail(listCategory) }
+//            Thread { requestThumbnail(listCategory) }.start()
         }
     }
 
@@ -95,11 +95,11 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                     .apply { removeIf { it.isEmpty() } }
             _depthDir.postValue(depths)
 
-            loadThumbnail(list)
+            requestThumbnail(list)
         }
     }
 
-    private fun loadThumbnail(list: MutableList<FileItemEx>) {
+    private fun requestThumbnail(list: MutableList<FileItemEx>) {
         viewModelScope.launch(Dispatchers.IO) {
             list.forEach {
                 var image: BitmapDrawable? = null
