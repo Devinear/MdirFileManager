@@ -13,6 +13,7 @@ import java.util.*
 object FileUtil {
 
     val LEGACY_ROOT = Environment.getExternalStorageDirectory().absolutePath
+    val LEGACY_DOWNLOAD = "$LEGACY_ROOT/Download"
 
 //    @JvmStatic
 //    val ROOT_URI by lazy { FileItemEx(ROOT).toUri() }
@@ -167,6 +168,18 @@ object FileUtil {
             ExtType.Zip -> FileType.Zip
             ExtType.Apk -> FileType.APK
             else -> FileType.Default
+        }
+    }
+
+    fun toFileType(category: Category) : FileType {
+        return when(category) {
+            Category.Image -> FileType.Image
+            Category.Video -> FileType.Video
+            Category.Audio -> FileType.Audio
+            Category.Document -> FileType.Document
+            Category.APK -> FileType.APK
+            Category.Zip -> FileType.Zip
+            Category.Download -> FileType.None
         }
     }
 

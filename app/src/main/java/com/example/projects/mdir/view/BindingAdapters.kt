@@ -7,6 +7,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableArrayList
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.R
 import com.example.projects.mdir.FileViewModel
@@ -24,14 +26,20 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("items", "viewModel")
-    fun setItems(recyclerView: RecyclerView, items: List<FileItemEx>?, viewModel: FileViewModel) {
+    @BindingAdapter("items", "viewModel", "lifecycleOwner")
+    fun setItems(recyclerView: RecyclerView, items: List<FileItemEx>?, viewModel: FileViewModel, lifecycleOwner: LifecycleOwner) {
         (recyclerView.adapter as BaseAdapter).run {
             items?.let {
                 setFileItems(it)
-            } ?: run{
-                viewModel.loadDirectory()
+                it.indices.forEach { position ->
+                    it[position].liveDrawable.observe(lifecycleOwner ,Observer {
+                        recyclerView.adapter?.notifyItemChanged(position)
+                    })
+                }
             }
+                // BrowserFragment onCreateView에서 진행
+//            } ?: run{
+//                viewModel.loadDirectory()
         }
     }
 

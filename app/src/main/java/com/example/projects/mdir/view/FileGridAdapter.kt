@@ -28,8 +28,8 @@ class FileGridAdapter(private val context: Context, val viewModel: FileViewModel
                 tvName.text = item.simpleName
                 tvName.setTextColor(color)
 
-                if(item.drawable != null) {
-                    ivImage.setImageDrawable(item.drawable)
+                if(item.liveDrawable.value != null) {
+                    ivImage.setImageDrawable(item.liveDrawable.value)
                     ivImage.scaleType = ImageView.ScaleType.CENTER_CROP
                 }
                 else {

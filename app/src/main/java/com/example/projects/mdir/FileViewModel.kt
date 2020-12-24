@@ -3,21 +3,18 @@ package com.example.projects.mdir
 import android.app.Application
 import android.content.Intent
 import android.content.pm.ResolveInfo
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.projects.mdir.common.BrowserType
-import com.example.projects.mdir.common.ExtType
-import com.example.projects.mdir.common.FileType
-import com.example.projects.mdir.common.FileUtil
+import androidx.lifecycle.*
+import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.AbsStorageRepository
 import com.example.projects.mdir.repository.LegacyStorageRepository
+import com.example.projects.mdir.repository.ThumbnailRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -43,25 +40,39 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val depthDir: LiveData<List<String>>
         get() = _depthDir
 
-//    private val _category = MutableLiveData<Category>()
-//    val category: LiveData<Category>
-//        get() = _category
+    private val _category = MutableLiveData<List<FileItemEx>>()
+    val category: LiveData<List<FileItemEx>>
+        get() = _category
 
     private val repository: AbsStorageRepository by lazy {
         LegacyStorageRepository()
     }
 
     private var rootUri: Uri = Uri.EMPTY
-//    private val rootUri: Uri by lazy { File(FileUtil.ROOT).toUri() }
 
     init {
         _mode.value = BrowserType.Storage
-//        rootUri = FileItemEx(FileUtil.ROOT).toUri()
     }
 
-    fun onClickStorage() {
-        repository.loadDirectory(app, FileUtil.LEGACY_ROOT)
-        Toast.makeText(app, "STORAGE", Toast.LENGTH_SHORT).show()
+    fun loadCategory(category: Category, isShowSystem: Boolean = _isShowSystem) {
+        viewModelScope.launch {
+            if(category == Category.Download) {
+                loadDirectory(FileUtil.LEGACY_DOWNLOAD)
+                return@launch
+            }
+
+            val listCategory = repository.loadDirectory(
+                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _isShowSystem
+            )
+            _files.postValue(listCategory)
+
+            // DEPTHS
+            _depthDir.postValue( MutableList(1) { category.name } )
+
+            requestThumbnail(listCategory)
+//            withContext(Dispatchers.IO) { requestThumbnail(listCategory) }
+//            Thread { requestThumbnail(listCategory) }.start()
+        }
     }
 
     fun loadDirectory(path: String = "", isShowSystem: Boolean = _isShowSystem) {
@@ -69,25 +80,40 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
-            // Dispatchers.IO ??
-            val list = repository.loadDirectory(app, curPath)
-
-            // System Folder/File Hide
-            if(!isShowSystem) {
-                list.removeAll { item -> return@removeAll item.name[0] == '.' }
-            }
+            val list = repository.loadDirectory(app, curPath, _isShowSystem)
 
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
             if(curPath != FileUtil.LEGACY_ROOT) {
                 list.add(0, FileItemEx(path = curPath, isUpDir = true))
             }
+            _files.postValue(list)
 
-            val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT).split('/').toMutableList().apply {
-                removeIf { it.isEmpty() }
-            }
+            // DEPTHS
+            val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT)
+                    .split('/')
+                    .toMutableList()
+                    .apply { removeIf { it.isEmpty() } }
             _depthDir.postValue(depths)
 
-            _files.postValue(list)
+            requestThumbnail(list)
+        }
+    }
+
+    private fun requestThumbnail(list: MutableList<FileItemEx>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            list.forEach {
+                var image: BitmapDrawable? = null
+                val type = FileUtil.getFileExtType(it.extension)
+                if (it.isDirectory) {
+                    val subList = it.listFiles { subFile -> subFile.isFile && FileUtil.getFileExtType(subFile.extension) == ExtType.Image }
+                    subList?.takeIf { subList.isNotEmpty() }?.apply {
+                        image = ThumbnailRepository.INSTANCE.requestDrawable(app, subList[0].absolutePath)
+                    }
+                } else if (type == ExtType.Image || type == ExtType.Video || type == ExtType.Audio) {
+                    image = ThumbnailRepository.INSTANCE.requestDrawable(app, it.absolutePath, type)
+                }
+                it.liveDrawable.postValue(image)
+            }
         }
     }
 
@@ -107,21 +133,12 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         loadDirectory(rootUri.path?:FileUtil.LEGACY_ROOT, _isShowSystem)
     }
 
-//    @ExperimentalStdlibApi
     fun requestClickItem(item: FileItemEx) {
         when (item.exType) {
             // 부모 폴더
-            FileType.UpDir -> {
-//                _depthDir.value?.run {
-//                    if(size > 0) removeAt(size - 1)
-//                }
-                loadDirectory(item.parent)
-            }
+            FileType.UpDir -> { loadDirectory(item.parent) }
             // 일반 폴더
-            FileType.Dir -> {
-//                _depthDir.value?.add(item)
-                loadDirectory(item.path, false)
-            }
+            FileType.Dir -> { loadDirectory(item.path, false) }
             // 일반 파일
             else -> requestExecute(item)
         }
