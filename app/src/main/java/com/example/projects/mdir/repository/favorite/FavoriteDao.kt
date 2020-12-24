@@ -5,10 +5,10 @@ import androidx.room.*
 @Dao
 interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertInfo(vararg data: FavoriteData)
+    suspend fun insert(vararg data: FavoriteData)
 
     @Delete
-    suspend fun deleteInfo(vararg data: FavoriteData)
+    suspend fun delete(vararg data: FavoriteData)
 
     @Query("SELECT * FROM Favorite")
     suspend fun getAll(): List<FavoriteData>
