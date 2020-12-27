@@ -12,7 +12,6 @@ import com.example.projects.databinding.LayoutSnackbarBinding
 import com.example.projects.mdir.common.ExtType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItemEx
-import com.example.projects.mdir.repository.FavoriteRepository
 import java.io.File
 
 @SuppressLint("ViewConstructor")
@@ -49,13 +48,13 @@ class FileSnackBar(context: Context, val item: FileItemEx, val path: String) : V
     fun delete() = Toast.makeText(context, "DELETE", Toast.LENGTH_SHORT).show()
 
     fun favorite() {
-        val full = "$path/${item.name}"
-        when {
-            FavoriteRepository.INSTANCE.contains(full)
-                -> FavoriteRepository.INSTANCE.remove(full)
-            else
-                -> FavoriteRepository.INSTANCE.add(full)
-        }
-        Toast.makeText(context, "FAVORITE [${FavoriteRepository.INSTANCE.size()}]", Toast.LENGTH_SHORT).show()
+//        val full = "$path/${item.name}"
+//        when {
+//            FavoriteRepository.INSTANCE.contains(full)
+//                -> FavoriteRepository.INSTANCE.remove(full)
+//            else
+//                -> FavoriteRepository.INSTANCE.add(full)
+//        }
+//        Toast.makeText(context, "FAVORITE [${FavoriteRepository.INSTANCE.size()}]", Toast.LENGTH_SHORT).show()
     }
 }
