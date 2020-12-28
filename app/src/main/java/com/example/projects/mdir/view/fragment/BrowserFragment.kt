@@ -22,9 +22,9 @@ import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.LayoutType
-import com.example.projects.mdir.view.BrowserData
-import com.example.projects.mdir.view.FileGridAdapter
-import com.example.projects.mdir.view.FileLinearAdapter
+import com.example.projects.mdir.data.FileItemEx
+import com.example.projects.mdir.view.*
+import com.google.android.material.snackbar.Snackbar
 
 class BrowserFragment : Fragment() {
 
@@ -113,6 +113,56 @@ class BrowserFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding) {
+
+        }
+
+        observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
+    private var optionDialog : FileOptionDialog? = null
+
+    private fun observeViewModel() {
+        with(viewModel) {
+            showOption.observe(viewLifecycleOwner, Observer {
+//                if(snackBar.isShown) {
+//                    snackBar.dismiss()
+//                }
+//
+//                // 이동, 복사, 상세정보, 공유, 삭제
+//
+//                // 즐겨찾기 설정
+//                // 이름변경
+//                val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+//                layout.removeAllViews()
+//
+//                // 기존의 SnackBar가 아닌 CustomView를 연결
+//                val customView = FileSnackBar(context = app, item = files.value!![0], path = FileUtil.LEGACY_ROOT).view
+//                layout.setPadding(0, 0, 0, 0)
+//                layout.addView(customView, 0)
+//
+//                snackBar.show()
+
+//                optionDialog?.dismiss()
+//                optionDialog?: run { FileOptionDialog(context = requireContext(), viewModel = viewModel, item = it).apply {
+//                    optionDialog = this
+//                } }.run {
+//                    show()
+//                }
+
+                FileOptionDialog(context = requireContext(), viewModel = viewModel, file = it).run { show() }
+
+            })
+        }
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
@@ -152,6 +202,26 @@ class BrowserFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showOption(item: FileItemEx) {
+//                if(snackBar.isShown) {
+//                    snackBar.dismiss()
+//                }
+//
+//                // 이동, 복사, 상세정보, 공유, 삭제
+//
+//                // 즐겨찾기 설정
+//                // 이름변경
+//                val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+//                layout.removeAllViews()
+//
+//                // 기존의 SnackBar가 아닌 CustomView를 연결
+//                val customView = FileSnackBar(context = app, item = files.value!![0], path = FileUtil.LEGACY_ROOT).view
+//                layout.setPadding(0, 0, 0, 0)
+//                layout.addView(customView, 0)
+//
+//                snackBar.show()
     }
 
 }

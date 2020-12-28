@@ -44,6 +44,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val category: LiveData<List<FileItemEx>>
         get() = _category
 
+    private var _showOption = MutableLiveData<FileItemEx>()
+    val showOption: LiveData<FileItemEx>
+        get() = _showOption
+
     private val repository: AbsStorageRepository by lazy {
         LegacyStorageRepository()
     }
@@ -178,5 +182,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }, "Share: ${item.name}"))
     }
 
-    fun requestLongClickItem(item: FileItemEx) = Unit
+    fun requestLongClickItem(item: FileItemEx) {
+        _showOption.postValue(item)
+    }
 }
