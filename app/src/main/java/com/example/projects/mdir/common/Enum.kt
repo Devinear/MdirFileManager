@@ -66,3 +66,11 @@ enum class BrowserType {
     Favorite,
     Recent
 }
+
+enum class Command {
+    Favorite,
+    Rename,
+    Share,
+    Info,
+    Delete
+}

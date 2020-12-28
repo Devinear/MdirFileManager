@@ -7,6 +7,7 @@
         <import type="android.graphics.drawable.Drawable" />
         <import type="com.example.projects.mdir.FileViewModel" />
         <import type="com.example.projects.mdir.data.FileItemEx" />
+        <import type="com.example.projects.mdir.common.Command" />
 
         <variable name="vm" type="FileViewModel" />
         <variable name="item" type="FileItemEx" />
@@ -81,14 +82,15 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:text="FAVORITE"
-                        android:drawableStart="@{item.isFavorite ? @drawable/baseline_star_white_24 : @drawable/baseline_star_border_white_24}"
+                        android:drawableStart="@{item.favorite.booleanValue() ? @drawable/baseline_star_white_24 : @drawable/baseline_star_border_white_24}"
                         tools:drawableStart="@drawable/baseline_star_white_24" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/swi_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:checked="@{item.isFavorite}"/>
+                        android:onClick="@{()-> vm.requestCommand(Command.Favorite, item)}"
+                        android:checked="@{item.favorite.booleanValue()}"/>
 
                 </LinearLayout>
 
@@ -96,24 +98,28 @@
                     style="@style/BottomSheetTextView"
                     android:id="@+id/tv_rename"
                     android:text="RENAME"
+                    android:onClick="@{()-> vm.requestCommand(Command.Rename, item)}"
                     android:drawableStart="@drawable/outline_create_white_24" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BottomSheetTextView"
                     android:id="@+id/tv_share"
                     android:text="SHARE"
+                    android:onClick="@{()-> vm.requestCommand(Command.Share, item)}"
                     android:drawableStart="@drawable/outline_share_white_24" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BottomSheetTextView"
                     android:id="@+id/tv_info"
                     android:text="INFO"
+                    android:onClick="@{()-> vm.requestCommand(Command.Info, item)}"
                     android:drawableStart="@drawable/outline_info_white_24" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BottomSheetTextView"
                     android:id="@+id/tv_delete"
                     android:text="DELETE"
+                    android:onClick="@{()-> vm.requestCommand(Command.Delete, item)}"
                     android:drawableStart="@drawable/outline_delete_white_24" />
 
             </LinearLayout>

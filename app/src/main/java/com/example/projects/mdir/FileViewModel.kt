@@ -144,11 +144,15 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             // 일반 폴더
             FileType.Dir -> { loadDirectory(item.path, false) }
             // 일반 파일
-            else -> requestExecute(item)
+            else -> execute(item)
         }
     }
 
-    fun requestExecute(item: FileItemEx) {
+    fun requestLongClickItem(item: FileItemEx) {
+        _showOption.postValue(item)
+    }
+
+    private fun execute(item: FileItemEx) {
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW
             flags = Intent.FLAG_ACTIVITY_NEW_TASK // setFlags
@@ -168,7 +172,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun requestShare(item: FileItemEx) {
+    private fun share(item: FileItemEx) {
         // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
         app.startActivity(Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
@@ -179,10 +183,19 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                 else -> "application/*"
             }
             putExtra(Intent.EXTRA_STREAM, File(item.absolutePath).toURI())
-        }, "Share: ${item.name}"))
+        }, "Share: ${item.name}").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
-    fun requestLongClickItem(item: FileItemEx) {
-        _showOption.postValue(item)
+    fun requestCommand(command: Command, item: FileItemEx) {
+        when(command) {
+            Command.Favorite -> {
+                val isFavorite : Boolean = item.favorite.value ?: false
+                item.favorite.postValue(!isFavorite)
+            }
+            Command.Rename -> { }
+            Command.Share -> share(item)
+            Command.Info -> { }
+            Command.Delete -> { }
+        }
     }
 }
