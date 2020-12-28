@@ -22,6 +22,8 @@ class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
 
     var liveDrawable = MutableLiveData<BitmapDrawable>()
 
+    var isFavorite : Boolean = false
+
     init {
         convert()
     }
