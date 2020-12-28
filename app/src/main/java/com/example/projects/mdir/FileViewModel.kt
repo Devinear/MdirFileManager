@@ -12,6 +12,7 @@ import androidx.lifecycle.*
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.repository.AbsStorageRepository
+import com.example.projects.mdir.repository.FavoriteRepository
 import com.example.projects.mdir.repository.LegacyStorageRepository
 import com.example.projects.mdir.repository.ThumbnailRepository
 import kotlinx.coroutines.Dispatchers
@@ -172,6 +173,26 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun requestCommand(command: Command, item: FileItemEx) {
+        when(command) {
+            Command.Favorite -> favorite(item)
+            Command.Rename -> { }
+            Command.Share -> share(item)
+            Command.Info -> { }
+            Command.Delete -> { }
+        }
+    }
+
+    private fun favorite(item: FileItemEx) {
+        val favorite : Boolean = !(item.favorite.value ?: false)
+        item.favorite.postValue(favorite)
+
+        if(favorite)
+            FavoriteRepository.INSTANCE.add(item.absolutePath)
+        else
+            FavoriteRepository.INSTANCE.remove(item.absolutePath)
+    }
+
     private fun share(item: FileItemEx) {
         // java.lang.ClassCastException: java.net.URI cannot be cast to android.os.Parcelable 발생
         app.startActivity(Intent.createChooser(Intent().apply {
@@ -186,16 +207,4 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }, "Share: ${item.name}").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
-    fun requestCommand(command: Command, item: FileItemEx) {
-        when(command) {
-            Command.Favorite -> {
-                val isFavorite : Boolean = item.favorite.value ?: false
-                item.favorite.postValue(!isFavorite)
-            }
-            Command.Rename -> { }
-            Command.Share -> share(item)
-            Command.Info -> { }
-            Command.Delete -> { }
-        }
-    }
 }
