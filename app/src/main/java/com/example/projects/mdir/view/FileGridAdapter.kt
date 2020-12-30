@@ -12,7 +12,7 @@ import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
-class FileGridAdapter(private val context: Context, val viewModel: FileViewModel) : BaseAdapter(baseContext = context) {
+class FileGridAdapter(context: Context, val viewModel: FileViewModel) : BaseAdapter(baseContext = context) {
 
     class ViewHolder(
             private val binding: ItemGridFileBinding,

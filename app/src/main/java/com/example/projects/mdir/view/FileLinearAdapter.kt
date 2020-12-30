@@ -16,7 +16,7 @@ import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
 
-class FileLinearAdapter(private val context: Context, val viewModel: FileViewModel) : BaseAdapter(baseContext = context) {
+class FileLinearAdapter(context: Context, val viewModel: FileViewModel) : BaseAdapter(baseContext = context) {
 
     class ViewHolder(
             private val binding: ItemLinearFileBinding,

@@ -81,7 +81,7 @@ class BrowserFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "onCreateView")
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
