@@ -33,14 +33,9 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //    private lateinit var binding : ActivityFileManagerBinding
 
     private val viewModelStore = ViewModelStore()
-    private lateinit var viewModel: FileViewModel
-//    private val viewModel : FileViewModel by lazy {
-//        ViewModelProviders.of(this).get(FileViewModel::class.java)
-//    }
-
-    // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-//    private val adapterLinear = FileLinearAdapter(this)
-//    private val adapterGrid = FileGridAdapter(this)
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(FileViewModel::class.java)
+    }
 
     // UI
     val livePath = MutableLiveData<String>()

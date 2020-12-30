@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
@@ -46,12 +47,10 @@ class BrowserFragment : Fragment() {
         }
     }
 
-    private val viewModel by lazy {
-        ViewModelProvider(this).get(FileViewModel::class.java)
-    }
 
     private lateinit var binding : LayoutBrowserBinding
     private lateinit var activity : Activity
+    private lateinit var viewModel : FileViewModel
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapterLinear by lazy { FileLinearAdapter(activity, viewModel) }
@@ -72,6 +71,10 @@ class BrowserFragment : Fragment() {
         super.onAttach(context)
         activity = getActivity() as FileManagerActivity
         activity.invalidateOptionsMenu()
+
+        // FileManagerActivity 에서 생성한 ViewModel과 LifeCycle 을 공유하는 동일한 ViewModel
+        // ViewModel은 내부적으로 싱글턴이다.
+        viewModel = ViewModelProvider(activity as ViewModelStoreOwner).get(FileViewModel::class.java)
     }
 
     override fun onCreateView(
