@@ -24,7 +24,7 @@ class FavoriteRepository {
 
     fun remove(path: String) {
         CoroutineScope(Dispatchers.IO).launch {
-//            dao.deleteByPath(id = path)
+            dao.deleteByPath(id = path)
         }
     }
 
