@@ -22,6 +22,12 @@ class FavoriteRepository {
         }
     }
 
+    fun remove(path: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+//            dao.deleteByPath(id = path)
+        }
+    }
+
     fun getAll(viewModel: FileViewModel) {
         val list = mutableListOf<String>()
         CoroutineScope(Dispatchers.IO).launch {

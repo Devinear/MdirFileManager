@@ -10,6 +10,9 @@ interface FavoriteDao {
     @Delete
     suspend fun delete(vararg data: FavoriteData)
 
+//    @Query("DELETE FROM Favorite WHERE id = :id")
+//    suspend fun deleteByPath(id: String) : Boolean
+
     @Query("SELECT * FROM Favorite")
     suspend fun getAll(): List<FavoriteData>
 

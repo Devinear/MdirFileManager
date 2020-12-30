@@ -188,9 +188,9 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         item.favorite.postValue(favorite)
 
         if(favorite)
-            FavoriteRepository.INSTANCE.add(item.absolutePath)
+            FavoriteRepository.INSTANCE.add(item = item)
         else
-            FavoriteRepository.INSTANCE.remove(item.absolutePath)
+            FavoriteRepository.INSTANCE.remove(path = item.absolutePath)
     }
 
     private fun share(item: FileItemEx) {
@@ -205,6 +205,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             }
             putExtra(Intent.EXTRA_STREAM, File(item.absolutePath).toURI())
         }, "Share: ${item.name}").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
+
+    fun responseFavoriteList(list: List<String>) {
+
     }
 
 }
