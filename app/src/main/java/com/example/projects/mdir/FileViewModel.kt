@@ -33,10 +33,6 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val mode: LiveData<BrowserType>
         get() = _mode
 
-    private var _isShowSystem : Boolean = false
-    val isShowSystem: Boolean
-        get() = _isShowSystem
-
     private var _depthDir = MutableLiveData<List<String>>()
     val depthDir: LiveData<List<String>>
         get() = _depthDir
@@ -49,6 +45,12 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val showOption: LiveData<FileItemEx>
         get() = _showOption
 
+    private var _showSystem : Boolean = false
+    val showSystem: Boolean
+        get() = _showSystem
+
+    private val favorites = mutableListOf<String>()
+
     private val repository: AbsStorageRepository by lazy {
         LegacyStorageRepository()
     }
@@ -57,9 +59,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
     init {
         _mode.value = BrowserType.Storage
+        initFavorite()
     }
 
-    fun loadCategory(category: Category, isShowSystem: Boolean = _isShowSystem) {
+    fun loadCategory(category: Category, isShowSystem: Boolean = _showSystem) {
         viewModelScope.launch {
             if(category == Category.Download) {
                 loadDirectory(FileUtil.LEGACY_DOWNLOAD)
@@ -67,8 +70,11 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             }
 
             val listCategory = repository.loadDirectory(
-                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _isShowSystem
+                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem
             )
+            favorites.forEach { favorite ->
+                listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
+            }
             _files.postValue(listCategory)
 
             // DEPTHS
@@ -80,13 +86,15 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
-    fun loadDirectory(path: String = "", isShowSystem: Boolean = _isShowSystem) {
+    fun loadDirectory(path: String = "", isShowSystem: Boolean = _showSystem) {
         viewModelScope.launch {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
-            val list = repository.loadDirectory(app, curPath, _isShowSystem)
-
+            val list = repository.loadDirectory(app, curPath, _showSystem)
+            favorites.forEach { favorite ->
+                list.find { it.absolutePath == favorite }?.favorite?.value = true
+            }
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
             if(curPath != FileUtil.LEGACY_ROOT) {
                 list.add(0, FileItemEx(path = curPath, isUpDir = true))
@@ -134,8 +142,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun requestShowSystem(isShowSystem: Boolean) {
-        _isShowSystem = isShowSystem
-        loadDirectory(rootUri.path?:FileUtil.LEGACY_ROOT, _isShowSystem)
+        _showSystem = isShowSystem
+        loadDirectory(rootUri.path?:FileUtil.LEGACY_ROOT, _showSystem)
     }
 
     fun requestClickItem(item: FileItemEx) {
@@ -207,8 +215,13 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }, "Share: ${item.name}").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
-    fun responseFavoriteList(list: List<String>) {
+    private fun initFavorite() {
+        FavoriteRepository.INSTANCE.getAll(this)
+    }
 
+    fun responseFavoriteList(list: List<String>) {
+        favorites.clear()
+        favorites.addAll(list)
     }
 
 }
