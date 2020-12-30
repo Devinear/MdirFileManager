@@ -49,7 +49,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val showSystem: Boolean
         get() = _showSystem
 
-    private val favorites = mutableListOf<String>()
+    val favorites = mutableListOf<String>()
 
     private val repository: AbsStorageRepository by lazy {
         LegacyStorageRepository()
