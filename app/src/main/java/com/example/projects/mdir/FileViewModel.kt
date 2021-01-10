@@ -130,6 +130,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+   fun requestThumbnailFavorite(list: MutableList<FileItemEx>) {
+       requestThumbnail(list)
+    }
+
     fun requestHome() {
         loadDirectory(FileUtil.LEGACY_ROOT)
     }

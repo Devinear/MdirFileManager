@@ -2,6 +2,8 @@ package com.example.projects.mdir.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.databinding.ItemRecentBinding
 import com.example.projects.mdir.data.FileItemEx
@@ -25,10 +27,16 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
     
     override fun getItemCount(): Int = items.count()
 
-    fun setItems(list: List<FileItemEx>) {
+    fun setItems(list: List<FileItemEx>, lifecycleOwner: LifecycleOwner) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
+
+        items.indices.forEach { position ->
+            items[position].liveDrawable.observe(lifecycleOwner, Observer {
+                notifyItemChanged(position)
+            })
+        }
     }
 
 }

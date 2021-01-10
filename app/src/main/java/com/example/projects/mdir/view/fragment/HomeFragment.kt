@@ -17,7 +17,6 @@ import com.example.projects.databinding.LayoutHomeBinding
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.data.FileItemEx
-import com.example.projects.mdir.repository.FavoriteRepository
 import com.example.projects.mdir.view.HomeAdapter
 
 class HomeFragment : Fragment() {
@@ -69,7 +68,8 @@ class HomeFragment : Fragment() {
             favorites.forEach { favorite ->
                 items.add(FileItemEx(favorite))
             }
-            setItems(items)
+            setItems(items, this@HomeFragment)
+            viewModel.requestThumbnailFavorite(items)
         }
         binding.reFavorite.layoutManager = GridLayoutManager(activity, 5).apply {  }
     }
