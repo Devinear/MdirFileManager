@@ -156,7 +156,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
         }
     }
 
-    private fun changeFragment(type: FragmentType = FragmentType.Home, category: Category? = null) {
+    private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null) {
         showFragment = type
 
         // 모든 Fragment 제거
@@ -170,10 +170,19 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
                     supportActionBar?.setDisplayHomeAsUpEnabled(false) // BackKey 비활성화
                 }
                 FragmentType.Browser -> {
-                    if(category == null)
-                        replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage))
-                    else
-                        replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Category, category = category))
+                    when(browserType) {
+                        BrowserType.Find, BrowserType.Recent, BrowserType.Favorite -> {
+                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = browserType))
+                        }
+                        BrowserType.Category -> {
+                            category
+                                ?.run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Category, category = category)) }
+                                ?:run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage)) }
+                        }
+                        else -> {
+                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage))
+                        }
+                    }
                     addToBackStack(HomeFragment.toString())
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -368,12 +377,12 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     fun requestStorage() {
         // 차후에 드라이브를 추가하게되면 타입을 늘리자.
         Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
-        changeFragment(type = FragmentType.Browser)
+        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Storage)
     }
 
     fun requestCategory(type: Category) {
         Toast.makeText(this, "Category[${type.name}]", Toast.LENGTH_SHORT).show()
-        changeFragment(type = FragmentType.Browser, category = type)
+        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Category, category = type)
     }
 
     fun onClickAll() = updateFileList(isShowType = ShowType.All)
@@ -383,6 +392,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     fun onClickZip() = updateFileList(isShowType = ShowType.Zip)
 
     fun onClickDoc() = updateFileList(isShowType = ShowType.Doc)
+
+    fun requestExtendFavorite() {
+        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Favorite)
+    }
 
     companion object {
         const val GRID_ITEM_WIDTH_DP = 120

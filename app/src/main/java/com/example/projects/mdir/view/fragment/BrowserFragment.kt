@@ -104,10 +104,12 @@ class BrowserFragment : Fragment() {
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
 
-        if(browserData?.type == BrowserType.Storage)
-            viewModel.loadDirectory()
-        else
-            viewModel.loadCategory(browserData?.category?:Category.Image)
+        when(browserData?.type?:BrowserType.Storage) {
+            BrowserType.Category -> viewModel.loadCategory(browserData?.category?:Category.Image)
+            BrowserType.Favorite -> viewModel.loadFavorite()
+            else/*BrowserType.Storage*/ -> viewModel.loadDirectory()
+        }
+
 
         (activity as FileManagerActivity).liveShowType.apply {
             removeObservers(viewLifecycleOwner)

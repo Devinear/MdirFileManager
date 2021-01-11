@@ -112,6 +112,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun loadFavorite() {
+
+    }
+
     private fun requestThumbnail(list: MutableList<FileItemEx>) {
         viewModelScope.launch(Dispatchers.IO) {
             list.forEach {
