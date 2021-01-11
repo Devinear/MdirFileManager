@@ -2,6 +2,7 @@ package com.example.projects.mdir.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,19 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
     class ViewHolder(private val binding : ItemRecentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: FileItemEx) {
-            binding.ivImage.setImageDrawable(item.liveDrawable.value)
+            item.liveDrawable.value
+                ?.run {
+                    with(binding.ivImage) {
+                        setImageDrawable(this@run)
+                        scaleType = ImageView.ScaleType.CENTER_CROP
+                    }
+                }
+                ?:run {
+                    with(binding.ivImage) {
+                        setImageResource(item.exType.drawableRes)
+                        scaleType = ImageView.ScaleType.CENTER
+                    }
+                }
             binding.tvName.text = item.simpleName
         }
     }
@@ -34,7 +47,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
         items.indices.forEach { position ->
             items[position].liveDrawable.observe(lifecycleOwner, Observer {
-                notifyItemChanged(position)
+                it?.run { notifyItemChanged(position) }
             })
         }
     }
