@@ -394,7 +394,9 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     fun onClickDoc() = updateFileList(isShowType = ShowType.Doc)
 
     fun requestExtendFavorite() {
-        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Favorite)
+        // Favorite Empty 예외
+        if(viewModel.favorites.isNotEmpty())
+            changeFragment(type = FragmentType.Browser, browserType = BrowserType.Favorite)
     }
 
     companion object {
