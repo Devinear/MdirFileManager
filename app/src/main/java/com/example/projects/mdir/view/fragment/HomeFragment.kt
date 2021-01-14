@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.projects.R
 import com.example.projects.databinding.LayoutHomeBinding
@@ -51,17 +49,12 @@ class HomeFragment : Fragment() {
         )
         binding.vm = activityViewModel
         binding.activity = activity as FileManagerActivity
+
+        initUi()
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initUi()
-    }
-
     private fun initUi() {
-        binding.laFavorite
         binding.reFavorite.adapter = HomeAdapter().apply {
             val favorites = viewModel.favorites
             val items = mutableListOf<FileItemEx>()
@@ -72,11 +65,17 @@ class HomeFragment : Fragment() {
             viewModel.requestThumbnailFavorite(items)
         }
         binding.reFavorite.layoutManager = GridLayoutManager(activity, 5).apply {  }
+
+        val favoriteSize = viewModel.favorites.size
+        binding.laFavorite.visibility = if(favoriteSize > 0) View.VISIBLE else View.GONE
+        binding.ibFavorite.visibility = if(favoriteSize > FAVORITE_MAX_VISIBLE_COUNT) View.VISIBLE else View.GONE
     }
 
     companion object {
         val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             HomeFragment()
         }
+
+        const val FAVORITE_MAX_VISIBLE_COUNT = 5
     }
 }
