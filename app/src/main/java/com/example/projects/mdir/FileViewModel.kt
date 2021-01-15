@@ -113,7 +113,13 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun loadFavorite() {
-
+        viewModelScope.launch {
+            val list = mutableListOf<FileItemEx>()
+            favorites.forEach { list.add(FileItemEx(path = it)) }
+            _files.postValue(list)
+            _depthDir.postValue(List(1) { "Favorite" })
+            requestThumbnail(list)
+        }
     }
 
     private fun requestThumbnail(list: MutableList<FileItemEx>) {
