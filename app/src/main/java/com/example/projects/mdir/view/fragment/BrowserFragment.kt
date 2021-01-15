@@ -66,6 +66,11 @@ class BrowserFragment : Fragment() {
     private val browserData by lazy { requireArguments().getParcelable<BrowserData>(TYPE) }
     private val browserPath by lazy { requireArguments().getString(PATH)?:"" }
 
+    private var _browserType = BrowserType.Storage
+    val browserType : BrowserType
+        get() = _browserType
+
+
     override fun onAttach(context: Context) {
         Log.d(TAG, "onAttach")
         super.onAttach(context)
@@ -104,12 +109,12 @@ class BrowserFragment : Fragment() {
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
 
-        when(browserData?.type?:BrowserType.Storage) {
+        _browserType = browserData?.type?:BrowserType.Storage
+        when(_browserType) {
             BrowserType.Category -> viewModel.loadCategory(browserData?.category?:Category.Image)
             BrowserType.Favorite -> viewModel.loadFavorite()
             else/*BrowserType.Storage*/ -> viewModel.loadDirectory()
         }
-
 
         (activity as FileManagerActivity).liveShowType.apply {
             removeObservers(viewLifecycleOwner)

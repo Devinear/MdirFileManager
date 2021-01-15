@@ -45,7 +45,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:src="@drawable/outline_smartphone_white_24"
-                android:onClick="@{()->viewModel.requestHome()}" />
+                android:onClick="@{()-> viewModel.requestHome(fragment.browserType)}" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -59,7 +59,8 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     app:viewModel="@{viewModel}"
-                    app:depthList="@{viewModel.depthDir}" />
+                    app:depthList="@{viewModel.depthDir}"
+                    app:browserType="@{fragment.browserType}"/>
 
             </HorizontalScrollView>
 

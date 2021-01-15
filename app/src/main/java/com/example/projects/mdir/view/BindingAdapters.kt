@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projects.R
 import com.example.projects.mdir.FileViewModel
+import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 
@@ -44,8 +45,8 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("depthList", "viewModel")
-    fun setDepthList(linearLayout: LinearLayout, depths: List<String>?, viewModel: FileViewModel) {
+    @BindingAdapter("depthList", "viewModel", "browserType")
+    fun setDepthList(linearLayout: LinearLayout, depths: List<String>?, viewModel: FileViewModel, browserType: BrowserType) {
 //        if(depths == null) return
         depths ?: return
         linearLayout.removeAllViews()
@@ -64,7 +65,10 @@ object BindingAdapters {
             linearLayout.addView(AppCompatTextView(buttonContext).apply {
                 text = nameDir
                 tag = path
-                setOnClickListener { viewModel.requestDepth(it.tag.toString()) }
+
+                if(browserType == BrowserType.Storage) {
+                    setOnClickListener { viewModel.requestDepth(it.tag.toString()) }
+                }
             })
         }
 

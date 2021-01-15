@@ -144,8 +144,9 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
        requestThumbnail(list)
     }
 
-    fun requestHome() {
-        loadDirectory(FileUtil.LEGACY_ROOT)
+    fun requestHome(browserType: BrowserType = BrowserType.Storage) {
+        if(browserType == BrowserType.Storage)
+            loadDirectory(FileUtil.LEGACY_ROOT)
     }
 
     fun requestDepth(depth: String) {
