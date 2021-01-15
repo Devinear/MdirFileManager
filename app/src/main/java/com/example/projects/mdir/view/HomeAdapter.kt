@@ -46,7 +46,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
         notifyDataSetChanged()
 
         items.indices.forEach { position ->
-            items[position].liveDrawable.observe(lifecycleOwner, Observer {
+            items[position].liveDrawable.value ?: items[position].liveDrawable.observe(lifecycleOwner, Observer {
                 it?.run { notifyItemChanged(position) }
             })
         }
