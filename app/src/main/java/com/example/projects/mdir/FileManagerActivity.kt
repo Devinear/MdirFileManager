@@ -27,20 +27,12 @@ import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
 import java.io.File
 
-class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), OnFileClickListener, AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner {
-
-//    private lateinit var binding : LayoutFileManagerBinding
-//    private lateinit var binding : ActivityFileManagerBinding
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner {
 
     private val viewModelStore = ViewModelStore()
-    private lateinit var viewModel: FileViewModel
-//    private val viewModel : FileViewModel by lazy {
-//        ViewModelProviders.of(this).get(FileViewModel::class.java)
-//    }
-
-    // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-//    private val adapterLinear = FileLinearAdapter(this)
-//    private val adapterGrid = FileGridAdapter(this)
+    private val viewModel by lazy {
+        ViewModelProvider(this).get(FileViewModel::class.java)
+    }
 
     // UI
     val livePath = MutableLiveData<String>()
@@ -67,33 +59,6 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         super.onCreate(savedInstanceState)
         checkPermission()
 
-//        binding = DataBindingUtil.setContentView(this, R.layout.activity_file_manager)
-
-
-//        binding = DataBindingUtil.setContentView(this, R.layout.layout_file_manager)
-//        binding.apply {
-//            recycler.adapter = adapterLinear
-//            recycler.layoutManager = LinearLayoutManager(this@FileManagerActivity)
-//            layoutType = LayoutType.Linear
-//
-//            // Binding에 LifeCycleOwner을 지정해줘야 LiveData가 실시간으로 변경된다.
-//            lifecycleOwner = this@FileManagerActivity
-//            activity = this@FileManagerActivity
-//
-//            // Bind Item
-//            items = listFileItem
-//        }
-//
-//        adapterLinear.apply {
-//            clickListener = this@FileManagerActivity
-//            isPortrait = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-//            updateFileList()
-//        }
-
-        viewModel = ViewModelProvider(
-            this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        ).get(FileViewModel::class.java)
-
         initUi()
     }
 
@@ -102,11 +67,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
 //            setBackgroundColor(ContextCompat.getColor(context, R.color.colorHomeLayout))
             setTitleTextColor(ContextCompat.getColor(context, R.color.colorHomeText))
         }.also {
-            setSupportActionBar(it.apply {
-                title = "Retro File"
-            })
+            setSupportActionBar(it.apply { title = "Retro File" }   )
         }
-
         appbar.setExpanded(false)
     }
 
@@ -194,7 +156,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         }
     }
 
-    private fun changeFragment(type: FragmentType = FragmentType.Home, category: Category? = null) {
+    private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null) {
         showFragment = type
 
         // 모든 Fragment 제거
@@ -208,10 +170,19 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
                     supportActionBar?.setDisplayHomeAsUpEnabled(false) // BackKey 비활성화
                 }
                 FragmentType.Browser -> {
-                    if(category == null)
-                        replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage))
-                    else
-                        replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Category, category = category))
+                    when(browserType) {
+                        BrowserType.Find, BrowserType.Recent, BrowserType.Favorite -> {
+                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = browserType))
+                        }
+                        BrowserType.Category -> {
+                            category
+                                ?.run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Category, category = category)) }
+                                ?:run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage)) }
+                        }
+                        else -> {
+                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage))
+                        }
+                    }
                     addToBackStack(HomeFragment.toString())
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -245,63 +216,63 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
         }
     }
 
-    override fun onClickFile(item: FileItemEx) {
-        when (item.exType) {
-            FileType.UpDir -> {
-                if(currentPath == FileUtil.LEGACY_ROOT) {
-                    Toast.makeText(this, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
-                    return
-                }
-                currentPath = FileUtil.getUpDirPath(currentPath)
-                livePath.value = "..${currentPath.removePrefix(FileUtil.LEGACY_ROOT)}"
-                updateFileList()
-            }
-            FileType.Dir -> {
-//                currentPath = "$currentPath/${item.name}"
-                currentPath = item.path
-                livePath.value = "..${currentPath.removePrefix(FileUtil.LEGACY_ROOT)}"
-                updateFileList()
-            }
-            else -> {
-                // 일반 파일
-                val intent = Intent().apply {
-                    action = Intent.ACTION_VIEW
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK // setFlags
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    setDataAndType(
-                        FileProvider.getUriForFile(this@FileManagerActivity,
-                            "${this@FileManagerActivity.packageName}.provider", File("$currentPath/${item.name}.${item.extension}")),
-                        FileUtil.getMimeType(item.extension))
-                }
-
-                // 해당 Intent를 처리할 수 있는 앱이 있는지 확인
-                val resolveInfo : List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
-                val isIntentSafe = resolveInfo.isNotEmpty()
-                if(isIntentSafe)
-                    startActivity(intent)
-                else
-                    Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    override fun onLongClickFile(item: FileItemEx) {
-        // 이동, 복사, 상세정보, 공유, 삭제
-
-        // 즐겨찾기 설정
-        // 이름변경
-//        val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
-////        layout.findViewById<TextView>(R.id.snackbar_text).visibility = View.INVISIBLE
-//        layout.removeAllViews()
+//    override fun onClickFile(item: FileItemEx) {
+//        when (item.exType) {
+//            FileType.UpDir -> {
+//                if(currentPath == FileUtil.LEGACY_ROOT) {
+//                    Toast.makeText(this, "최상위 폴더입니다.", Toast.LENGTH_SHORT).show()
+//                    return
+//                }
+//                currentPath = FileUtil.getUpDirPath(currentPath)
+//                livePath.value = "..${currentPath.removePrefix(FileUtil.LEGACY_ROOT)}"
+//                updateFileList()
+//            }
+//            FileType.Dir -> {
+////                currentPath = "$currentPath/${item.name}"
+//                currentPath = item.path
+//                livePath.value = "..${currentPath.removePrefix(FileUtil.LEGACY_ROOT)}"
+//                updateFileList()
+//            }
+//            else -> {
+//                // 일반 파일
+//                val intent = Intent().apply {
+//                    action = Intent.ACTION_VIEW
+//                    flags = Intent.FLAG_ACTIVITY_NEW_TASK // setFlags
+//                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//                    addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                    setDataAndType(
+//                        FileProvider.getUriForFile(this@FileManagerActivity,
+//                            "${this@FileManagerActivity.packageName}.provider", File("$currentPath/${item.name}.${item.extension}")),
+//                        FileUtil.getMimeType(item.extension))
+//                }
 //
-//        // 기존의 SnackBar가 아닌 CustomView를 연결
-//        val customView = FileSnackBar(context = this, item = item, path = currentPath).view
-//        layout.setPadding(0, 0, 0, 0)
-//        layout.addView(customView, 0)
+//                // 해당 Intent를 처리할 수 있는 앱이 있는지 확인
+//                val resolveInfo : List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
+//                val isIntentSafe = resolveInfo.isNotEmpty()
+//                if(isIntentSafe)
+//                    startActivity(intent)
+//                else
+//                    Toast.makeText(this, item.name, Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//    }
 //
-//        snackBar.show()
-    }
+//    override fun onLongClickFile(item: FileItemEx) {
+//        // 이동, 복사, 상세정보, 공유, 삭제
+//
+//        // 즐겨찾기 설정
+//        // 이름변경
+////        val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+//////        layout.findViewById<TextView>(R.id.snackbar_text).visibility = View.INVISIBLE
+////        layout.removeAllViews()
+////
+////        // 기존의 SnackBar가 아닌 CustomView를 연결
+////        val customView = FileSnackBar(context = this, item = item, path = currentPath).view
+////        layout.setPadding(0, 0, 0, 0)
+////        layout.addView(customView, 0)
+////
+////        snackBar.show()
+//    }
 
     private fun updateFileList(isHome: Boolean = false, isShowType: ShowType = ShowType.All, isFavorite: Boolean = false) {
         Log.d(TAG, "updateFileList IsHome:$isHome IsShowType:$isShowType")
@@ -406,12 +377,12 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     fun requestStorage() {
         // 차후에 드라이브를 추가하게되면 타입을 늘리자.
         Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
-        changeFragment(type = FragmentType.Browser)
+        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Storage)
     }
 
     fun requestCategory(type: Category) {
         Toast.makeText(this, "Category[${type.name}]", Toast.LENGTH_SHORT).show()
-        changeFragment(type = FragmentType.Browser, category = type)
+        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Category, category = type)
     }
 
     fun onClickAll() = updateFileList(isShowType = ShowType.All)
@@ -421,6 +392,12 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), O
     fun onClickZip() = updateFileList(isShowType = ShowType.Zip)
 
     fun onClickDoc() = updateFileList(isShowType = ShowType.Doc)
+
+    fun requestExtendFavorite() {
+        // Favorite Empty 예외
+        if(viewModel.favorites.isNotEmpty())
+            changeFragment(type = FragmentType.Browser, browserType = BrowserType.Favorite)
+    }
 
     companion object {
         const val GRID_ITEM_WIDTH_DP = 120

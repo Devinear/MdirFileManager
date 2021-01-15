@@ -13,13 +13,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_item_height"
-        android:padding="5dp"
-        android:background="@android:color/black" >
+        android:padding="5dp" >
 
         <ImageView
             android:id="@+id/iv_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:scaleType="centerCrop"
             app:layout_constraintVertical_weight="1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -30,15 +30,16 @@
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             app:layout_constraintHorizontal_weight="0.5"
             android:fontFamily="@font/dos_m"
-            android:textSize="@dimen/recycler_item_text_size"
+            android:textSize="@dimen/home_recent_text_size"
             android:ellipsize="middle"
             android:singleLine="true"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
+            android:background="#70000000"
             android:text="${item.simpleName}"
-            android:background="@color/colorDimGray"
             tools:text="NAME"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

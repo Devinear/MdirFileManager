@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projects.R
@@ -22,9 +23,9 @@ import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.LayoutType
-import com.example.projects.mdir.view.BrowserData
-import com.example.projects.mdir.view.FileGridAdapter
-import com.example.projects.mdir.view.FileLinearAdapter
+import com.example.projects.mdir.data.FileItemEx
+import com.example.projects.mdir.view.*
+import com.google.android.material.snackbar.Snackbar
 
 class BrowserFragment : Fragment() {
 
@@ -46,12 +47,10 @@ class BrowserFragment : Fragment() {
         }
     }
 
-    private val viewModel by lazy {
-        ViewModelProvider(this).get(FileViewModel::class.java)
-    }
 
     private lateinit var binding : LayoutBrowserBinding
     private lateinit var activity : Activity
+    private lateinit var viewModel : FileViewModel
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapterLinear by lazy { FileLinearAdapter(activity, viewModel) }
@@ -67,18 +66,27 @@ class BrowserFragment : Fragment() {
     private val browserData by lazy { requireArguments().getParcelable<BrowserData>(TYPE) }
     private val browserPath by lazy { requireArguments().getString(PATH)?:"" }
 
+    private var _browserType = BrowserType.Storage
+    val browserType : BrowserType
+        get() = _browserType
+
+
     override fun onAttach(context: Context) {
         Log.d(TAG, "onAttach")
         super.onAttach(context)
         activity = getActivity() as FileManagerActivity
         activity.invalidateOptionsMenu()
+
+        // FileManagerActivity 에서 생성한 ViewModel과 LifeCycle 을 공유하는 동일한 ViewModel
+        // ViewModel은 내부적으로 싱글턴이다.
+        viewModel = ViewModelProvider(activity as ViewModelStoreOwner).get(FileViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "onCreateView")
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
@@ -101,16 +109,68 @@ class BrowserFragment : Fragment() {
             laInfo.visibility = if(browserData?.type == BrowserType.Storage) View.VISIBLE else View.GONE
         }
 
-        if(browserData?.type == BrowserType.Storage)
-            viewModel.loadDirectory()
-        else
-            viewModel.loadCategory(browserData?.category?:Category.Image)
+        _browserType = browserData?.type?:BrowserType.Storage
+        when(_browserType) {
+            BrowserType.Category -> viewModel.loadCategory(browserData?.category?:Category.Image)
+            BrowserType.Favorite -> viewModel.loadFavorite()
+            else/*BrowserType.Storage*/ -> viewModel.loadDirectory()
+        }
 
         (activity as FileManagerActivity).liveShowType.apply {
             removeObservers(viewLifecycleOwner)
             observe(viewLifecycleOwner, Observer { changeViewMode(isListMode = it) })
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding) {
+
+        }
+
+        observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
+    private var optionDialog : FileOptionDialog? = null
+
+    private fun observeViewModel() {
+        with(viewModel) {
+            showOption.observe(viewLifecycleOwner, Observer {
+//                if(snackBar.isShown) {
+//                    snackBar.dismiss()
+//                }
+//
+//                // 이동, 복사, 상세정보, 공유, 삭제
+//
+//                // 즐겨찾기 설정
+//                // 이름변경
+//                val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+//                layout.removeAllViews()
+//
+//                // 기존의 SnackBar가 아닌 CustomView를 연결
+//                val customView = FileSnackBar(context = app, item = files.value!![0], path = FileUtil.LEGACY_ROOT).view
+//                layout.setPadding(0, 0, 0, 0)
+//                layout.addView(customView, 0)
+//
+//                snackBar.show()
+
+//                optionDialog?.dismiss()
+//                optionDialog?: run { FileOptionDialog(context = requireContext(), viewModel = viewModel, item = it).apply {
+//                    optionDialog = this
+//                } }.run {
+//                    show()
+//                }
+
+                FileOptionDialog(context = requireContext(), viewModel = viewModel, file = it).run { show() }
+
+            })
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -152,6 +212,26 @@ class BrowserFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showOption(item: FileItemEx) {
+//                if(snackBar.isShown) {
+//                    snackBar.dismiss()
+//                }
+//
+//                // 이동, 복사, 상세정보, 공유, 삭제
+//
+//                // 즐겨찾기 설정
+//                // 이름변경
+//                val layout : Snackbar.SnackbarLayout = snackBar.view as Snackbar.SnackbarLayout
+//                layout.removeAllViews()
+//
+//                // 기존의 SnackBar가 아닌 CustomView를 연결
+//                val customView = FileSnackBar(context = app, item = files.value!![0], path = FileUtil.LEGACY_ROOT).view
+//                layout.setPadding(0, 0, 0, 0)
+//                layout.addView(customView, 0)
+//
+//                snackBar.show()
     }
 
 }

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.graphics.drawable.Drawable" />
+        <import type="com.example.projects.mdir.FileViewModel" />
+        <import type="com.example.projects.mdir.data.FileItemEx" />
+        <import type="com.example.projects.mdir.common.Command" />
+
+        <variable name="vm" type="FileViewModel" />
+        <variable name="item" type="FileItemEx" />
+        <variable name="image" type="Drawable" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/la_option_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:orientation="vertical"
+        app:behavior_peekHeight="72dp"
+        app:behavior_hideable="false"
+        app:layout_behavior="@string/bottom_sheet_behavior" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@{image}"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/outline_folder_white_48"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{item.name}"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:fontFamily="@font/dos_m"
+                android:textColor="@android:color/white"
+                tools:text="File Name" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="7dp"
+            android:background="@android:color/white" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:orientation="horizontal" >
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/BottomSheetTextView"
+                        android:id="@+id/tv_favorite"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:text="FAVORITE"
+                        android:drawableStart="@{item.favorite.booleanValue() ? @drawable/baseline_star_white_24 : @drawable/baseline_star_border_white_24}"
+                        tools:drawableStart="@drawable/baseline_star_white_24" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/swi_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:onClick="@{()-> vm.requestCommand(Command.Favorite, item)}"
+                        android:checked="@{item.favorite.booleanValue()}"/>
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BottomSheetTextView"
+                    android:id="@+id/tv_rename"
+                    android:text="RENAME"
+                    android:onClick="@{()-> vm.requestCommand(Command.Rename, item)}"
+                    android:drawableStart="@drawable/outline_create_white_24" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BottomSheetTextView"
+                    android:id="@+id/tv_share"
+                    android:text="SHARE"
+                    android:onClick="@{()-> vm.requestCommand(Command.Share, item)}"
+                    android:drawableStart="@drawable/outline_share_white_24" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BottomSheetTextView"
+                    android:id="@+id/tv_info"
+                    android:text="INFO"
+                    android:onClick="@{()-> vm.requestCommand(Command.Info, item)}"
+                    android:drawableStart="@drawable/outline_info_white_24" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/BottomSheetTextView"
+                    android:id="@+id/tv_delete"
+                    android:text="DELETE"
+                    android:onClick="@{()-> vm.requestCommand(Command.Delete, item)}"
+                    android:drawableStart="@drawable/outline_delete_white_24" />
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</layout>
