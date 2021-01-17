@@ -1,9 +1,6 @@
 package com.example.projects.mdir
 
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -13,19 +10,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.databinding.ObservableArrayList
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.projects.R
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
-import com.example.projects.mdir.listener.OnFileClickListener
 import com.example.projects.mdir.view.fragment.BrowserFragment
 import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
 import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
-import java.io.File
 
 class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner {
 
@@ -142,6 +139,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
                 changeFragment(FragmentType.Browser)
                 true
             }
+            android.R.id.home -> {
+                changeFragment(FragmentType.Home)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -166,8 +167,6 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
             when(showFragment) {
                 FragmentType.Home -> {
                     replace(R.id.fragment_container, HomeFragment.INSTANCE)
-                    addToBackStack(null)
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false) // BackKey 비활성화
                 }
                 FragmentType.Browser -> {
                     when(browserType) {
@@ -183,22 +182,17 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
                             replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage))
                         }
                     }
-                    addToBackStack(HomeFragment.toString())
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
                     liveShowType.postValue(isShowList)
                 }
                 FragmentType.Find -> {
                     replace(R.id.fragment_container, FindFragment.INSTANCE)
-                    addToBackStack(HomeFragment.toString())
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 FragmentType.Setting -> {
                     replace(R.id.fragment_container, SettingFragment.INSTANCE)
-                    addToBackStack(HomeFragment.toString())
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
             }
+            addToBackStack(if(showFragment == FragmentType.Home) null else HomeFragment.toString())
+            supportActionBar?.setDisplayHomeAsUpEnabled(showFragment != FragmentType.Home)
         }.commit()
     }
 
