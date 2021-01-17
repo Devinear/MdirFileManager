@@ -59,12 +59,14 @@ class HomeFragment : Fragment() {
             val favorites = viewModel.favorites
             val items = mutableListOf<FileItemEx>()
             favorites.forEach { favorite ->
+                if(items.size >= FAVORITE_MAX_VISIBLE_COUNT)
+                    return@forEach
                 items.add(FileItemEx(favorite))
             }
             setItems(items, this@HomeFragment)
             viewModel.requestThumbnailFavorite(items)
         }
-        binding.reFavorite.layoutManager = GridLayoutManager(activity, 5).apply {  }
+        binding.reFavorite.layoutManager = GridLayoutManager(activity, 5)
 
         val favoriteSize = viewModel.favorites.size
         binding.laFavorite.visibility = if(favoriteSize > 0) View.VISIBLE else View.GONE
