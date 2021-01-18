@@ -210,10 +210,16 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         val favorite : Boolean = !(item.favorite.value ?: false)
         item.favorite.postValue(favorite)
 
-        if(favorite)
-            FavoriteRepository.INSTANCE.add(item = item)
-        else
-            FavoriteRepository.INSTANCE.remove(path = item.absolutePath)
+        when {
+            favorite -> {
+                FavoriteRepository.INSTANCE.add(item = item)
+                favorites.add(item.absolutePath)
+            }
+            else -> {
+                FavoriteRepository.INSTANCE.remove(path = item.absolutePath)
+                favorites.remove(item.absolutePath)
+            }
+        }
     }
 
     private fun share(item: FileItemEx) {

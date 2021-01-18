@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
             favorites.forEach { favorite ->
                 if(items.size >= FAVORITE_MAX_VISIBLE_COUNT)
                     return@forEach
-                items.add(FileItemEx(favorite))
+                items.add(FileItemEx(favorite).apply { this.favorite.value = true })
             }
             setItems(items, this@HomeFragment)
             viewModel.requestThumbnailFavorite(items)
