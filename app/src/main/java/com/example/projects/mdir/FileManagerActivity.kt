@@ -66,7 +66,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
         }.also {
             setSupportActionBar(it.apply { title = "Retro File" }   )
         }
-        appbar.setExpanded(false)
+
+        // Favorite, Recent 둘중 하나라도 0인 경우 확장으로 시작하자
+//        if(viewModel.favorites.size == 0 || viewModel.recent.size == 0)
+//            appbar.setExpanded(true)
+//        else
+//            appbar.setExpanded(false)
+        appbar.setExpanded(true)
     }
 
     override fun onBackPressed() {
@@ -191,8 +197,17 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
                     replace(R.id.fragment_container, SettingFragment.INSTANCE)
                 }
             }
-            addToBackStack(if(showFragment == FragmentType.Home) null else HomeFragment.toString())
-            supportActionBar?.setDisplayHomeAsUpEnabled(showFragment != FragmentType.Home)
+            when (showFragment) {
+                FragmentType.Home -> {
+                    addToBackStack(null)
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                }
+                else -> {
+                    addToBackStack(HomeFragment.toString())
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    appbar.setExpanded(false, true)
+                }
+            }
         }.commit()
     }
 
