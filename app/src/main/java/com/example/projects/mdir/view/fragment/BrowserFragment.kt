@@ -167,6 +167,7 @@ class BrowserFragment : Fragment() {
 //                    show()
 //                }
 
+                it ?: return@Observer
                 FileOptionDialog(context = requireContext(), viewModel = viewModel, file = it).run { show() }
 
             })

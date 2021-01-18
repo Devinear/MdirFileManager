@@ -40,6 +40,7 @@ class FileOptionDialog(context: Context, val viewModel: FileViewModel, val file:
 
     override fun dismiss() {
         super.dismiss()
+        viewModel.requestShowOption(null)
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     }
 
