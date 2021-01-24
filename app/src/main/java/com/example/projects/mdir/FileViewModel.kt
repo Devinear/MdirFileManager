@@ -63,7 +63,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun loadCategory(category: Category, isShowSystem: Boolean = _showSystem) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             if(category == Category.Download) {
                 loadDirectory(FileUtil.LEGACY_DOWNLOAD)
                 return@launch
@@ -87,7 +87,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun loadDirectory(path: String = "", isShowSystem: Boolean = _showSystem) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
@@ -113,7 +113,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun loadFavorite() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             val list = mutableListOf<FileItemEx>()
             favorites.forEach { list.add(FileItemEx(path = it)) }
             _files.postValue(list)
