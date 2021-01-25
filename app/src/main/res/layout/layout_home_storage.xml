@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/recycler_linear_port_item_height"
-        android:onClick="@{()->activity.requestStorage()}"
+        android:onClick="@{()->activity.requestStorage(&quot;&quot;)}"
         tools:background="@color/color30Gray">
 
         <ImageView

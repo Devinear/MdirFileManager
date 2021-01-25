@@ -113,7 +113,7 @@ class BrowserFragment : Fragment() {
         when(_browserType) {
             BrowserType.Category -> viewModel.loadCategory(browserData?.category?:Category.Image)
             BrowserType.Favorite -> viewModel.loadFavorite()
-            else/*BrowserType.Storage*/ -> viewModel.loadDirectory()
+            else/*BrowserType.Storage*/ -> viewModel.loadDirectory(browserPath)
         }
 
         (activity as FileManagerActivity).liveShowType.apply {

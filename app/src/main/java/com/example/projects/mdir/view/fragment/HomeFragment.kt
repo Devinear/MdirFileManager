@@ -15,6 +15,7 @@ import com.example.projects.databinding.LayoutHomeBinding
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.data.FileItemEx
+import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.HomeAdapter
 
 class HomeFragment : Fragment() {
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding : LayoutHomeBinding
     private lateinit var activity : Activity
     private lateinit var viewModel : FileViewModel
+    var requestListener : RequestListener? = null
 
     private val activityViewModel : FileViewModel by lazy {
         ViewModelProvider(requireActivity(), object : ViewModelProvider.Factory {
@@ -55,7 +57,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initUi() {
-        binding.reFavorite.adapter = HomeAdapter().apply {
+        binding.reFavorite.adapter = HomeAdapter(fragment = this).apply {
             val favorites = viewModel.favorites
             val items = mutableListOf<FileItemEx>()
             favorites.forEach { favorite ->
@@ -71,6 +73,13 @@ class HomeFragment : Fragment() {
         val favoriteSize = viewModel.favorites.size
         binding.laFavorite.visibility = if(favoriteSize > 0) View.VISIBLE else View.GONE
         binding.ibFavorite.visibility = if(favoriteSize > FAVORITE_MAX_VISIBLE_COUNT) View.VISIBLE else View.GONE
+    }
+
+    fun onFavorite(item: FileItemEx) {
+        when (item.exType) {
+            FileType.Dir -> { requestListener?.onRequestStoragePath(item.absolutePath) }
+            else -> { viewModel.requestClickItem(item) }
+        }
     }
 
     companion object {

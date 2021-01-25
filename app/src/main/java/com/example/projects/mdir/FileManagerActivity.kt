@@ -18,13 +18,14 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.example.projects.R
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
+import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.fragment.BrowserFragment
 import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
 import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
 
-class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner {
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner, RequestListener {
 
     private val viewModelStore = ViewModelStore()
     private val viewModel by lazy {
@@ -163,7 +164,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
         }
     }
 
-    private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null) {
+    private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
+//        requestProgress(isShow = true)
         showFragment = type
 
         // 모든 Fragment 제거
@@ -185,7 +187,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
                                 ?:run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage)) }
                         }
                         else -> {
-                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage))
+                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage, path = path))
                         }
                     }
                     liveShowType.postValue(isShowList)
@@ -223,6 +225,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
             changeFragment()
 //            updateFileList()
         }
+    }
+
+    override fun onRequestStoragePath(path: String) {
+        requestStorage(path = path)
     }
 
 //    override fun onClickFile(item: FileItemEx) {
@@ -383,10 +389,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 //        }
     }
 
-    fun requestStorage() {
+    fun requestStorage(path: String = "") {
         // 차후에 드라이브를 추가하게되면 타입을 늘리자.
         Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
-        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Storage)
+        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Storage, path = path)
     }
 
     fun requestCategory(type: Category) {
