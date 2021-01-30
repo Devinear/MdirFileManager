@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -167,6 +168,18 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
 //        requestProgress(isShow = true)
         showFragment = type
+
+        when {
+            showFragment != FragmentType.Home -> {
+                appbar.iv_toolbar.visibility = View.INVISIBLE
+                appbar.setExpanded(false, false)
+
+                GlobalScope.launch {
+                    delay(1000L)
+                    appbar.iv_toolbar.visibility = View.VISIBLE
+                }
+            }
+        }
 
         // 모든 Fragment 제거
         supportFragmentManager.fragments.removeAll { true }
