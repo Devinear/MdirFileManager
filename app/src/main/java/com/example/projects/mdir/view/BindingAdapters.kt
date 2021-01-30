@@ -15,6 +15,7 @@ import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
+import com.example.projects.mdir.view.fragment.BrowserFragment
 
 object BindingAdapters {
 
@@ -27,8 +28,8 @@ object BindingAdapters {
     }
 
     @JvmStatic
-    @BindingAdapter("items", "viewModel", "lifecycleOwner")
-    fun setItems(recyclerView: RecyclerView, items: List<FileItemEx>?, viewModel: FileViewModel, lifecycleOwner: LifecycleOwner) {
+    @BindingAdapter("items", "viewModel", "lifecycleOwner", "fragment")
+    fun setItems(recyclerView: RecyclerView, items: List<FileItemEx>?, viewModel: FileViewModel, lifecycleOwner: LifecycleOwner, fragment: BrowserFragment) {
         (recyclerView.adapter as BaseAdapter).run {
             items?.let {
                 setFileItems(it)
@@ -37,6 +38,7 @@ object BindingAdapters {
                         recyclerView.adapter?.notifyItemChanged(position)
                     })
                 }
+                fragment.hideProgress()
             }
                 // BrowserFragment onCreateView에서 진행
 //            } ?: run{

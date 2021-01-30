@@ -174,7 +174,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
         supportFragmentManager.beginTransaction().apply {
             when(showFragment) {
                 FragmentType.Home -> {
-                    replace(R.id.fragment_container, HomeFragment.INSTANCE)
+                    replace(R.id.fragment_container, HomeFragment.INSTANCE.apply { requestListener = this@FileManagerActivity })
                 }
                 FragmentType.Browser -> {
                     when(browserType) {

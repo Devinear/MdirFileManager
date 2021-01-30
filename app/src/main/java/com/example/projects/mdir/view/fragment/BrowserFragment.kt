@@ -26,6 +26,7 @@ import com.example.projects.mdir.common.LayoutType
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.*
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_file_manager.*
 
 class BrowserFragment : Fragment() {
 
@@ -126,7 +127,7 @@ class BrowserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
-
+            progress.show()
         }
 
         observeViewModel()
@@ -233,6 +234,10 @@ class BrowserFragment : Fragment() {
 //                layout.addView(customView, 0)
 //
 //                snackBar.show()
+    }
+
+    fun hideProgress() {
+        binding.progress.hide()
     }
 
 }
