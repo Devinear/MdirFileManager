@@ -117,9 +117,11 @@ class BrowserFragment : Fragment() {
             else/*BrowserType.Storage*/ -> viewModel.loadDirectory(browserPath)
         }
 
-        (activity as FileManagerActivity).liveShowType.apply {
-            removeObservers(viewLifecycleOwner)
-            observe(viewLifecycleOwner, Observer { changeViewMode(isListMode = it) })
+        (activity as FileManagerActivity).apply {
+            appbar.setExpanded(false, true)
+
+            liveShowType.removeObservers(viewLifecycleOwner)
+            liveShowType.observe(viewLifecycleOwner, Observer { changeViewMode(isListMode = it) })
         }
         return binding.root
     }

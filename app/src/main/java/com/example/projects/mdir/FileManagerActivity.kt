@@ -25,6 +25,8 @@ import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
 import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.activity_file_manager.view.*
+import kotlinx.coroutines.*
 
 class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner, RequestListener {
 
@@ -171,13 +173,16 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 
         when {
             showFragment != FragmentType.Home -> {
-                appbar.iv_toolbar.visibility = View.INVISIBLE
-                appbar.setExpanded(false, false)
 
-                GlobalScope.launch {
-                    delay(1000L)
-                    appbar.iv_toolbar.visibility = View.VISIBLE
-                }
+                // Visible을 바꾸는건 자연스럽지 못하다...
+//                appbar.iv_toolbar.visibility = View.INVISIBLE
+//                appbar.setExpanded(false, true)
+
+//                GlobalScope.launch {
+//                    delay(1000L)
+//                    appbar.setExpanded(false, true)
+//                    appbar.iv_toolbar.visibility = View.VISIBLE
+//                }
             }
         }
 
@@ -220,7 +225,6 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
                 else -> {
                     addToBackStack(HomeFragment.toString())
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    appbar.setExpanded(false, true)
                 }
             }
         }.commit()
