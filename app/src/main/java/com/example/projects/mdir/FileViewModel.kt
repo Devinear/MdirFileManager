@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -63,7 +64,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun loadCategory(category: Category, isShowSystem: Boolean = _showSystem) {
+        Log.d(TAG, "loadCategory")
         viewModelScope.launch(Dispatchers.Main) {
+            Log.d(TAG, "loadCategory viewModelScope")
+
             if(category == Category.Download) {
                 loadDirectory(FileUtil.LEGACY_DOWNLOAD)
                 return@launch
@@ -123,6 +127,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     private fun requestThumbnail(list: MutableList<FileItemEx>) {
+        Log.d(TAG, "requestThumbnail")
         viewModelScope.launch(Dispatchers.IO) {
             list.forEach {
                 var image: BitmapDrawable? = null
@@ -249,4 +254,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         favorites.addAll(list)
     }
 
+    companion object {
+        private const val TAG = "[DE][VM] ViewModel"
+    }
 }

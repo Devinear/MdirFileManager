@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.activity_file_manager.*
 class BrowserFragment : Fragment() {
 
     companion object {
-        private const val TAG = "[FR] BROWSER"
+        private const val TAG = "[DE][FR] BROWSER"
         private const val PATH = "path"
         private const val TYPE = "type"
         private const val GRID_ITEM_WIDTH_DP = 120
@@ -128,6 +128,7 @@ class BrowserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated")
         with(binding) {
             progress.show()
         }
@@ -143,6 +144,7 @@ class BrowserFragment : Fragment() {
     private var optionDialog : FileOptionDialog? = null
 
     private fun observeViewModel() {
+        Log.d(TAG, "observeViewModel")
         with(viewModel) {
             showOption.observe(viewLifecycleOwner, Observer {
 //                if(snackBar.isShown) {

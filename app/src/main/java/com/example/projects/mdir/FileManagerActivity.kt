@@ -408,12 +408,12 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 
     fun requestStorage(path: String = "") {
         // 차후에 드라이브를 추가하게되면 타입을 늘리자.
-        Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "requestStorage path:$path")
         changeFragment(type = FragmentType.Browser, browserType = BrowserType.Storage, path = path)
     }
 
     fun requestCategory(type: Category) {
-        Toast.makeText(this, "Category[${type.name}]", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "requestCategory type:${type.name}")
         changeFragment(type = FragmentType.Browser, browserType = BrowserType.Category, category = type)
     }
 
@@ -433,7 +433,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 
     companion object {
         const val GRID_ITEM_WIDTH_DP = 120
-        const val TAG = "FileManagerActivity"
+        const val TAG = "[DE] Activity"
         const val REQUEST_CODE = 1
     }
 }
