@@ -1,6 +1,8 @@
 package com.example.projects.mdir.repository
 
 import android.content.Context
+import android.util.Log
+import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
@@ -16,18 +18,38 @@ class LegacyStorageRepository : AbsStorageRepository() {
     }
 
     override fun loadDirectory(context: Context, file: File, isShowSystem: Boolean): MutableList<FileItemEx> {
+        Log.d(TAG, "loadDirectory PATH:" + file.absoluteFile)
         if(!file.exists()) return mutableListOf()
 
         val listLoadDirs = mutableListOf<FileItemEx>()
 
         val list = file.listFiles().toMutableList()
-        if(!isShowSystem) {
-            list.removeAll { item -> return@removeAll item.name[0] == '.' }
+//        if(!isShowSystem) {
+//            list.removeAll { item -> return@removeAll item.name[0] == '.' }
+//        }
+        list.forEach {
+            val item = FileItemEx(it.absolutePath)
+            listLoadDirs.add(item)
+
+            if(item.isDirectory)
+                loadDir(item)
         }
-        list.forEach { listLoadDirs.add(FileItemEx(it.absolutePath)) }
         innerSort(listLoadDirs)
 
         return listLoadDirs
+    }
+
+    private fun loadDir(root: FileItemEx) {
+        Log.d(TAG, "loadDir PATH:" + root.absoluteFile)
+        if(!root.isDirectory) return
+
+        root.listFiles().toMutableList().forEach { file ->
+            val item = FileItemEx(file.absolutePath)
+            root.childs.add(item)
+
+            if(file.isDirectory)
+                loadDir(item)
+        }
     }
 
     override fun loadDirectory(context: Context, path: String, category: Category, isShowSystem: Boolean): MutableList<FileItemEx> {
@@ -89,5 +111,9 @@ class LegacyStorageRepository : AbsStorageRepository() {
             is SortBy.Size -> (o1.length() - o2.length()).toInt() * ascending
             else/*is SortBy.Type*/ -> o1.exType.sort - o2.exType.sort * ascending
         }
+    }
+
+    companion object {
+        private const val TAG = "[DE][RE] Legacy"
     }
 }
