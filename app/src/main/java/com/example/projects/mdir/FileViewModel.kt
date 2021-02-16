@@ -116,6 +116,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    private fun clickDirectory(directory: FileItemEx, isUpDir: Boolean = false) {
+
+    }
+
     fun loadFavorite() {
         viewModelScope.launch(Dispatchers.Main) {
             val list = mutableListOf<FileItemEx>()
@@ -167,6 +171,19 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun requestClickItem(item: FileItemEx) {
+        when (item.exType) {
+//            // 부모 폴더
+//            FileType.UpDir -> {loadDirectory(item.parent)}
+//            // 일반 폴더
+//            FileType.Dir -> {loadDirectory(item.path, false)}
+            // 폴더
+            FileType.UpDir, FileType.Dir -> clickDirectory(directory = item, isUpDir = item.exType == FileType.UpDir)
+            // 일반 파일
+            else -> execute(item)
+        }
+    }
+
+    fun requestPath(item: FileItemEx) {
         when (item.exType) {
             // 부모 폴더
             FileType.UpDir -> { loadDirectory(item.parent) }

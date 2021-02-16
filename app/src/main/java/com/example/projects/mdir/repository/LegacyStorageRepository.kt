@@ -2,7 +2,6 @@ package com.example.projects.mdir.repository
 
 import android.content.Context
 import android.util.Log
-import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
@@ -45,7 +44,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
         root.listFiles().toMutableList().forEach { file ->
             val item = FileItemEx(file.absolutePath)
-            root.childs.add(item)
+            root.childItems.add(item)
 
             if(file.isDirectory)
                 loadDir(item)
