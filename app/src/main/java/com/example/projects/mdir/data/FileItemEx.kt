@@ -22,9 +22,9 @@ class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
 
     var liveDrawable = MutableLiveData<BitmapDrawable>()
     var favorite = MutableLiveData<Boolean>()
-
-    val parentItem : FileItemEx? = null
-    val childItems = mutableListOf<FileItemEx>()
+    
+    var up : FileItemEx? = null
+    val childs = mutableListOf<FileItemEx>()
 
     init {
         convert()

@@ -26,8 +26,9 @@ class LegacyStorageRepository : AbsStorageRepository() {
 //        if(!isShowSystem) {
 //            list.removeAll { item -> return@removeAll item.name[0] == '.' }
 //        }
+        val root = FileItemEx(file.absolutePath)
         list.forEach {
-            val item = FileItemEx(it.absolutePath)
+            val item = FileItemEx(it.absolutePath).apply { up = root }
             listLoadDirs.add(item)
 
             if(item.isDirectory)
@@ -44,7 +45,8 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
         root.listFiles().toMutableList().forEach { file ->
             val item = FileItemEx(file.absolutePath)
-            root.childItems.add(item)
+            item.up = root
+            root.childs.add(item)
 
             if(file.isDirectory)
                 loadDir(item)

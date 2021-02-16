@@ -96,9 +96,12 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
             val list = repository.loadDirectory(app, curPath, _showSystem)
+
+            // FAVORITE
             favorites.forEach { favorite ->
                 list.find { it.absolutePath == favorite }?.favorite?.value = true
             }
+
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
             if(curPath != FileUtil.LEGACY_ROOT) {
                 list.add(0, FileItemEx(path = curPath, isUpDir = true))
@@ -106,19 +109,37 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             _files.postValue(list)
 
             // DEPTHS
-            val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT)
-                    .split('/')
-                    .toMutableList()
-                    .apply { removeIf { it.isEmpty() } }
-            _depthDir.postValue(depths)
+            _depthDir.postValue(changedDepth(depth = curPath))
 
             requestThumbnail(list)
         }
     }
 
     private fun clickDirectory(directory: FileItemEx, isUpDir: Boolean = false) {
+        viewModelScope.launch(Dispatchers.Main) {
 
+            // isUpDir 경우 실제로는 directory.up이 자기자신이 된다.
+            val list = if(isUpDir) directory.up?.up?.childs?:directory.childs else directory.childs
+
+            // FAVORITE
+            favorites.forEach { favorite ->
+                list.find { it.absolutePath == favorite }?.favorite?.value = true
+            }
+            _files.postValue(list.apply {
+                add(0, FileItemEx(path = directory.absolutePath, isUpDir = true).apply { up = directory })
+            })
+
+            // DEPTHS
+            _depthDir.postValue(changedDepth(depth = directory.absolutePath))
+
+            requestThumbnail(list)
+        }
     }
+
+    private fun changedDepth(depth: String) = depth.substringAfter(FileUtil.LEGACY_ROOT)
+            .split('/')
+            .toMutableList()
+            .apply { removeIf { it.isEmpty() } }
 
     fun loadFavorite() {
         viewModelScope.launch(Dispatchers.Main) {
