@@ -119,18 +119,26 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         viewModelScope.launch(Dispatchers.Main) {
 
             // isUpDir 경우 실제로는 directory.up이 자기자신이 된다.
-            val list = if(isUpDir) directory.up?.up?.childs?:directory.childs else directory.childs
+            val target = if(isUpDir) directory.self?:directory else directory
+            val targetUp = target.up
+            val list = target.childs
 
             // FAVORITE
             favorites.forEach { favorite ->
                 list.find { it.absolutePath == favorite }?.favorite?.value = true
             }
             _files.postValue(list.apply {
-                add(0, FileItemEx(path = directory.absolutePath, isUpDir = true).apply { up = directory })
+                list.removeAll { item -> return@removeAll item.exType == FileType.UpDir }
+//                if(isUpDir)
+//                    add(0, FileItemEx(path = directory.absolutePath, isUpDir = true).apply { self = directory })
+//                else
+                if(targetUp != null) {
+                    add(0, FileItemEx(path = targetUp.absolutePath, isUpDir = true).apply { self = targetUp })
+                }
             })
 
             // DEPTHS
-            _depthDir.postValue(changedDepth(depth = directory.absolutePath))
+            _depthDir.postValue(changedDepth(depth = target.absolutePath))
 
             requestThumbnail(list)
         }
