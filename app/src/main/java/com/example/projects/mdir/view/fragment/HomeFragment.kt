@@ -14,6 +14,7 @@ import com.example.projects.R
 import com.example.projects.databinding.LayoutHomeBinding
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
+import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.HomeAdapter
