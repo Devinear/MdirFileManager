@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,10 +24,11 @@ import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
 import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.activity_file_manager.*
 import kotlinx.android.synthetic.main.activity_file_manager.view.*
 import kotlinx.coroutines.*
 
-class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner, RequestListener {
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/* AppBarLayout.OnOffsetChangedListener,*/ ViewModelStoreOwner, RequestListener {
 
     private val viewModelStore = ViewModelStore()
     private val viewModel by lazy {
@@ -77,6 +77,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 //        else
 //            appbar.setExpanded(false)
         appbar.setExpanded(true)
+        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val range = (-appBarLayout!!.totalScrollRange).toFloat()
+            iv_toolbar.imageAlpha = ((255 * (1.0f - verticalOffset.toFloat() / range)).toInt())
+        })
     }
 
     override fun onBackPressed() {
@@ -95,9 +99,11 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     override fun getViewModelStore(): ViewModelStore = viewModelStore
 
     /* AppBarLayout.OnOffsetChangedListener */
-    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-        TODO("Not yet implemented")
-    }
+//    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+////        TODO("Not yet implemented")
+//        val range = (-appBarLayout!!.totalScrollRange).toFloat()
+//        iv_toolbar.imageAlpha = ((255 * (1.0f - verticalOffset.toFloat() / range)).toInt())
+//    }
 
     private lateinit var menu: Menu
     var isShowList = true
