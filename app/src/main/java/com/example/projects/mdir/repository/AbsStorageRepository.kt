@@ -8,10 +8,10 @@ import java.io.File
 
 abstract class AbsStorageRepository {
 
-    internal var sortPairFir : Pair<SortBy, SortOrder> = Pair(SortBy.Type, SortOrder.Ascending)
-    internal var sortPairSec : Pair<SortBy, SortOrder> = Pair(SortBy.Name, SortOrder.Ascending)
-
-    internal var query : String = ""
+//    internal var sortPairFir : Pair<SortBy, SortOrder> = Pair(SortBy.Type, SortOrder.Ascending)
+//    internal var sortPairSec : Pair<SortBy, SortOrder> = Pair(SortBy.Name, SortOrder.Ascending)
+//
+//    internal var query : String = ""
 
     open fun loadDirectory(context: Context, file: File, isShowSystem: Boolean) = mutableListOf<FileItemEx>()
     open fun loadDirectory(context: Context, path: String, isShowSystem: Boolean) = mutableListOf<FileItemEx>()
@@ -19,12 +19,12 @@ abstract class AbsStorageRepository {
 
     open fun loadDirectory(context: Context, path: String, category: Category, isShowSystem: Boolean) = mutableListOf<FileItemEx>()
 
-    fun sort(sortBy: SortBy, sortOrder: SortOrder, sortBySec: SortBy = SortBy.Name, sortOrderSec: SortOrder = SortOrder.Ascending) {
-        sortPairFir = Pair(sortBy, sortOrder)
-        sortPairSec = Pair(sortBySec, sortOrderSec)
-    }
-
-    fun search(query: String) {
-        this.query = query
-    }
+//    fun sort(sortBy: SortBy, sortOrder: SortOrder, sortBySec: SortBy = SortBy.Name, sortOrderSec: SortOrder = SortOrder.Ascending) {
+//        sortPairFir = Pair(sortBy, sortOrder)
+//        sortPairSec = Pair(sortBySec, sortOrderSec)
+//    }
+//
+//    fun search(query: String) {
+//        this.query = query
+//    }
 }

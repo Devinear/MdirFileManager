@@ -36,7 +36,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
         val listLoadDirs = mutableListOf<FileItemEx>().apply {
             addAll(root.childs)
         }
-        innerSort(listLoadDirs)
+//        innerSort(listLoadDirs)
 
         return listLoadDirs
     }
@@ -67,7 +67,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
                 type = requestType,
                 isShowSystem = isShowSystem)
 
-        simpleSort(listCategory)
+//        simpleSort(listCategory)
         return listCategory
     }
 
@@ -91,20 +91,20 @@ class LegacyStorageRepository : AbsStorageRepository() {
         }
     }
 
-    private fun innerSort(list: MutableList<FileItemEx>) {
-        list.sortWith(kotlin.Comparator { o1, o2 ->
-            innerComparator(o1, o2, sortPairFir).let {
-                // 1차 정렬 결과가 동등하다면 2차 정렬을 실행함.
-                if(it != 0)
-                    return@Comparator it
-                else
-                    return@Comparator innerComparator(o1, o2, sortPairSec)
-            }
-        })
-    }
-
-    private fun simpleSort(list: MutableList<FileItemEx>, ascending: Boolean = true)
-            = list.sortWith(kotlin.Comparator { o1, o2 -> o1.name.compareTo(o2.name) * ( if(ascending) 1 else -1 ) })
+//    private fun innerSort(list: MutableList<FileItemEx>) {
+//        list.sortWith(kotlin.Comparator { o1, o2 ->
+//            innerComparator(o1, o2, sortPairFir).let {
+//                // 1차 정렬 결과가 동등하다면 2차 정렬을 실행함.
+//                if(it != 0)
+//                    return@Comparator it
+//                else
+//                    return@Comparator innerComparator(o1, o2, sortPairSec)
+//            }
+//        })
+//    }
+//
+//    private fun simpleSort(list: MutableList<FileItemEx>, ascending: Boolean = true)
+//            = list.sortWith(kotlin.Comparator { o1, o2 -> o1.name.compareTo(o2.name) * ( if(ascending) 1 else -1 ) })
 
     private fun innerComparator(o1: FileItemEx, o2: FileItemEx, option: Pair<SortBy, SortOrder>) : Int {
         val ascending = if(option.second == SortOrder.Ascending) 1 else -1
