@@ -26,6 +26,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val files: LiveData<List<FileItemEx>>
         get() = _files
 
+    var needRefresh : Boolean = false
+
     private val _openDir = MutableLiveData<FileItemEx>()
     val openDir: LiveData<FileItemEx>
         get() = _openDir
@@ -73,9 +75,16 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                 return@launch
             }
 
-            val listCategory = repository.loadDirectory(
-                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem
-            )
+            val listCategory = if(needRefresh || files.value?.isEmpty() != false) {
+                repository.loadDirectory(
+                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem)
+            }
+            else {
+                files.value?.toMutableList() ?: mutableListOf()
+            }
+//            val listCategory = repository.loadDirectory(
+//                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem
+//            )
             favorites.forEach { favorite ->
                 listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
             }
