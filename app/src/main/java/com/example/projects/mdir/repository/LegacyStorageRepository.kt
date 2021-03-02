@@ -7,17 +7,19 @@ import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
 import com.example.projects.mdir.data.FileItemEx
 import java.io.File
-import java.util.*
+import kotlin.Exception
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class LegacyStorageRepository : AbsStorageRepository() {
 
-    override fun loadDirectory(context: Context, path: String, isShowSystem: Boolean): MutableList<FileItemEx> {
-        return loadDirectory(context, File(path), isShowSystem)
-    }
+    private val filesByRoot = mutableListOf<FileItemEx>()
 
-    override fun loadDirectory(context: Context, file: File, isShowSystem: Boolean): MutableList<FileItemEx> {
-        Log.d(TAG, "loadDirectory PATH:" + file.absoluteFile)
+
+    override fun loadDirectory(context: Context, path: String, refresh: Boolean): MutableList<FileItemEx> {
+        // refresh : 기존의 데이터를 무시하고 전부 갱신할 것인가
+        Log.d(TAG, "loadDirectory PATH:[$path]")
+
+        val file = File(path)
         if(!file.exists()) return mutableListOf()
 
         val list = file.listFiles().toMutableList()
@@ -41,11 +43,28 @@ class LegacyStorageRepository : AbsStorageRepository() {
         return listLoadDirs
     }
 
+    private fun loadRoot() {
+        Log.d(TAG, "loadRoot")
+
+        val root = FileItemEx(FileUtil.LEGACY_ROOT)
+        root.listFiles().forEach {
+            val item = FileItemEx(it.absolutePath).apply { up = root }
+//            Log.d(TAG, "loadRoot item:" + item.absoluteFile)
+            root.childs.add(item)
+
+            if(item.isDirectory)
+                loadDir(item)
+        }
+
+        filesByRoot.clear()
+        filesByRoot.addAll(root.childs)
+    }
+
     private fun loadDir(root: FileItemEx) {
-        Log.d(TAG, "loadDir PATH:" + root.absoluteFile)
+        Log.d(TAG, "loadDir 11 SIZE:${root.listFiles().size} PATH:${root.absoluteFile}")
         if(!root.isDirectory) return
 
-        root.listFiles().toMutableList().forEach { file ->
+        root.listFiles()/*.toMutableList()*/.forEach { file ->
             val item = FileItemEx(file.absolutePath)
             item.up = root
             root.childs.add(item)
@@ -53,36 +72,84 @@ class LegacyStorageRepository : AbsStorageRepository() {
             if(file.isDirectory)
                 loadDir(item)
         }
+        Log.d(TAG, "loadDir 22 SIZE:${root.childs.size}")
     }
 
-    override fun loadDirectory(context: Context, path: String, category: Category, isShowSystem: Boolean): MutableList<FileItemEx> {
-        val root = File(path)
-        val requestType = FileUtil.toFileType(category = category)
-        if(!root.exists() || requestType == FileType.None) return mutableListOf()
+    override fun request(context: Context, category: Category): MutableList<FileItemEx> {
+        Log.d(TAG, "request Category:[${category.name}]")
 
-        val listCategory = mutableListOf<FileItemEx>()
-        loadFile(context = context,
-                listRoot = root.listFiles().toMutableList(),
-                listOut = listCategory,
-                type = requestType,
-                isShowSystem = isShowSystem)
+//        if(filesByRoot.isEmpty())
+            loadRoot()
 
-//        simpleSort(listCategory)
-        return listCategory
+        val type = FileUtil.toFileType(category = category)
+        if(type == FileType.None) return mutableListOf()
+
+        val categorys = mutableListOf<FileItemEx>()
+//        filesByRoot.forEach {
+//
+//        }
+//        val listCategory = mutableListOf<FileItemEx>()
+//        loadFile(context = context,
+//                listRoot = root.listFiles().toMutableList(),
+//                listOut = listCategory,
+//                type = requestType)
+
+
+
+        val list = mutableListOf<FileItemEx>()
+        loadType(root = filesByRoot, out = categorys, type = type)
+
+        return list
     }
 
-    private fun loadFile(context: Context, listRoot: MutableList<File>, listOut: MutableList<FileItemEx>, type: FileType, isShowSystem: Boolean) {
-        if(!isShowSystem) {
-            listRoot.removeAll { item -> return@removeAll item.name[0] == '.' }
+    private fun loadType(root: MutableList<FileItemEx>, out: MutableList<FileItemEx>, type: FileType) {
+//        Log.d(TAG, "loadType")
+        root.forEach { file ->
+            if(file.exType == FileType.Dir && file.childs.isNotEmpty()) {
+                // 폴더 이므로 새로 만들어도 된다.
+                out.add(FileItemEx(file.absolutePath))
+                Log.d(TAG, "loadType File:${file.absoluteFile}")
+                try {
+                    loadType(file.childs, out, type)
+                }
+                catch (e: Exception) {
+                    return@forEach
+                }
+            }
+            else if(file.exType == type) {
+                out.last().childs.add(file)
+            }
         }
+    }
+
+
+
+//    override fun loadDirectory(context: Context, path: String, category: Category, refresh: Boolean): MutableList<FileItemEx> {
+//        val root = File(path)
+//        val requestType = FileUtil.toFileType(category = category)
+//        if(!root.exists() || requestType == FileType.None) return mutableListOf()
+//
+//        val listCategory = mutableListOf<FileItemEx>()
+//        loadFile(context = context,
+//                listRoot = root.listFiles().toMutableList(),
+//                listOut = listCategory,
+//                type = requestType)
+//
+////        simpleSort(listCategory)
+//        return listCategory
+//    }
+
+    private fun loadFile(context: Context, listRoot: MutableList<File>, listOut: MutableList<FileItemEx>, type: FileType) {
+//        if(!isShowSystem) {
+//            listRoot.removeAll { item -> return@removeAll item.name[0] == '.' }
+//        }
         listRoot.forEach { file ->
             FileItemEx(file.absolutePath).apply {
                 if(exType == FileType.Dir) {
                     loadFile(context = context,
                             listRoot = listFiles().toMutableList(),
                             listOut = listOut,
-                            type = type,
-                            isShowSystem = isShowSystem)
+                            type = type)
                 }
                 else if(exType == type) {
                     listOut.add(this)

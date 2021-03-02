@@ -75,19 +75,20 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                 return@launch
             }
 
-            val listCategory = if(needRefresh || files.value?.isEmpty() != false) {
-                repository.loadDirectory(
-                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem)
-            }
-            else {
-                files.value?.toMutableList() ?: mutableListOf()
-            }
+//            val listCategory = if(needRefresh || files.value?.isEmpty() != false) {
+//                repository.loadDirectory(
+//                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem)
+//            }
+//            else {
+//                files.value?.toMutableList() ?: mutableListOf()
+//            }
 //            val listCategory = repository.loadDirectory(
-//                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem
+//                    context = app, path = FileUtil.LEGACY_ROOT, category = category, refresh = false
 //            )
-            favorites.forEach { favorite ->
-                listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
-            }
+//            favorites.forEach { favorite ->
+//                listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
+//            }
+            val listCategory = repository.request(context = app, category = category)
             _files.postValue(listCategory)
 
             // DEPTHS
@@ -104,7 +105,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
 
-            val list = repository.loadDirectory(app, curPath, _showSystem)
+            val list = repository.loadDirectory(context = app, path = curPath, refresh = false)
 
             // FAVORITE
             favorites.forEach { favorite ->

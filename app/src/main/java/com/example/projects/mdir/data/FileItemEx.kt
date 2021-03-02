@@ -26,6 +26,7 @@ class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
     var up : FileItemEx? = null
     var self : FileItemEx? = null
     val childs = mutableListOf<FileItemEx>()
+//    val categorys = mutableListOf<FileItemEx>()
 
     init {
         convert()
