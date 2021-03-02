@@ -131,7 +131,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             // isUpDir 경우 실제로는 directory.up이 자기자신이 된다.
             val target = if(isUpDir) directory.self?:directory else directory
             val targetUp = target.up
-            val list = target.childs
+            val list = target.child
 
             // FAVORITE
             favorites.forEach { favorite ->

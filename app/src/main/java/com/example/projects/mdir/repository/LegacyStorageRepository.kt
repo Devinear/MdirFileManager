@@ -29,14 +29,14 @@ class LegacyStorageRepository : AbsStorageRepository() {
         val root = FileItemEx(file.absolutePath)
         list.forEach {
             val item = FileItemEx(it.absolutePath).apply { up = root }
-            root.childs.add(item)
+            root.child.add(item)
 //            listLoadDirs.add(item)
 
             if(item.isDirectory)
                 loadDir(item)
         }
         val listLoadDirs = mutableListOf<FileItemEx>().apply {
-            addAll(root.childs)
+            addAll(root.child)
         }
 //        innerSort(listLoadDirs)
 
@@ -50,74 +50,56 @@ class LegacyStorageRepository : AbsStorageRepository() {
         root.listFiles().forEach {
             val item = FileItemEx(it.absolutePath).apply { up = root }
 //            Log.d(TAG, "loadRoot item:" + item.absoluteFile)
-            root.childs.add(item)
+            root.child.add(item)
 
             if(item.isDirectory)
                 loadDir(item)
         }
 
         filesByRoot.clear()
-        filesByRoot.addAll(root.childs)
+        filesByRoot.addAll(root.child)
     }
 
     private fun loadDir(root: FileItemEx) {
-        Log.d(TAG, "loadDir 11 SIZE:${root.listFiles().size} PATH:${root.absoluteFile}")
         if(!root.isDirectory) return
 
         root.listFiles()/*.toMutableList()*/.forEach { file ->
             val item = FileItemEx(file.absolutePath)
             item.up = root
-            root.childs.add(item)
+            root.child.add(item)
 
             if(file.isDirectory)
                 loadDir(item)
         }
-        Log.d(TAG, "loadDir 22 SIZE:${root.childs.size}")
     }
 
     override fun request(context: Context, category: Category): MutableList<FileItemEx> {
         Log.d(TAG, "request Category:[${category.name}]")
 
-//        if(filesByRoot.isEmpty())
+        if(filesByRoot.isEmpty())
             loadRoot()
 
         val type = FileUtil.toFileType(category = category)
         if(type == FileType.None) return mutableListOf()
 
-        val categorys = mutableListOf<FileItemEx>()
-//        filesByRoot.forEach {
-//
-//        }
-//        val listCategory = mutableListOf<FileItemEx>()
-//        loadFile(context = context,
-//                listRoot = root.listFiles().toMutableList(),
-//                listOut = listCategory,
-//                type = requestType)
+        val category = mutableListOf<FileItemEx>()
+        loadType(root = filesByRoot, out = category, type = type)
 
 
-
-        val list = mutableListOf<FileItemEx>()
-        loadType(root = filesByRoot, out = categorys, type = type)
-
-        return list
+        // 빈 폴더 제거
+        category.removeAll { dir -> dir.child.size == 0 }
+        return category
     }
 
     private fun loadType(root: MutableList<FileItemEx>, out: MutableList<FileItemEx>, type: FileType) {
-//        Log.d(TAG, "loadType")
         root.forEach { file ->
-            if(file.exType == FileType.Dir && file.childs.isNotEmpty()) {
+            if(file.exType == FileType.Dir && file.child.isNotEmpty()) {
                 // 폴더 이므로 새로 만들어도 된다.
                 out.add(FileItemEx(file.absolutePath))
-                Log.d(TAG, "loadType File:${file.absoluteFile}")
-                try {
-                    loadType(file.childs, out, type)
-                }
-                catch (e: Exception) {
-                    return@forEach
-                }
+                loadType(file.child, out, type)
             }
             else if(file.exType == type) {
-                out.last().childs.add(file)
+                out.last().child.add(file)
             }
         }
     }
