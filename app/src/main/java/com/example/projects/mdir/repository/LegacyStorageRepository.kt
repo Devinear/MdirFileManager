@@ -14,6 +14,10 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
     private val filesByRoot = mutableListOf<FileItemEx>()
 
+    override fun initRepository() {
+        Log.d(TAG, "initRepository")
+        loadRoot()
+    }
 
     override fun loadDirectory(context: Context, path: String, refresh: Boolean): MutableList<FileItemEx> {
         // refresh : 기존의 데이터를 무시하고 전부 갱신할 것인가
@@ -49,7 +53,6 @@ class LegacyStorageRepository : AbsStorageRepository() {
         val root = FileItemEx(FileUtil.LEGACY_ROOT)
         root.listFiles().forEach {
             val item = FileItemEx(it.absolutePath).apply { up = root }
-//            Log.d(TAG, "loadRoot item:" + item.absoluteFile)
             root.child.add(item)
 
             if(item.isDirectory)
@@ -75,7 +78,6 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
     override fun request(context: Context, category: Category): MutableList<FileItemEx> {
         Log.d(TAG, "request Category:[${category.name}]")
-
         if(filesByRoot.isEmpty())
             loadRoot()
 
@@ -84,7 +86,6 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
         val category = mutableListOf<FileItemEx>()
         loadType(root = filesByRoot, out = category, type = type)
-
 
         // 빈 폴더 제거
         category.removeAll { dir -> dir.child.size == 0 }
@@ -103,8 +104,6 @@ class LegacyStorageRepository : AbsStorageRepository() {
             }
         }
     }
-
-
 
 //    override fun loadDirectory(context: Context, path: String, category: Category, refresh: Boolean): MutableList<FileItemEx> {
 //        val root = File(path)
