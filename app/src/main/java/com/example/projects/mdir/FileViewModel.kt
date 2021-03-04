@@ -63,6 +63,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     init {
         _mode.value = BrowserType.Storage
         initFavorite()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.initRepository()
+        }
     }
 
     fun loadCategory(category: Category, isShowSystem: Boolean = _showSystem) {
@@ -104,6 +108,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         viewModelScope.launch(Dispatchers.Main) {
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
+
+            _mode.value = BrowserType.Storage
 
             val list = repository.loadDirectory(context = app, path = curPath, refresh = false)
 

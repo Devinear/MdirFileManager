@@ -13,6 +13,8 @@ abstract class AbsStorageRepository {
 //
 //    internal var query : String = ""
 
+    open fun initRepository() { }
+
     open fun loadDirectory(context: Context, path: String, refresh: Boolean = false) = mutableListOf<FileItemEx>()
     open fun loadDirectory(context: Context, tree: DocumentFile, refresh: Boolean = false) = mutableListOf<FileItemEx>()
 
