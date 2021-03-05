@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.media.ThumbnailUtils
+import android.os.Build
 import android.util.Size
 import com.example.projects.mdir.common.ExtType
 import java.io.File
@@ -24,12 +25,19 @@ class ThumbnailRepository {
         }
         else {
             try {
-                val bitmap = when(type) {
-                    ExtType.Video, ExtType.Audio -> ThumbnailUtils.createVideoThumbnail(File(path), Size(300, 400), null)
-                    else -> { BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = 4 }) }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val bitmap = when (type) {
+                        ExtType.Video, ExtType.Audio ->
+                            ThumbnailUtils.createVideoThumbnail(File(path), Size(300, 400), null)
+                        else ->
+                            BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = 4 })
+                    }
+                    insertThumb(path = path, thumb = bitmap)
+                    BitmapDrawable(context.resources, bitmap)
                 }
-                insertThumb(path = path, thumb = bitmap)
-                BitmapDrawable(context.resources, bitmap)
+                else {
+                    return null
+                }
             }
             catch (e: Exception) {
                 e.printStackTrace()
