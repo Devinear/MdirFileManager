@@ -26,6 +26,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val files: LiveData<List<FileItemEx>>
         get() = _files
 
+    private val categoryFiles = mutableListOf<FileItemEx>()
+
     var needRefresh : Boolean = false
 
     private val _openDir = MutableLiveData<FileItemEx>()
@@ -35,14 +37,13 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     private val _mode = MutableLiveData<BrowserType>()
     val mode: LiveData<BrowserType>
         get() = _mode
+    private var _category : Category? = null
+    val category: Category?
+        get() = _category
 
     private var _depthDir = MutableLiveData<List<String>>()
     val depthDir: LiveData<List<String>>
         get() = _depthDir
-
-    private val _category = MutableLiveData<List<FileItemEx>>()
-    val category: LiveData<List<FileItemEx>>
-        get() = _category
 
     private var _showOption = MutableLiveData<FileItemEx?>()
     val showOption: LiveData<FileItemEx?>
@@ -78,6 +79,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                 loadDirectory(FileUtil.LEGACY_DOWNLOAD)
                 return@launch
             }
+            _mode.value = BrowserType.Category
+            _category = category
 
 //            val listCategory = if(needRefresh || files.value?.isEmpty() != false) {
 //                repository.loadDirectory(
@@ -92,13 +95,14 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 //            favorites.forEach { favorite ->
 //                listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
 //            }
-            val listCategory = repository.request(context = app, category = category)
-            _files.postValue(listCategory)
+            categoryFiles.addAll(repository.request(context = app, category = category))
+//            val listCategory = repository.request(context = app, category = category)
+            _files.postValue(categoryFiles)
 
             // DEPTHS
             _depthDir.postValue( MutableList(1) { category.name } )
 
-            requestThumbnail(listCategory)
+            requestThumbnail(categoryFiles)
 //            withContext(Dispatchers.IO) { requestThumbnail(listCategory) }
 //            Thread { requestThumbnail(listCategory) }.start()
         }
@@ -106,11 +110,13 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun loadDirectory(path: String = "", isShowSystem: Boolean = _showSystem) {
         viewModelScope.launch(Dispatchers.Main) {
+            _mode.value = BrowserType.Storage
+            _category = null
+
+            categoryFiles.clear()
+
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
-
-            _mode.value = BrowserType.Storage
-
             val list = repository.loadDirectory(context = app, path = curPath, refresh = false)
 
             // FAVORITE
@@ -134,29 +140,50 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     private fun clickDirectory(directory: FileItemEx, isUpDir: Boolean = false) {
         viewModelScope.launch(Dispatchers.Main) {
 
-            // isUpDir 경우 실제로는 directory.up이 자기자신이 된다.
-            val target = if (isUpDir) directory.self ?: directory else directory
-            val targetUp = target.parentDir
-            val list = target.subFiles
+            if(mode.value == BrowserType.Category) {
+                // Category는 무조건 깊이가 1이다.
+                if(isUpDir) {
+                    _files.postValue(categoryFiles)
+                    _depthDir.postValue( listOf(_category?.name?:"") )
+                }
+                else {
+                    val list = directory.subFiles
 
-            // FAVORITE
-            favorites.forEach { favorite ->
-                list.find { it.absolutePath == favorite }?.favorite?.value = true
+                    _files.postValue(list.apply {
+                        removeAll { item -> return@removeAll item.exType == FileType.UpDir }
+                        add(0, FileItemEx(path = directory.absolutePath, isUpDir = true))
+                    })
+                    requestThumbnail(list)
+
+                    _category ?: return@launch
+                    _depthDir.postValue( listOf(_category!!.name, directory.simpleName) )
+                }
             }
-            _files.postValue(list.apply {
-                list.removeAll { item -> return@removeAll item.exType == FileType.UpDir }
+            else {
+                // isUpDir 경우 실제로는 directory.up이 자기자신이 된다.
+                val target = if (isUpDir) directory.self ?: directory else directory
+                val targetUp = target.parentDir
+                val list = target.subFiles
+
+                // FAVORITE
+                favorites.forEach { favorite ->
+                    list.find { it.absolutePath == favorite }?.favorite?.value = true
+                }
+                _files.postValue(list.apply {
+                    removeAll { item -> return@removeAll item.exType == FileType.UpDir }
 //                if(isUpDir)
 //                    add(0, FileItemEx(path = directory.absolutePath, isUpDir = true).apply { self = directory })
 //                else
-                if(targetUp != null) {
-                    add(0, FileItemEx(path = targetUp.absolutePath, isUpDir = true).apply { self = targetUp })
-                }
-            })
+                    if (targetUp != null) {
+                        add(0, FileItemEx(path = targetUp.absolutePath, isUpDir = true).apply { self = targetUp })
+                    }
+                })
+                requestThumbnail(list)
 
-            // DEPTHS
-            _depthDir.postValue(changedDepth(depth = target.absolutePath))
+                // DEPTHS
+                _depthDir.postValue(changedDepth(depth = target.absolutePath))
 
-            requestThumbnail(list)
+            }
         }
     }
 
