@@ -79,6 +79,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
         }
 
         return mutableListOf<FileItemEx>().also {
+            it.add(FileItemEx(FileUtil.LEGACY_ROOT))
             loadType(root = listFile, out = it, type = type)
             it.removeAll { dir -> dir.subFiles.size == 0 }
         }
@@ -92,7 +93,8 @@ class LegacyStorageRepository : AbsStorageRepository() {
                 loadType(file.subFiles, out, type)
             }
             else if(file.exType == type) {
-                out.last().subFiles.add(file)
+//                out.last().subFiles.add(file)
+                out.find { it -> it.absolutePath == file.parent }?.apply { subFiles.add(file) }
             }
         }
     }
