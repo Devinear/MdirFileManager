@@ -25,19 +25,18 @@ class ThumbnailRepository {
         }
         else {
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    val bitmap = when (type) {
-                        ExtType.Video, ExtType.Audio ->
+                val bitmap = when (type) {
+                    ExtType.Video, ExtType.Audio -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                             ThumbnailUtils.createVideoThumbnail(File(path), Size(300, 400), null)
-                        else ->
-                            BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = 4 })
+                        else
+                            return null
                     }
-                    insertThumb(path = path, thumb = bitmap)
-                    BitmapDrawable(context.resources, bitmap)
+                    else ->
+                        BitmapFactory.decodeFile(path, BitmapFactory.Options().apply { inSampleSize = 4 })
                 }
-                else {
-                    return null
-                }
+                insertThumb(path = path, thumb = bitmap)
+                BitmapDrawable(context.resources, bitmap)
             }
             catch (e: Exception) {
                 e.printStackTrace()
