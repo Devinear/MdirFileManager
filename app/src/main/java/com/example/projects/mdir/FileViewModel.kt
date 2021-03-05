@@ -206,6 +206,9 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         Log.d(TAG, "requestThumbnail")
         viewModelScope.launch(Dispatchers.IO) {
             list.forEach {
+                if(it.exType == FileType.UpDir)
+                    return@forEach
+
                 var image: BitmapDrawable? = null
                 val type = FileUtil.getFileExtType(it.extension)
                 if (it.isDirectory) {
