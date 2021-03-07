@@ -131,6 +131,7 @@ class BrowserFragment : Fragment() {
         Log.d(TAG, "onViewCreated")
         with(binding) {
             progress.show()
+            progress.visibility = View.VISIBLE
         }
 
         observeViewModel()
@@ -241,7 +242,8 @@ class BrowserFragment : Fragment() {
     }
 
     fun hideProgress() {
-        binding.progress.hide()
+        Log.d(TAG, "hideProgress")
+//        binding.progress.hide()
     }
 
 }
