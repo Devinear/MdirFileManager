@@ -38,7 +38,7 @@ object BindingAdapters {
                         recyclerView.adapter?.notifyItemChanged(position)
                     })
                 }
-                fragment.hideProgress()
+                fragment.showProgress(show = false)
             }
                 // BrowserFragment onCreateView에서 진행
 //            } ?: run{

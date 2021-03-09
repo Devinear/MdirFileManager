@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -54,6 +55,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val appbar by lazy { findViewById<AppBarLayout>(R.id.appbar) }
+    private val progress by lazy { findViewById<ContentLoadingProgressBar>(R.id.progress) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -198,12 +200,18 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
         supportFragmentManager.beginTransaction().apply {
             when(showFragment) {
                 FragmentType.Home -> {
-                    replace(R.id.fragment_container, HomeFragment.INSTANCE.apply { requestListener = this@FileManagerActivity })
+                    replace(R.id.fragment_container,
+                            HomeFragment.INSTANCE.apply {
+                                requestListener = this@FileManagerActivity }
+                    )
                 }
                 FragmentType.Browser -> {
                     when(browserType) {
                         BrowserType.Find, BrowserType.Recent, BrowserType.Favorite -> {
-                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = browserType))
+                            replace(R.id.fragment_container,
+                                    BrowserFragment.newInstance(type = browserType)
+                                            .apply { requestListener = this@FileManagerActivity }
+                            )
                         }
                         BrowserType.Category -> {
                             category
@@ -247,6 +255,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
             }
             changeFragment()
 //            updateFileList()
+        }
+    }
+
+    override fun onRequestProgressBar(show : Boolean) {
+        when(show) {
+            true -> progress.show()
+            false -> progress.hide()
         }
     }
 

@@ -24,6 +24,7 @@ import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.LayoutType
 import com.example.projects.mdir.data.FileItemEx
+import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_file_manager.*
@@ -52,6 +53,7 @@ class BrowserFragment : Fragment() {
     private lateinit var binding : LayoutBrowserBinding
     private lateinit var activity : Activity
     private lateinit var viewModel : FileViewModel
+    var requestListener : RequestListener? = null
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapterLinear by lazy { FileLinearAdapter(activity, viewModel) }
@@ -129,16 +131,19 @@ class BrowserFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated")
-        with(binding) {
-            progress.show()
-            progress.visibility = View.VISIBLE
-        }
+//        with(binding.progress) {
+//            show()
+//            isActivated = true
+//            visibility = View.VISIBLE
+//        }
 
+        showProgress()
         observeViewModel()
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume")
     }
 
     private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
@@ -241,9 +246,17 @@ class BrowserFragment : Fragment() {
 //                snackBar.show()
     }
 
+    fun showProgress(show : Boolean = true) {
+        Log.d(TAG, "showProgress Show:$show")
+        requestListener?.onRequestProgressBar(show = show)
+    }
     fun hideProgress() {
         Log.d(TAG, "hideProgress")
-//        binding.progress.hide()
+        requestListener?.onRequestProgressBar(show = false)
+//        with(binding.progress) {
+//            isActivated = false
+//            hide()
+//        }
     }
 
 }
