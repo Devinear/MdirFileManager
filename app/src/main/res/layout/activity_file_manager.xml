@@ -49,6 +49,17 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminateTint="@color/colorLightGray"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_gravity="center"
+        android:translationZ="10dp"
+        android:visibility="gone"
+        android:indeterminate="true" />
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
