@@ -56,7 +56,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
     }
 
     private fun loadDir(root: FileItemEx) {
-        root.listFiles().forEach { subFile ->
+        root.listFiles()?.forEach { subFile ->
             val item = FileItemEx(subFile.absolutePath)
             item.parentDir = root
             root.subFiles.add(item)
