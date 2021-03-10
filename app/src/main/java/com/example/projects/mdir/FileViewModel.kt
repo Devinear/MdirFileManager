@@ -70,6 +70,11 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun clearFileItem() {
+        Log.d(TAG, "clearFileItem")
+        _files.value = null
+    }
+
     fun loadCategory(category: Category, isShowSystem: Boolean = _showSystem) {
         Log.d(TAG, "loadCategory")
         viewModelScope.launch(Dispatchers.Main) {
@@ -95,6 +100,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 //            favorites.forEach { favorite ->
 //                listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
 //            }
+            categoryFiles.clear()
             categoryFiles.addAll(repository.request(context = app, category = category))
 //            val listCategory = repository.request(context = app, category = category)
             _files.postValue(categoryFiles)

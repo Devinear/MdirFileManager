@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -56,6 +58,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val appbar by lazy { findViewById<AppBarLayout>(R.id.appbar) }
     private val progress by lazy { findViewById<ContentLoadingProgressBar>(R.id.progress) }
+//    private val progress2 by lazy { findViewById<ProgressBar>(R.id.progress2) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -208,18 +211,24 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
                 FragmentType.Browser -> {
                     when(browserType) {
                         BrowserType.Find, BrowserType.Recent, BrowserType.Favorite -> {
-                            replace(R.id.fragment_container,
-                                    BrowserFragment.newInstance(type = browserType)
-                                            .apply { requestListener = this@FileManagerActivity }
-                            )
+                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = browserType))
                         }
                         BrowserType.Category -> {
                             category
-                                ?.run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Category, category = category)) }
-                                ?:run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage)) }
+                                ?.run { replace(R.id.fragment_container,
+                                        BrowserFragment.newInstance(type = BrowserType.Category, category = category)
+                                                .apply { requestListener = this@FileManagerActivity })
+                                }
+                                ?:run { replace(R.id.fragment_container,
+                                        BrowserFragment.newInstance(type = BrowserType.Storage)
+                                                .apply { requestListener = this@FileManagerActivity })
+                                }
                         }
                         else -> {
-                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage, path = path))
+                            replace(R.id.fragment_container,
+                                    BrowserFragment.newInstance(type = BrowserType.Storage, path = path)
+                                            .apply { requestListener = this@FileManagerActivity }
+                            )
                         }
                     }
                     liveShowType.postValue(isShowList)
@@ -259,10 +268,15 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
     }
 
     override fun onRequestProgressBar(show : Boolean) {
-        when(show) {
-            true -> progress.show()
-            false -> progress.hide()
-        }
+        Log.d(TAG, "onRequestProgressBar show:$show")
+        progress.visibility = if(show) View.VISIBLE else View.GONE
+//        progress2.visibility = View.VISIBLE
+
+
+//        when(show) {
+//            true -> progress.show()
+//            false -> progress.hide()
+//        }
     }
 
     override fun onRequestStoragePath(path: String) {

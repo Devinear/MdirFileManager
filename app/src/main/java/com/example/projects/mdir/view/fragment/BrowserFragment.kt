@@ -85,6 +85,12 @@ class BrowserFragment : Fragment() {
         viewModel = ViewModelProvider(activity as ViewModelStoreOwner).get(FileViewModel::class.java)
     }
 
+    override fun onDetach() {
+        Log.d(TAG, "onDetach")
+        super.onDetach()
+        viewModel.clearFileItem()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
