@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.common.FileUtil
+import com.example.projects.mdir.common.Setting
 import com.example.projects.mdir.data.FileItemEx
 import java.io.File
 
@@ -87,7 +88,19 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
     private fun loadType(root: MutableList<FileItemEx>, out: MutableList<FileItemEx>, type: FileType) {
         root.forEach { file ->
-            if(file.exType == FileType.Dir && file.subFiles.isNotEmpty()) {
+            // 1. '.nomedia' 파일 확인
+            // 2. '.'으로 시작하는 시스템 파일(폴더) 확인
+            if(file.simpleName == ".nomedia" && Setting.hideNomedia) {
+                // '.nomedia'를 숨기는 경우 해당 파일이 포함된 폴더 및 하위 폴더를 숨겨야 한다.
+                Log.d(TAG, "loadType NoMedia Parent:[${file.parent}]")
+                out.find { it -> it.absolutePath.contains(file.parent) }?.apply { subFiles.clear() }
+                return
+            }
+            else if(file.simpleName[0] == '.' && Setting.hideSystem) {
+                // 시스템 파일(폴더)을 숨기는 경우 그냥 지나가면 된다.
+                Log.d(TAG, "loadType Name:[${file.simpleName}]")
+            }
+            else if(file.exType == FileType.Dir && file.subFiles.isNotEmpty()) {
                 // 폴더 이므로 새로 만들어도 된다.
                 out.add(FileItemEx(file.absolutePath))
                 loadType(file.subFiles, out, type)
