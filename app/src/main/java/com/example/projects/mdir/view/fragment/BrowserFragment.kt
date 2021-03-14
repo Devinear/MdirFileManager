@@ -256,6 +256,7 @@ class BrowserFragment : Fragment() {
     fun setItemsFinished() {
         showProgress(show = false)
         tv_empty.visibility = if(recycler.adapter?.itemCount?:0 == 0) View.VISIBLE else View.GONE
+        tv_empty.bringToFront()
     }
 
     fun showProgress(show : Boolean = true) {
