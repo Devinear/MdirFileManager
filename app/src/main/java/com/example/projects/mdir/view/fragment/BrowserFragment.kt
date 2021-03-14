@@ -28,6 +28,7 @@ import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_file_manager.*
+import kotlinx.android.synthetic.main.layout_browser.*
 
 class BrowserFragment : Fragment() {
 
@@ -250,6 +251,11 @@ class BrowserFragment : Fragment() {
 //                layout.addView(customView, 0)
 //
 //                snackBar.show()
+    }
+
+    fun setItemsFinished() {
+        showProgress(show = false)
+        tv_empty.visibility = if(recycler.adapter?.itemCount?:0 == 0) View.VISIBLE else View.GONE
     }
 
     fun showProgress(show : Boolean = true) {
