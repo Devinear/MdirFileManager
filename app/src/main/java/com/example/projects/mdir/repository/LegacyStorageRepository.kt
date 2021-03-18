@@ -30,6 +30,9 @@ class LegacyStorageRepository : AbsStorageRepository() {
 //        if(!isShowSystem) {
 //            list.removeAll { item -> return@removeAll item.name[0] == '.' }
 //        }
+        val showNomedia = Setting.hideNomedia
+        val showSystem = Setting.hideSystem
+
         val root = FileItemEx(file.absolutePath)
         list.forEach {
             val item = FileItemEx(it.absolutePath).apply { parentDir = root }
@@ -44,6 +47,11 @@ class LegacyStorageRepository : AbsStorageRepository() {
     private fun loadRoot() {
         Log.d(TAG, "loadRoot")
         val root = FileItemEx(FileUtil.LEGACY_ROOT)
+
+        // Root의 경우 모두 뜨자.
+//        val showNomedia = Setting.hideNomedia
+//        val showSystem = Setting.hideSystem
+
         root.listFiles().forEach {
             val item = FileItemEx(it.absolutePath).apply { parentDir = root }
             root.subFiles.add(item)
@@ -54,11 +62,15 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
         listFile.clear()
         listFile.addAll(root.subFiles)
+        Log.d(TAG, "loadRoot Size:${listFile.size}")
     }
 
     private fun loadDir(root: FileItemEx) {
         root.listFiles()?.forEach { subFile ->
             val item = FileItemEx(subFile.absolutePath)
+//            if(item.simpleName == ".nomedia" && Setting.hideNomedia) {
+//                return // forEach가 아닌 함수를 빠져나와야 한다.
+//            }
             item.parentDir = root
             root.subFiles.add(item)
 
@@ -69,7 +81,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
     }
 
     override fun request(context: Context, category: Category): MutableList<FileItemEx> {
-        Log.d(TAG, "request Category:[${category.name}]")
+        Log.d(TAG, "request Category:[${category.name}] OldList:${listFile.size}")
         if(listFile.isEmpty()) {
             loadRoot()
         }
