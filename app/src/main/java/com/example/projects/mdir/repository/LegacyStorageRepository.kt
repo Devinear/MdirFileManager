@@ -48,16 +48,19 @@ class LegacyStorageRepository : AbsStorageRepository() {
         Log.d(TAG, "loadRoot")
         val root = FileItemEx(FileUtil.LEGACY_ROOT)
 
-        // Root의 경우 모두 뜨자.
-//        val showNomedia = Setting.hideNomedia
-//        val showSystem = Setting.hideSystem
+        // Root의 경우에도 System을 구분하자.
+        // 위의 값을 변경하는 경우 Root부터 다시 설정하자.
+        val hideSystem = Setting.hideSystem
 
         root.listFiles().forEach {
+            if(hideSystem && it.name[0] == '.')
+                return@forEach
+
             val item = FileItemEx(it.absolutePath).apply { parentDir = root }
             root.subFiles.add(item)
 
             if(item.isDirectory)
-                loadDir(item)
+                loadDir(root = item, hideSystem = hideSystem)
         }
 
         listFile.clear()
@@ -65,12 +68,12 @@ class LegacyStorageRepository : AbsStorageRepository() {
         Log.d(TAG, "loadRoot Size:${listFile.size}")
     }
 
-    private fun loadDir(root: FileItemEx) {
+    private fun loadDir(root: FileItemEx, hideSystem: Boolean = true) {
         root.listFiles()?.forEach { subFile ->
+            if(hideSystem && subFile.name[0] == '.')
+                return@forEach
+
             val item = FileItemEx(subFile.absolutePath)
-//            if(item.simpleName == ".nomedia" && Setting.hideNomedia) {
-//                return // forEach가 아닌 함수를 빠져나와야 한다.
-//            }
             item.parentDir = root
             root.subFiles.add(item)
 
