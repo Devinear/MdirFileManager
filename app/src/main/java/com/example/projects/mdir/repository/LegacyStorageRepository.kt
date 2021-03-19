@@ -53,7 +53,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
         val hideSystem = Setting.hideSystem
 
         root.listFiles().forEach {
-            if(hideSystem && it.name[0] == '.')
+            if(hideSystem && it.name[0] == '.' && it.name != ".nomedia")
                 return@forEach
 
             val item = FileItemEx(it.absolutePath).apply { parentDir = root }
@@ -70,7 +70,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
     private fun loadDir(root: FileItemEx, hideSystem: Boolean = true) {
         root.listFiles()?.forEach { subFile ->
-            if(hideSystem && subFile.name[0] == '.')
+            if(hideSystem && subFile.name[0] == '.' && subFile.name != ".nomedia")
                 return@forEach
 
             val item = FileItemEx(subFile.absolutePath)
@@ -89,6 +89,10 @@ class LegacyStorageRepository : AbsStorageRepository() {
             loadRoot()
         }
 
+        // 카테고리의 경우
+        // 폴더 안에 .nomedia 파일이 존재하는 경우 해당 폴더 및 하위 폴더 내용을 추가하지 않는다.
+        val hideNomedia = Setting.hideNomedia
+
         val type = FileUtil.toFileType(category = category)
         if(type == FileType.None) {
             return mutableListOf()
@@ -96,33 +100,40 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
         return mutableListOf<FileItemEx>().also {
             it.add(FileItemEx(FileUtil.LEGACY_ROOT))
-            loadType(root = listFile, out = it, type = type)
+            loadType(root = listFile, out = it, type = type, hideNomedia = hideNomedia)
             it.removeAll { dir -> dir.subFiles.size == 0 }
+            it.takeIf { it[0].name == "0" }.apply { it[0].simpleName = "내장 메모리" }
         }
     }
 
-    private fun loadType(root: MutableList<FileItemEx>, out: MutableList<FileItemEx>, type: FileType) {
+    private fun loadType(root: MutableList<FileItemEx>, out: MutableList<FileItemEx>, type: FileType, hideNomedia: Boolean = false) {
         root.forEach { file ->
-            // 1. '.nomedia' 파일 확인
-            // 2. '.'으로 시작하는 시스템 파일(폴더) 확인
-            if(file.simpleName == ".nomedia" && Setting.hideNomedia) {
+            if(hideNomedia && file.name == ".nomedia") {
                 // '.nomedia'를 숨기는 경우 해당 파일이 포함된 폴더 및 하위 폴더를 숨겨야 한다.
                 Log.d(TAG, "loadType NoMedia Parent:[${file.parent}]")
-                out.find { it -> it.absolutePath.contains(file.parent) }?.apply { subFiles.clear() }
+//                out.find {
+//                    it.absolutePath.contains(file.parent)
+//                }?.apply {
+//                    subFiles.clear()
+//                }
+                // 여러 폴더가 포함될 수 있으므로..
+                out.forEach {
+                    if(it.absolutePath.contains(file.parent))
+                        it.subFiles.clear()
+                }
                 return
-            }
-            else if(file.simpleName[0] == '.' && Setting.hideSystem) {
-                // 시스템 파일(폴더)을 숨기는 경우 그냥 지나가면 된다.
-                Log.d(TAG, "loadType Name:[${file.simpleName}]")
             }
             else if(file.exType == FileType.Dir && file.subFiles.isNotEmpty()) {
                 // 폴더 이므로 새로 만들어도 된다.
                 out.add(FileItemEx(file.absolutePath))
-                loadType(file.subFiles, out, type)
+                loadType(file.subFiles, out, type, hideNomedia)
             }
             else if(file.exType == type) {
-//                out.last().subFiles.add(file)
-                out.find { it -> it.absolutePath == file.parent }?.apply { subFiles.add(file) }
+                out.find {
+                    it.absolutePath == file.parent
+                }?.apply {
+                    subFiles.add(file)
+                }
             }
         }
     }
