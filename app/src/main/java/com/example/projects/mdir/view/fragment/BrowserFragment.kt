@@ -121,9 +121,15 @@ class BrowserFragment : Fragment() {
 
         _browserType = browserData?.type?:BrowserType.Storage
         when(_browserType) {
-            BrowserType.Category -> viewModel.loadCategory(browserData?.category?:Category.Image)
-            BrowserType.Favorite -> viewModel.loadFavorite()
-            else/*BrowserType.Storage*/ -> viewModel.loadDirectory(browserPath)
+            BrowserType.Category -> {
+                viewModel.loadCategory(browserData?.category?:Category.Image)
+            }
+            BrowserType.Favorite -> {
+                viewModel.loadFavorite()
+            }
+            else/*BrowserType.Storage*/ -> {
+                viewModel.loadDirectory(browserPath)
+            }
         }
 
         (activity as FileManagerActivity).apply {
@@ -211,6 +217,7 @@ class BrowserFragment : Fragment() {
     }
 
     private fun changeViewMode(isListMode: Boolean) {
+        Log.d(TAG, "changeViewMode ListMode:$isListMode")
         layoutType = if( isListMode ) LayoutType.Linear else LayoutType.Grid
         with(binding.recycler) {
             when(layoutType) {
