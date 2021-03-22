@@ -36,7 +36,7 @@ class BrowserFragment : Fragment() {
         private const val TAG = "[DE][FR] BROWSER"
         private const val PATH = "path"
         private const val TYPE = "type"
-        private const val GRID_ITEM_WIDTH_DP = 120
+        private const val GRID_ITEM_WIDTH_DP = 150
 
 //        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 //            BrowserFragment()

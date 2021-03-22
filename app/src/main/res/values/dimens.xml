@@ -4,7 +4,7 @@
     <dimen name="recycler_item_margin_default">15dp</dimen>
     <dimen name="recycler_linear_land_item_height">30dp</dimen>
     <dimen name="recycler_linear_port_item_height">70dp</dimen>
-    <dimen name="recycler_grid_item_height">150dp</dimen>
+    <dimen name="recycler_grid_item_height">200dp</dimen>
     <dimen name="layout_padding_default_size">10dp</dimen>
     <dimen name="title_item_margin">20dp</dimen>
 
