@@ -102,7 +102,11 @@ class LegacyStorageRepository : AbsStorageRepository() {
             it.add(FileItemEx(FileUtil.LEGACY_ROOT))
             loadType(root = listFile, out = it, type = type, hideNomedia = hideNomedia)
             it.removeAll { dir -> dir.subFiles.size == 0 }
-            it.takeIf { it[0].name == "0" }.apply { it[0].simpleName = "내장 메모리" }
+            it.takeIf {
+                it.size > 0 && it[0].name == "0"
+            }?.apply {
+                it[0].simpleName = "내장 메모리"
+            }
         }
     }
 
