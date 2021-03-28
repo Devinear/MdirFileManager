@@ -3,11 +3,13 @@ package com.example.projects.mdir.view
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.ViewDataBinding
 import com.example.projects.databinding.ItemGridFileBinding
 import com.example.projects.mdir.FileViewModel
+import com.example.projects.mdir.common.FileType
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.view.base.BaseAdapter
 import com.example.projects.mdir.view.base.BaseViewHolder
@@ -25,8 +27,17 @@ class FileGridAdapter(context: Context, val viewModel: FileViewModel) : BaseAdap
         override fun onBind(context: Context, item: FileItemEx, color: Int) {
             binding.run {
                 this.item = item
+
                 tvName.text = item.simpleName
                 tvName.setTextColor(color)
+
+                if(item.exType == FileType.Dir) {
+                    tvCount.visibility = View.VISIBLE
+                    tvCount.text = item.subFiles.size.toString()
+                }
+                else {
+                    tvCount.visibility = View.GONE
+                }
 
                 if(item.liveDrawable.value != null) {
                     ivImage.setImageDrawable(item.liveDrawable.value)

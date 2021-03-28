@@ -40,7 +40,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="HOME"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickHome()}" />
 
@@ -59,7 +59,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="Find"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickFind()}" />
 
@@ -78,7 +78,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="Favorite"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickFavorite()}" />
 
@@ -97,7 +97,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="Setting"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickSetting()}" />
 
@@ -120,7 +120,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="PATH"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickHome()}" />
 
@@ -131,7 +131,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/dos_m"
                 android:text="@{activity.livePath}"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/black"
                 tools:text=".."/>
         </LinearLayout>
@@ -167,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dos_m"
                 android:text="@{activity.liveShow.toString()}"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 tools:text="All"/>
 
@@ -177,7 +177,7 @@
                 android:layout_marginEnd="@dimen/title_item_margin"
                 android:fontFamily="@font/dos_m"
                 android:text=" Show"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/black"/>
 
             <TextView
@@ -186,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dos_m"
                 android:text="@{activity.liveFiles.toString()}"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 tools:text="10"/>
 
@@ -196,7 +196,7 @@
                 android:layout_marginEnd="@dimen/title_item_margin"
                 android:fontFamily="@font/dos_m"
                 android:text=" File"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/black"/>
 
             <TextView
@@ -205,7 +205,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dos_m"
                 android:text="@{activity.liveDirs.toString()}"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 tools:text="10"/>
 
@@ -215,7 +215,7 @@
                 android:layout_marginEnd="@dimen/title_item_margin"
                 android:fontFamily="@font/dos_m"
                 android:text=" Dir"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/black"/>
 
             <TextView
@@ -224,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dos_m"
                 android:text="@{activity.liveImages.toString()}"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 tools:text="10"/>
 
@@ -234,7 +234,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/dos_m"
                 android:text=" IMAGE"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/black"/>
 
         </LinearLayout>
@@ -256,7 +256,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="LIST"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickGrid()}" />
 
@@ -275,7 +275,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="ALL"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickAll()}" />
 
@@ -294,7 +294,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="IMAGE"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickImage()}" />
 
@@ -313,7 +313,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="ZIP"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickZip()}" />
 
@@ -332,7 +332,7 @@
                 android:background="@null"
                 android:fontFamily="@font/dos_m"
                 android:text="DOC"
-                android:textSize="@dimen/recycler_item_text_size"
+                android:textSize="@dimen/recycler_linear_item_text_size"
                 android:textColor="@android:color/white"
                 android:onClick="@{()->activity.onClickDoc()}" />
 

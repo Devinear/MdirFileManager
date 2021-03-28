@@ -24,17 +24,19 @@ import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
 import com.example.projects.mdir.common.LayoutType
 import com.example.projects.mdir.data.FileItemEx
+import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_file_manager.*
+import kotlinx.android.synthetic.main.layout_browser.*
 
 class BrowserFragment : Fragment() {
 
     companion object {
-        private const val TAG = "[FR] BROWSER"
+        private const val TAG = "[DE][FR] BROWSER"
         private const val PATH = "path"
         private const val TYPE = "type"
-        private const val GRID_ITEM_WIDTH_DP = 120
+        private const val GRID_ITEM_WIDTH_DP = 150
 
 //        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 //            BrowserFragment()
@@ -52,6 +54,7 @@ class BrowserFragment : Fragment() {
     private lateinit var binding : LayoutBrowserBinding
     private lateinit var activity : Activity
     private lateinit var viewModel : FileViewModel
+    var requestListener : RequestListener? = null
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
     private val adapterLinear by lazy { FileLinearAdapter(activity, viewModel) }
@@ -83,6 +86,12 @@ class BrowserFragment : Fragment() {
         viewModel = ViewModelProvider(activity as ViewModelStoreOwner).get(FileViewModel::class.java)
     }
 
+    override fun onDetach() {
+        Log.d(TAG, "onDetach")
+        super.onDetach()
+        viewModel.clearFileItem()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -112,9 +121,15 @@ class BrowserFragment : Fragment() {
 
         _browserType = browserData?.type?:BrowserType.Storage
         when(_browserType) {
-            BrowserType.Category -> viewModel.loadCategory(browserData?.category?:Category.Image)
-            BrowserType.Favorite -> viewModel.loadFavorite()
-            else/*BrowserType.Storage*/ -> viewModel.loadDirectory(browserPath)
+            BrowserType.Category -> {
+                viewModel.loadCategory(browserData?.category?:Category.Image)
+            }
+            BrowserType.Favorite -> {
+                viewModel.loadFavorite()
+            }
+            else/*BrowserType.Storage*/ -> {
+                viewModel.loadDirectory(browserPath)
+            }
         }
 
         (activity as FileManagerActivity).apply {
@@ -128,21 +143,27 @@ class BrowserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
-            progress.show()
-        }
+        Log.d(TAG, "onViewCreated")
+//        with(binding.progress) {
+//            show()
+//            isActivated = true
+//            visibility = View.VISIBLE
+//        }
 
+        showProgress()
         observeViewModel()
     }
 
     override fun onResume() {
         super.onResume()
+        Log.d(TAG, "onResume")
     }
 
     private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
     private var optionDialog : FileOptionDialog? = null
 
     private fun observeViewModel() {
+        Log.d(TAG, "observeViewModel")
         with(viewModel) {
             showOption.observe(viewLifecycleOwner, Observer {
 //                if(snackBar.isShown) {
@@ -196,6 +217,7 @@ class BrowserFragment : Fragment() {
     }
 
     private fun changeViewMode(isListMode: Boolean) {
+        Log.d(TAG, "changeViewMode ListMode:$isListMode")
         layoutType = if( isListMode ) LayoutType.Linear else LayoutType.Grid
         with(binding.recycler) {
             when(layoutType) {
@@ -238,8 +260,23 @@ class BrowserFragment : Fragment() {
 //                snackBar.show()
     }
 
+    fun setItemsFinished() {
+        showProgress(show = false)
+        tv_empty.visibility = if(recycler.adapter?.itemCount?:0 == 0) View.VISIBLE else View.GONE
+        tv_empty.bringToFront()
+    }
+
+    fun showProgress(show : Boolean = true) {
+        Log.d(TAG, "showProgress Show:$show")
+        requestListener?.onRequestProgressBar(show = show)
+    }
     fun hideProgress() {
-        binding.progress.hide()
+        Log.d(TAG, "hideProgress")
+        requestListener?.onRequestProgressBar(show = false)
+//        with(binding.progress) {
+//            isActivated = false
+//            hide()
+//        }
     }
 
 }

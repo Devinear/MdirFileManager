@@ -13,4 +13,5 @@
     <string name="menu_hide_show">Show hidden folder/files</string>
     <string name="sub_item">" item"</string>
     <string name="sub_items">" items"</string>
+    <string name="msg_empty">EMPTY</string>
 </resources>

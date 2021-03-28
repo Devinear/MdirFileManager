@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ResolveInfo
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -25,6 +26,10 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val files: LiveData<List<FileItemEx>>
         get() = _files
 
+    private val categoryFiles = mutableListOf<FileItemEx>()
+
+    var needRefresh : Boolean = false
+
     private val _openDir = MutableLiveData<FileItemEx>()
     val openDir: LiveData<FileItemEx>
         get() = _openDir
@@ -32,14 +37,13 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     private val _mode = MutableLiveData<BrowserType>()
     val mode: LiveData<BrowserType>
         get() = _mode
+    private var _category : Category? = null
+    val category: Category?
+        get() = _category
 
     private var _depthDir = MutableLiveData<List<String>>()
     val depthDir: LiveData<List<String>>
         get() = _depthDir
-
-    private val _category = MutableLiveData<List<FileItemEx>>()
-    val category: LiveData<List<FileItemEx>>
-        get() = _category
 
     private var _showOption = MutableLiveData<FileItemEx?>()
     val showOption: LiveData<FileItemEx?>
@@ -60,27 +64,51 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     init {
         _mode.value = BrowserType.Storage
         initFavorite()
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.initRepository()
+        }
+    }
+
+    fun clearFileItem() {
+        Log.d(TAG, "clearFileItem")
+        _files.value = null
     }
 
     fun loadCategory(category: Category, isShowSystem: Boolean = _showSystem) {
+        Log.d(TAG, "loadCategory")
         viewModelScope.launch(Dispatchers.Main) {
+            Log.d(TAG, "loadCategory viewModelScope")
+
             if(category == Category.Download) {
                 loadDirectory(FileUtil.LEGACY_DOWNLOAD)
                 return@launch
             }
+            _mode.value = BrowserType.Category
+            _category = category
 
-            val listCategory = repository.loadDirectory(
-                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem
-            )
-            favorites.forEach { favorite ->
-                listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
-            }
-            _files.postValue(listCategory)
+//            val listCategory = if(needRefresh || files.value?.isEmpty() != false) {
+//                repository.loadDirectory(
+//                    context = app, path = FileUtil.LEGACY_ROOT, category = category, isShowSystem = _showSystem)
+//            }
+//            else {
+//                files.value?.toMutableList() ?: mutableListOf()
+//            }
+//            val listCategory = repository.loadDirectory(
+//                    context = app, path = FileUtil.LEGACY_ROOT, category = category, refresh = false
+//            )
+//            favorites.forEach { favorite ->
+//                listCategory.find { it.absolutePath == favorite }?.favorite?.value = true
+//            }
+            categoryFiles.clear()
+            categoryFiles.addAll(repository.request(context = app, category = category))
+//            val listCategory = repository.request(context = app, category = category)
+            _files.postValue(categoryFiles)
 
             // DEPTHS
             _depthDir.postValue( MutableList(1) { category.name } )
 
-            requestThumbnail(listCategory)
+            requestThumbnail(categoryFiles)
 //            withContext(Dispatchers.IO) { requestThumbnail(listCategory) }
 //            Thread { requestThumbnail(listCategory) }.start()
         }
@@ -88,13 +116,20 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun loadDirectory(path: String = "", isShowSystem: Boolean = _showSystem) {
         viewModelScope.launch(Dispatchers.Main) {
+            _mode.value = BrowserType.Storage
+            _category = null
+
+            categoryFiles.clear()
+
             rootUri = if(path == "") { File(FileUtil.LEGACY_ROOT).toUri() } else { File(path).toUri() }
             val curPath : String = rootUri.path?:FileUtil.LEGACY_ROOT
+            val list = repository.loadDirectory(context = app, path = curPath, refresh = false)
 
-            val list = repository.loadDirectory(app, curPath, _showSystem)
+            // FAVORITE
             favorites.forEach { favorite ->
                 list.find { it.absolutePath == favorite }?.favorite?.value = true
             }
+
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
             if(curPath != FileUtil.LEGACY_ROOT) {
                 list.add(0, FileItemEx(path = curPath, isUpDir = true))
@@ -102,15 +137,66 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             _files.postValue(list)
 
             // DEPTHS
-            val depths = curPath.substringAfter(FileUtil.LEGACY_ROOT)
-                    .split('/')
-                    .toMutableList()
-                    .apply { removeIf { it.isEmpty() } }
-            _depthDir.postValue(depths)
+            _depthDir.postValue(changedDepth(depth = curPath))
 
             requestThumbnail(list)
         }
     }
+
+    private fun clickDirectory(directory: FileItemEx, isUpDir: Boolean = false) {
+        viewModelScope.launch(Dispatchers.Main) {
+
+            if(mode.value == BrowserType.Category) {
+                // Category는 무조건 깊이가 1이다.
+                if(isUpDir) {
+                    _files.postValue(categoryFiles)
+                    _depthDir.postValue( listOf(_category?.name?:"") )
+                }
+                else {
+                    val list = directory.subFiles
+
+                    _files.postValue(list.apply {
+                        removeAll { item -> return@removeAll item.exType == FileType.UpDir }
+                        add(0, FileItemEx(path = directory.absolutePath, isUpDir = true))
+                    })
+                    requestThumbnail(list)
+
+                    _category ?: return@launch
+                    _depthDir.postValue( listOf(_category!!.name, directory.simpleName) )
+                }
+            }
+            else {
+                // isUpDir 경우 실제로는 directory.up이 자기자신이 된다.
+                val target = if (isUpDir) directory.self ?: directory else directory
+                val targetUp = target.parentDir
+                val list = target.subFiles
+
+                // FAVORITE
+                favorites.forEach { favorite ->
+                    list.find { it.absolutePath == favorite }?.favorite?.value = true
+                }
+                _files.postValue(list.apply {
+                    removeAll { item -> return@removeAll item.exType == FileType.UpDir }
+//                if(isUpDir)
+//                    add(0, FileItemEx(path = directory.absolutePath, isUpDir = true).apply { self = directory })
+//                else
+                    if (targetUp != null) {
+                        add(0, FileItemEx(path = targetUp.absolutePath, isUpDir = true).apply { self = targetUp })
+                    }
+                })
+                requestThumbnail(list)
+
+                // DEPTHS
+                _depthDir.postValue(changedDepth(depth = target.absolutePath))
+
+            }
+        }
+    }
+
+    private fun changedDepth(depth: String) = depth.substringAfter(FileUtil.LEGACY_ROOT)
+            .split('/')
+            .toMutableList()
+            .apply { removeIf { it.isEmpty() } }
 
     fun loadFavorite() {
         viewModelScope.launch(Dispatchers.Main) {
@@ -123,8 +209,12 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     private fun requestThumbnail(list: MutableList<FileItemEx>) {
+        Log.d(TAG, "requestThumbnail")
         viewModelScope.launch(Dispatchers.IO) {
             list.forEach {
+                if(it.exType == FileType.UpDir)
+                    return@forEach
+
                 var image: BitmapDrawable? = null
                 val type = FileUtil.getFileExtType(it.extension)
                 if (it.isDirectory) {
@@ -162,6 +252,19 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun requestClickItem(item: FileItemEx) {
+        when (item.exType) {
+//            // 부모 폴더
+//            FileType.UpDir -> {loadDirectory(item.parent)}
+//            // 일반 폴더
+//            FileType.Dir -> {loadDirectory(item.path, false)}
+            // 폴더
+            FileType.UpDir, FileType.Dir -> clickDirectory(directory = item, isUpDir = item.exType == FileType.UpDir)
+            // 일반 파일
+            else -> execute(item)
+        }
+    }
+
+    fun requestPath(item: FileItemEx) {
         when (item.exType) {
             // 부모 폴더
             FileType.UpDir -> { loadDirectory(item.parent) }
@@ -249,4 +352,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         favorites.addAll(list)
     }
 
+    companion object {
+        private const val TAG = "[DE][VM] ViewModel"
+    }
 }

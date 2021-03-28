@@ -17,11 +17,16 @@ class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
     private var _isSystem : Boolean = false
     val isSystem : Boolean; get() = _isSystem
 
-    private var _simpleName : String = ""
-    val simpleName : String; get() = _simpleName
+//    private var _simpleName : String = ""
+//    val simpleName : String; get() = _simpleName
+    var simpleName : String = ""
 
     var liveDrawable = MutableLiveData<BitmapDrawable>()
     var favorite = MutableLiveData<Boolean>()
+
+    var parentDir : FileItemEx? = null
+    var self : FileItemEx? = null
+    val subFiles = mutableListOf<FileItemEx>()
 
     init {
         convert()
@@ -37,7 +42,8 @@ class FileItemEx(path: String, val isUpDir: Boolean = false) : File(path) {
             _exType = if (isDirectory) FileType.Dir else getFileType(getExtType(extension))
             _exTime = SimpleDateFormat("yy-MM-dd HH:mm", Locale.KOREA).format(Date(lastModified()))
             _isSystem = name.indexOf('.') == 0
-            _simpleName = if (isDirectory) name else getSimpleName(name)
+//            _simpleName = if (isDirectory) name else getSimpleName(name)
+            simpleName = if (isDirectory) name else getSimpleName(name)
         }
     }
 

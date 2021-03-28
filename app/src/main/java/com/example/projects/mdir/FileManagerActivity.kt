@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.ObservableArrayList
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -25,10 +27,11 @@ import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
 import com.example.projects.mdir.view.fragment.SettingFragment
 import com.google.android.material.appbar.AppBarLayout
+import kotlinx.android.synthetic.main.activity_file_manager.*
 import kotlinx.android.synthetic.main.activity_file_manager.view.*
 import kotlinx.coroutines.*
 
-class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), AppBarLayout.OnOffsetChangedListener, ViewModelStoreOwner, RequestListener {
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/* AppBarLayout.OnOffsetChangedListener,*/ ViewModelStoreOwner, RequestListener {
 
     private val viewModelStore = ViewModelStore()
     private val viewModel by lazy {
@@ -54,6 +57,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val appbar by lazy { findViewById<AppBarLayout>(R.id.appbar) }
+    private val progress by lazy { findViewById<ContentLoadingProgressBar>(R.id.progress) }
+//    private val progress2 by lazy { findViewById<ProgressBar>(R.id.progress2) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
@@ -77,12 +82,20 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 //        else
 //            appbar.setExpanded(false)
         appbar.setExpanded(true)
+        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val range = (-appBarLayout!!.totalScrollRange).toFloat()
+            iv_toolbar.imageAlpha = ((255 * (1.0f - verticalOffset.toFloat() / range)).toInt())
+        })
     }
 
     override fun onBackPressed() {
+        Log.d(TAG, "onBackPressed Fragment:$showFragment")
         super.onBackPressed()
         if(showFragment == FragmentType.Home) {
             finish()
+        }
+        else {
+            showFragment = FragmentType.Home
         }
     }
 
@@ -95,12 +108,14 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     override fun getViewModelStore(): ViewModelStore = viewModelStore
 
     /* AppBarLayout.OnOffsetChangedListener */
-    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-        TODO("Not yet implemented")
-    }
+//    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+////        TODO("Not yet implemented")
+//        val range = (-appBarLayout!!.totalScrollRange).toFloat()
+//        iv_toolbar.imageAlpha = ((255 * (1.0f - verticalOffset.toFloat() / range)).toInt())
+//    }
 
     private lateinit var menu: Menu
-    var isShowList = true
+//    var isShowList = true
     val liveShowType = MutableLiveData<Boolean>()
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -111,11 +126,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        Log.d(TAG, "onPrepareOptionsMenu Fragment:$showFragment")
+
         // Browser Fragment 보기 모드 변경 메뉴
         if(showFragment == FragmentType.Browser) {
             menu?.findItem(R.id.action_find)?.isVisible = true
-            menu?.findItem(R.id.action_list)?.isVisible = !isShowList
-            menu?.findItem(R.id.action_grid)?.isVisible = isShowList
+            menu?.findItem(R.id.action_list)?.isVisible = liveShowType.value ?: false
+            menu?.findItem(R.id.action_grid)?.isVisible = !(liveShowType.value ?: false)
         }
         else {
             menu?.findItem(R.id.action_find)?.isVisible = showFragment == FragmentType.Home
@@ -128,17 +145,15 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_list -> {
-                isShowList = true
-                liveShowType.postValue(isShowList)
-                menu.findItem(R.id.action_list)?.isVisible = !isShowList
-                menu.findItem(R.id.action_grid)?.isVisible = isShowList
+                liveShowType.postValue(true)
+                menu.findItem(R.id.action_list)?.isVisible = false
+                menu.findItem(R.id.action_grid)?.isVisible = true
                 true
             }
             R.id.action_grid -> {
-                isShowList = false
-                liveShowType.postValue(isShowList)
-                menu.findItem(R.id.action_list)?.isVisible = !isShowList
-                menu.findItem(R.id.action_grid)?.isVisible = isShowList
+                liveShowType.postValue(false)
+                menu.findItem(R.id.action_list)?.isVisible = true
+                menu.findItem(R.id.action_grid)?.isVisible = false
                 true
             }
             R.id.action_find -> {
@@ -169,6 +184,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 
     private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
 //        requestProgress(isShow = true)
+        Log.d(TAG, "changeFragment FragmentType:$type")
         showFragment = type
 
         when {
@@ -192,7 +208,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
         supportFragmentManager.beginTransaction().apply {
             when(showFragment) {
                 FragmentType.Home -> {
-                    replace(R.id.fragment_container, HomeFragment.INSTANCE.apply { requestListener = this@FileManagerActivity })
+                    replace(R.id.fragment_container,
+                            HomeFragment.INSTANCE.apply {
+                                requestListener = this@FileManagerActivity }
+                    )
                 }
                 FragmentType.Browser -> {
                     when(browserType) {
@@ -201,14 +220,25 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
                         }
                         BrowserType.Category -> {
                             category
-                                ?.run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Category, category = category)) }
-                                ?:run { replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage)) }
+                                ?.run { replace(R.id.fragment_container,
+                                        BrowserFragment.newInstance(type = BrowserType.Category, category = category)
+                                                .apply { requestListener = this@FileManagerActivity })
+                                }
+                                ?:run { replace(R.id.fragment_container,
+                                        BrowserFragment.newInstance(type = BrowserType.Storage)
+                                                .apply { requestListener = this@FileManagerActivity })
+                                }
                         }
                         else -> {
-                            replace(R.id.fragment_container, BrowserFragment.newInstance(type = BrowserType.Storage, path = path))
+                            replace(R.id.fragment_container,
+                                    BrowserFragment.newInstance(type = BrowserType.Storage, path = path)
+                                            .apply { requestListener = this@FileManagerActivity }
+                            )
                         }
                     }
-                    liveShowType.postValue(isShowList)
+                    val showList = browserType != BrowserType.Category ||
+                            (category == Category.Download || category == Category.APK || category == Category.Document)
+                    liveShowType.postValue(showList)
                 }
                 FragmentType.Find -> {
                     replace(R.id.fragment_container, FindFragment.INSTANCE)
@@ -242,6 +272,18 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
             changeFragment()
 //            updateFileList()
         }
+    }
+
+    override fun onRequestProgressBar(show : Boolean) {
+        Log.d(TAG, "onRequestProgressBar show:$show")
+        progress.visibility = if(show) View.VISIBLE else View.GONE
+//        progress2.visibility = View.VISIBLE
+
+
+//        when(show) {
+//            true -> progress.show()
+//            false -> progress.hide()
+//        }
     }
 
     override fun onRequestStoragePath(path: String) {
@@ -408,12 +450,12 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 
     fun requestStorage(path: String = "") {
         // 차후에 드라이브를 추가하게되면 타입을 늘리자.
-        Toast.makeText(this, "Storage", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "requestStorage path:$path")
         changeFragment(type = FragmentType.Browser, browserType = BrowserType.Storage, path = path)
     }
 
     fun requestCategory(type: Category) {
-        Toast.makeText(this, "Category[${type.name}]", Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "requestCategory type:${type.name}")
         changeFragment(type = FragmentType.Browser, browserType = BrowserType.Category, category = type)
     }
 
@@ -433,7 +475,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), A
 
     companion object {
         const val GRID_ITEM_WIDTH_DP = 120
-        const val TAG = "FileManagerActivity"
+        const val TAG = "[DE] Activity"
         const val REQUEST_CODE = 1
     }
 }
