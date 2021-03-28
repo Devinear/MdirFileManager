@@ -237,7 +237,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
                         }
                     }
                     val showList = browserType != BrowserType.Category ||
-                            (category == Category.Download || category == Category.APK)
+                            (category == Category.Download || category == Category.APK || category == Category.Document)
                     liveShowType.postValue(showList)
                 }
                 FragmentType.Find -> {
