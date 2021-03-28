@@ -93,6 +93,9 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
         if(showFragment == FragmentType.Home) {
             finish()
         }
+        else {
+            showFragment = FragmentType.Home
+        }
     }
 
     override fun onDestroy() {

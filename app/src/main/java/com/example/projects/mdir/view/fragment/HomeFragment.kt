@@ -74,6 +74,9 @@ class HomeFragment : Fragment() {
         val favoriteSize = viewModel.favorites.size
         binding.laFavorite.visibility = if(favoriteSize > 0) View.VISIBLE else View.GONE
         binding.ibFavorite.visibility = if(favoriteSize > FAVORITE_MAX_VISIBLE_COUNT) View.VISIBLE else View.GONE
+
+        // Back키로 Home으로 돌아온 경우 메뉴 초기화 작업
+        activity.invalidateOptionsMenu()
     }
 
     fun onFavorite(item: FileItemEx) {
