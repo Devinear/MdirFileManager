@@ -49,6 +49,7 @@
             android:id="@+id/tv_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
             app:layout_constraintHorizontal_weight="0.5"
             android:fontFamily="@font/dos_m"
             android:textSize="@dimen/recycler_grid_item_text_size"
