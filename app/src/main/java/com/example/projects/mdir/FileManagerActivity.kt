@@ -89,6 +89,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
     }
 
     override fun onBackPressed() {
+        Log.d(TAG, "onBackPressed Fragment:$showFragment")
         super.onBackPressed()
         if(showFragment == FragmentType.Home) {
             finish()
@@ -125,6 +126,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        Log.d(TAG, "onPrepareOptionsMenu Fragment:$showFragment")
+
         // Browser Fragment 보기 모드 변경 메뉴
         if(showFragment == FragmentType.Browser) {
             menu?.findItem(R.id.action_find)?.isVisible = true
@@ -181,6 +184,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
 
     private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
 //        requestProgress(isShow = true)
+        Log.d(TAG, "changeFragment FragmentType:$type")
         showFragment = type
 
         when {
