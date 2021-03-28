@@ -3,6 +3,7 @@ package com.example.projects.mdir.view.fragment
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
+        Log.d(TAG, "onAttach")
         super.onAttach(context)
         activity = getActivity() as FileManagerActivity
         viewModel = ViewModelProvider(activity as ViewModelStoreOwner).get(FileViewModel::class.java)
@@ -44,6 +46,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "onCreateView")
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             R.layout.layout_home,
@@ -58,6 +61,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initUi() {
+        Log.d(TAG, "initUi")
         binding.reFavorite.adapter = HomeAdapter(fragment = this).apply {
             val favorites = viewModel.favorites
             val items = mutableListOf<FileItemEx>()
@@ -80,6 +84,7 @@ class HomeFragment : Fragment() {
     }
 
     fun onFavorite(item: FileItemEx) {
+        Log.d(TAG, "onFavorite Item:${item.name}")
         when (item.exType) {
             FileType.Dir -> { requestListener?.onRequestStoragePath(item.absolutePath) }
             else -> { viewModel.requestClickItem(item) }
@@ -90,7 +95,7 @@ class HomeFragment : Fragment() {
         val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             HomeFragment()
         }
-
+        private const val TAG = "[DE][FR] HOME"
         const val FAVORITE_MAX_VISIBLE_COUNT = 5
     }
 }
