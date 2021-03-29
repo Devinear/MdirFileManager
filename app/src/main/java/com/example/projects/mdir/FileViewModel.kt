@@ -72,14 +72,14 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         _files.value = null
     }
 
-//    fun requestSort(fir: Pair<SortBy, SortOrder>, sec: Pair<SortBy, SortOrder>) {
-//        Log.d(TAG, "requestSort Fir:$fir Sec:$sec")
-//        viewModelScope.launch(Dispatchers.Main) {
-//            val list = _files.value?.toMutableList()
-//
-//            _files.postValue(list)
-//        }
-//    }
+    fun requestRefreshSort() {
+        Log.d(TAG, "requestRefreshSort")
+        viewModelScope.launch(Dispatchers.Main) {
+            val list = _files.value?.toMutableList() ?: return@launch
+            sort(list)
+            _files.postValue(list)
+        }
+    }
 
     private fun sort(list: MutableList<FileItemEx>) {
         val fir = Setting.sortPairFir
