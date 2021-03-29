@@ -12,10 +12,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.*
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
-import com.example.projects.mdir.repository.AbsStorageRepository
-import com.example.projects.mdir.repository.FavoriteRepository
-import com.example.projects.mdir.repository.LegacyStorageRepository
-import com.example.projects.mdir.repository.ThumbnailRepository
+import com.example.projects.mdir.repository.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -75,6 +72,51 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
         _files.value = null
     }
 
+//    fun requestSort(fir: Pair<SortBy, SortOrder>, sec: Pair<SortBy, SortOrder>) {
+//        Log.d(TAG, "requestSort Fir:$fir Sec:$sec")
+//        viewModelScope.launch(Dispatchers.Main) {
+//            val list = _files.value?.toMutableList()
+//
+//            _files.postValue(list)
+//        }
+//    }
+
+    private fun sort(list: MutableList<FileItemEx>) {
+        val fir = Setting.sortPairFir
+        val sec = Setting.sortPairSec
+
+        list.sortWith(kotlin.Comparator { o1, o2 ->
+            innerComparator(o1, o2, fir).let {
+                // 1차 정렬 결과가 동등하다면 2차 정렬을 실행함.
+                if(it != 0)
+                    return@Comparator it
+                else
+                    return@Comparator innerComparator(o1, o2, sec)
+            }
+        })
+
+    }
+
+    private fun innerComparator(o1: FileItemEx, o2: FileItemEx, sort: Pair<SortBy, SortOrder>) : Int {
+        val ascending = if(sort.second == SortOrder.Ascending) 1 else -1
+        return when(sort.first) {
+            is SortBy.Name -> o1.name.compareTo(o2.name) * ascending
+            is SortBy.Date -> (o1.lastModified() - o2.lastModified()).toInt() * ascending
+            is SortBy.Size -> (o1.length() - o2.length()).toInt() * ascending
+            is SortBy.Type -> (o1.exType.sort - o2.exType.sort) * ascending
+            else/*is SortBy.Favorite*/ -> {
+                val _o1 = o1.favorite.value ?: false
+                val _o2 = o2.favorite.value ?: false
+                when {
+                    _o1 && _o2  -> 0
+                    _o1 && !_o2 -> ascending
+                    else        -> -ascending
+                }
+            }
+
+        }
+    }
+
     fun loadCategory(category: Category, isShowSystem: Boolean = _showSystem) {
         Log.d(TAG, "loadCategory")
         viewModelScope.launch(Dispatchers.Main) {
@@ -103,6 +145,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             categoryFiles.clear()
             categoryFiles.addAll(repository.request(context = app, category = category))
 //            val listCategory = repository.request(context = app, category = category)
+
+            sort(categoryFiles)
             _files.postValue(categoryFiles)
 
             // DEPTHS
@@ -129,6 +173,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
             favorites.forEach { favorite ->
                 list.find { it.absolutePath == favorite }?.favorite?.value = true
             }
+            sort(list)
 
             // 최상위 폴더가 아닌 경우 UP_DIR TYPE Item 추가
             if(curPath != FileUtil.LEGACY_ROOT) {
