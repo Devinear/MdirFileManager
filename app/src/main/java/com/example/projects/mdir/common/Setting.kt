@@ -10,5 +10,5 @@ object Setting {
     var hideSystem = true // 파일(폴더)의 이름이 '.'으로 시작한 경우 해당 파일(폴더, 하위 포함)을 숨긴다.
 
     var sortPairFir : Pair<SortBy, SortOrder> = Pair(SortBy.Type, SortOrder.Ascending)
-    var sortPairSec : Pair<SortBy, SortOrder> = Pair(SortBy.Type, SortOrder.Ascending)
+    var sortPairSec : Pair<SortBy, SortOrder> = Pair(SortBy.Name, SortOrder.Ascending)
 }
