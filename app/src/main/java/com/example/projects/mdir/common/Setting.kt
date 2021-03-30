@@ -8,7 +8,9 @@ object Setting {
     // 일반 파일 보는 동작의 경우에는 보여야 한다.
     var hideNomedia = true
     var hideSystem = true // 파일(폴더)의 이름이 '.'으로 시작한 경우 해당 파일(폴더, 하위 포함)을 숨긴다.
+}
 
+object Sort {
     var sortPairFir : Pair<SortBy, SortOrder> = Pair(SortBy.Type, SortOrder.Ascending)
     var sortPairSec : Pair<SortBy, SortOrder> = Pair(SortBy.Name, SortOrder.Ascending)
 }
