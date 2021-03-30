@@ -131,11 +131,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
         // Browser Fragment 보기 모드 변경 메뉴
         if(showFragment == FragmentType.Browser) {
             menu?.findItem(R.id.action_find)?.isVisible = true
+            menu?.findItem(R.id.action_sort)?.isVisible = true
             menu?.findItem(R.id.action_list)?.isVisible = liveShowType.value ?: false
             menu?.findItem(R.id.action_grid)?.isVisible = !(liveShowType.value ?: false)
         }
         else {
             menu?.findItem(R.id.action_find)?.isVisible = showFragment == FragmentType.Home
+            menu?.findItem(R.id.action_sort)?.isVisible = false
             menu?.findItem(R.id.action_list)?.isVisible = false
             menu?.findItem(R.id.action_grid)?.isVisible = false
         }
@@ -154,6 +156,10 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
                 liveShowType.postValue(false)
                 menu.findItem(R.id.action_list)?.isVisible = true
                 menu.findItem(R.id.action_grid)?.isVisible = false
+                true
+            }
+            R.id.action_sort -> {
+
                 true
             }
             R.id.action_find -> {

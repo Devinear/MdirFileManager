@@ -18,6 +18,11 @@
         android:title="Gird"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/action_sort"
+        android:icon="@drawable/outline_filter_alt_white_24"
+        android:title="Sort"
+        app:showAsAction="never"/>
+
     <item android:id="@+id/action_settings"
         android:title="Setting"
         app:showAsAction=""/>

@@ -82,8 +82,8 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     private fun sort(list: MutableList<FileItemEx>) {
-        val fir = Setting.sortPairFir
-        val sec = Setting.sortPairSec
+        val fir = Sort.sortPairFir
+        val sec = Sort.sortPairSec
 
         list.sortWith(kotlin.Comparator { o1, o2 ->
             innerComparator(o1, o2, fir).let {
