@@ -13,18 +13,19 @@
         android:title="Gird"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/action_find"
-        android:icon="@drawable/outline_find_in_page_white_24"
-        android:title="Find"
-        app:showAsAction="ifRoom"/>
-
     <item android:id="@+id/action_sort"
         android:icon="@drawable/outline_filter_alt_white_24"
         android:title="Sort"
         app:showAsAction="ifRoom"/>
 
+    <item android:id="@+id/action_find"
+        android:icon="@drawable/outline_find_in_page_white_24"
+        android:title="Find"
+        app:showAsAction="ifRoom"/>
+
     <item android:id="@+id/action_settings"
+        android:icon="@drawable/outline_pets_white_24"
         android:title="Setting"
-        app:showAsAction=""/>
+        app:showAsAction="ifRoom"/>
 
 </menu>
