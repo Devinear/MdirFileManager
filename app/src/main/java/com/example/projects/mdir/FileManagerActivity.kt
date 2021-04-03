@@ -159,6 +159,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
                 true
             }
             R.id.action_sort -> {
+                SortDialog(context = this, viewModel = viewModel).run { show() }
 
                 true
             }
