@@ -6,6 +6,9 @@
     <data>
         <import type="com.example.projects.mdir.view.SortViewModel" />
         <variable name="vm" type="SortViewModel" />
+
+        <import type="com.example.projects.mdir.view.SortDialog" />
+        <variable name="dialog" type="SortDialog" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +34,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            android:background="@color/color30Gray"
+            android:background="@android:color/white"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:layout_constraintBottom_toTopOf="@id/tv_fir" />
 
@@ -48,6 +51,7 @@
             android:id="@+id/sp_fir_sort"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
+            android:spinnerMode="dropdown"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toBottomOf="@id/tv_fir"
             app:layout_constraintBottom_toTopOf="@id/tv_sec"
@@ -66,7 +70,7 @@
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/SortInnerTextView"
             android:id="@+id/tv_sec"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="두번째 정렬"
             app:layout_constraintTop_toBottomOf="@id/sp_fir_sort"
             app:layout_constraintBottom_toTopOf="@id/sp_sec_sort"
@@ -95,8 +99,9 @@
         <androidx.appcompat.widget.AppCompatButton
             style="@style/DialogButton"
             android:id="@+id/btn_ok"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="OK"
+            android:onClick="@{()->dialog.onClickOk() }"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toBottomOf="@id/sp_sec_sort"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -107,6 +112,7 @@
             style="@style/DialogButton"
             android:id="@+id/btn_cancel"
             android:text="Cancel"
+            android:onClick="@{()->dialog.onClickCancel() }"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toTopOf="@id/btn_ok"
             app:layout_constraintBottom_toBottomOf="@id/btn_ok"
