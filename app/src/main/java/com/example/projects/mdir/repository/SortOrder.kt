@@ -5,7 +5,7 @@ package com.example.projects.mdir.repository
 //    internal object Descending : SortOrder()
 //}
 
-enum class SortOrder {
-    Ascending,
-    Descending,
+enum class SortOrder(val position : Int) {
+    Ascending(0),
+    Descending(1),
 }

@@ -13,15 +13,14 @@ import com.example.projects.R
 import com.example.projects.databinding.LayoutSortBinding
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
+import com.example.projects.mdir.common.Sort
 import com.example.projects.mdir.repository.SortBy
 import com.example.projects.mdir.repository.SortOrder
 
-class SortDialog(context: Context, val viewModel: FileViewModel) : Dialog(context), ViewModelStoreOwner {
+class SortDialog(context: Context, val viewModel: FileViewModel) : Dialog(context)/*, ViewModelStoreOwner*/ {
 
-    private val sortViewModel = SortViewModel()
     private val binding : LayoutSortBinding
         = LayoutSortBinding.bind(View.inflate(context, R.layout.layout_sort, null))
-        .apply { vm = sortViewModel }
 
     init {
         setContentView(binding.root)
@@ -29,30 +28,51 @@ class SortDialog(context: Context, val viewModel: FileViewModel) : Dialog(contex
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.spFirSort.adapter = SortAdapter(context, SortBy.values())
-        binding.spFirOrder.adapter = SortAdapter(context, SortOrder.values())
 
-        binding.spSecSort.adapter = SortAdapter(context, SortBy.values())
-        binding.spSecOrder.adapter = SortAdapter(context, SortOrder.values())
+        val fir = Sort.sortPairFir
+        val sec = Sort.sortPairSec
+        with(binding) {
+            spFirSort.adapter = SortAdapter(context, SortBy.values())
+            spFirSort.setSelection(fir.first.position)
+            spFirOrder.adapter = SortAdapter(context, SortOrder.values())
+            spFirOrder.setSelection(fir.second.position)
 
-        observeViewModel()
-    }
+            spSecSort.adapter = SortAdapter(context, SortBy.values())
+            spSecSort.setSelection(sec.first.position)
+            spSecOrder.adapter = SortAdapter(context, SortOrder.values())
+            spSecOrder.setSelection(sec.second.position)
 
-    override fun dismiss() {
-        super.dismiss()
+            dialog = this@SortDialog
+        }
     }
 
     fun onClickOk() {
+        Sort.sortPairFir =
+                Pair(getSortBy(binding.spFirSort.selectedItemPosition), getSortOrder(binding.spFirOrder.selectedItemPosition))
+        Sort.sortPairSec =
+                Pair(getSortBy(binding.spSecSort.selectedItemPosition), getSortOrder(binding.spSecOrder.selectedItemPosition))
+
+        viewModel.requestRefreshSort()
+
         dismiss()
+    }
+
+    private fun getSortBy(position: Int) : SortBy
+    = when(position) {
+        SortBy.Name.position -> SortBy.Name
+        SortBy.Type.position -> SortBy.Type
+        SortBy.Size.position -> SortBy.Size
+        SortBy.Date.position -> SortBy.Date
+        else -> SortBy.Favorite
+    }
+
+    private fun getSortOrder(position: Int) : SortOrder
+    = when(position) {
+        SortOrder.Ascending.position -> SortOrder.Ascending
+        else -> SortOrder.Descending
     }
 
     fun onClickCancel() {
         dismiss()
-    }
-
-    override fun getViewModelStore(): ViewModelStore = viewModelStore
-
-    private fun observeViewModel() {
-
     }
 }

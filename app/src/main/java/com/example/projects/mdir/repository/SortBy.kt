@@ -8,10 +8,10 @@ package com.example.projects.mdir.repository
 //    internal object Favorite : SortBy()
 //}
 
-enum class SortBy {
-    Name,
-    Type,
-    Size,
-    Date,
-    Favorite,
+enum class SortBy(val position : Int) {
+    Name(0),
+    Type(1),
+    Size(2),
+    Date(3),
+    Favorite(4),
 }
