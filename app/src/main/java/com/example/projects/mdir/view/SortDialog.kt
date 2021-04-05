@@ -22,10 +22,6 @@ class SortDialog(context: Context, val viewModel: FileViewModel) : Dialog(contex
     private val binding : LayoutSortBinding
         = LayoutSortBinding.bind(View.inflate(context, R.layout.layout_sort, null))
 
-    init {
-        setContentView(binding.root)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,6 +40,8 @@ class SortDialog(context: Context, val viewModel: FileViewModel) : Dialog(contex
 
             dialog = this@SortDialog
         }
+
+        setContentView(binding.root)
     }
 
     fun onClickOk() {
