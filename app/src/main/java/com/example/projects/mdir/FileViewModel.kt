@@ -98,6 +98,9 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     private fun innerComparator(o1: FileItemEx, o2: FileItemEx, sort: Pair<SortBy, SortOrder>) : Int {
+        if(o1.parent == o2.absolutePath) return 1
+        else if(o1.absolutePath == o2.parent) return -1
+
         val ascending = if(sort.second == SortOrder.Ascending) 1 else -1
         return when(sort.first) {
             /*is*/ SortBy.Name -> o1.name.compareTo(o2.name) * ascending
