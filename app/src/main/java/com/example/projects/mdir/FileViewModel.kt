@@ -103,7 +103,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
 
         val ascending = if(sort.second == SortOrder.Ascending) 1 else -1
         return when(sort.first) {
-            /*is*/ SortBy.Name -> o1.name.compareTo(o2.name) * ascending
+            /*is*/ SortBy.Name -> o1.name.toLowerCase().compareTo(o2.name.toLowerCase()) * ascending
             /*is*/ SortBy.Date -> (o1.lastModified() - o2.lastModified()).toInt() * ascending
             /*is*/ SortBy.Size -> (o1.length() - o2.length()).toInt() * ascending
             /*is*/ SortBy.Type -> (o1.exType.sort - o2.exType.sort) * ascending
