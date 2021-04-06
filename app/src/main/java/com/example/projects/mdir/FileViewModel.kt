@@ -201,12 +201,12 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
                     _depthDir.postValue( listOf(_category?.name?:"") )
                 }
                 else {
-                    val list = directory.subFiles
-
-                    _files.postValue(list.apply {
+                    val list = directory.subFiles.apply {
                         removeAll { item -> return@removeAll item.exType == FileType.UpDir }
                         add(0, FileItemEx(path = directory.absolutePath, isUpDir = true))
-                    })
+                    }
+                    sort(list)
+                    _files.postValue(list)
                     requestThumbnail(list)
 
                     _category ?: return@launch
