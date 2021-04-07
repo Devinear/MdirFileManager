@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <data>
+        <import type="com.example.projects.mdir.view.SortDialog" />
+        <variable name="dialog" type="SortDialog" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/la_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="@drawable/dialog_border"
+        android:orientation="vertical" >
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/SortTitleTextView"
+            android:id="@+id/tv_title"
+            android:text="정렬"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/divider" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintBottom_toTopOf="@id/tv_fir" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/SortInnerTextView"
+            android:id="@+id/tv_fir"
+            android:text="첫번째 정렬"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:layout_constraintBottom_toTopOf="@id/sp_fir_sort"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/SortSpinner"
+            android:id="@+id/sp_fir_sort"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/tv_fir"
+            app:layout_constraintBottom_toTopOf="@id/tv_sec"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/sp_fir_order" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/SortSpinner"
+            android:id="@+id/sp_fir_order"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@id/sp_fir_sort"
+            app:layout_constraintBottom_toBottomOf="@id/sp_fir_sort"
+            app:layout_constraintStart_toEndOf="@id/sp_fir_sort"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/SortInnerTextView"
+            android:id="@+id/tv_sec"
+            android:layout_marginTop="20dp"
+            android:text="두번째 정렬"
+            app:layout_constraintTop_toBottomOf="@id/sp_fir_sort"
+            app:layout_constraintBottom_toTopOf="@id/sp_sec_sort"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/SortSpinner"
+            android:id="@+id/sp_sec_sort"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/tv_sec"
+            app:layout_constraintBottom_toTopOf="@id/btn_ok"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/sp_sec_order" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            style="@style/SortSpinner"
+            android:id="@+id/sp_sec_order"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@id/sp_sec_sort"
+            app:layout_constraintBottom_toBottomOf="@id/sp_sec_sort"
+            app:layout_constraintStart_toEndOf="@id/sp_sec_sort"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/DialogButton"
+            android:id="@+id/btn_ok"
+            android:layout_marginTop="20dp"
+            android:text="OK"
+            android:onClick="@{()->dialog.onClickOk() }"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toBottomOf="@id/sp_sec_sort"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_cancel" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/DialogButton"
+            android:id="@+id/btn_cancel"
+            android:text="Cancel"
+            android:onClick="@{()->dialog.onClickCancel() }"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@id/btn_ok"
+            app:layout_constraintBottom_toBottomOf="@id/btn_ok"
+            app:layout_constraintStart_toEndOf="@id/btn_ok"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

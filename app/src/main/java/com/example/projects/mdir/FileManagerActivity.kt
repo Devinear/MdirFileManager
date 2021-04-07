@@ -22,6 +22,7 @@ import com.example.projects.R
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.RequestListener
+import com.example.projects.mdir.view.SortDialog
 import com.example.projects.mdir.view.fragment.BrowserFragment
 import com.example.projects.mdir.view.fragment.FindFragment
 import com.example.projects.mdir.view.fragment.HomeFragment
@@ -131,11 +132,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
         // Browser Fragment 보기 모드 변경 메뉴
         if(showFragment == FragmentType.Browser) {
             menu?.findItem(R.id.action_find)?.isVisible = true
+            menu?.findItem(R.id.action_sort)?.isVisible = true
             menu?.findItem(R.id.action_list)?.isVisible = liveShowType.value ?: false
             menu?.findItem(R.id.action_grid)?.isVisible = !(liveShowType.value ?: false)
         }
         else {
             menu?.findItem(R.id.action_find)?.isVisible = showFragment == FragmentType.Home
+            menu?.findItem(R.id.action_sort)?.isVisible = false
             menu?.findItem(R.id.action_list)?.isVisible = false
             menu?.findItem(R.id.action_grid)?.isVisible = false
         }
@@ -154,6 +157,11 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
                 liveShowType.postValue(false)
                 menu.findItem(R.id.action_list)?.isVisible = true
                 menu.findItem(R.id.action_grid)?.isVisible = false
+                true
+            }
+            R.id.action_sort -> {
+                SortDialog(context = this, viewModel = viewModel).run { show() }
+
                 true
             }
             R.id.action_find -> {
