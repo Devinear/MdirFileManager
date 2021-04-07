@@ -111,7 +111,7 @@
             app:lifecycleOwner="@{owner}"
             app:fragment="@{fragment}"
             tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            tools:spanCount="3"
+            tools:spanCount="4"
             tools:listitem="@layout/item_grid_file" />
             <!--
             app:viewModel="@{viewModel}"
