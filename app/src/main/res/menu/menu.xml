@@ -3,23 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_find"
-        android:icon="@drawable/outline_find_in_page_white_24"
-        android:title="Find"
-        app:showAsAction="always"/>
-
     <item android:id="@+id/action_list"
         android:icon="@drawable/outline_list_white_24"
         android:title="List"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
     <item android:id="@+id/action_grid"
         android:icon="@drawable/outline_grid_on_white_24"
         android:title="Gird"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_sort"
+        android:icon="@drawable/outline_filter_alt_white_24"
+        android:title="Sort"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/action_find"
+        android:icon="@drawable/outline_find_in_page_white_24"
+        android:title="Find"
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_settings"
+        android:icon="@drawable/outline_pets_white_24"
         android:title="Setting"
-        app:showAsAction=""/>
+        app:showAsAction="ifRoom"/>
 
 </menu>
