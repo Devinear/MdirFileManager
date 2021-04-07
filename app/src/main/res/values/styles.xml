@@ -127,46 +127,4 @@
         <item name="android:drawablePadding">16dp</item>
     </style>
 
-    <style name="SortTitleTextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:textSize">22dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/dos_m</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="SortInnerTextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textAlignment">viewStart</item>
-        <item name="android:textSize">20dp</item>
-        <item name="android:fontFamily">@font/dos_m</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="SortSpinner">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">5dp</item>
-        <item name="android:layout_marginEnd">5dp</item>
-        <item name="android:overlapAnchor">false</item>
-        <item name="android:spinnerMode">dropdown</item> <!--dialog-->
-        <item name="android:background">@drawable/spinner_background</item> <!--dialog-->
-        <item name="android:dropDownListViewStyle">@style/SpinnerDivideStyle</item>
-    </style>
-
-    <style name="SpinnerDivideStyle" parent="android:style/Widget.ListView.DropDown">
-        <item name="android:divider">@android:color/white</item> <!-- divider 색 -->
-        <item name="android:dividerHeight">2dp</item> <!-- divider 높이 -->
-    </style>
-
-    <style name="DialogButton">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16dp</item>
-        <item name="android:fontFamily">@font/dos_m</item>
-    </style>
-
 </resources>
