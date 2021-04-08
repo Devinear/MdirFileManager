@@ -59,7 +59,6 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val appbar by lazy { findViewById<AppBarLayout>(R.id.appbar) }
     private val progress by lazy { findViewById<ContentLoadingProgressBar>(R.id.progress) }
-//    private val progress2 by lazy { findViewById<ProgressBar>(R.id.progress2) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
