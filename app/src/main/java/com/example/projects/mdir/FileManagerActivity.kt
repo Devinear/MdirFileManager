@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.activity_file_manager.*
 import kotlinx.android.synthetic.main.activity_file_manager.view.*
 import kotlinx.coroutines.*
 
-class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/* AppBarLayout.OnOffsetChangedListener,*/ ViewModelStoreOwner, RequestListener {
+class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), ViewModelStoreOwner, RequestListener {
 
     private val viewModelStore = ViewModelStore()
     private val viewModel by lazy {
@@ -107,13 +107,6 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager),/*
 
     /* ViewModelStoreOwner */
     override fun getViewModelStore(): ViewModelStore = viewModelStore
-
-    /* AppBarLayout.OnOffsetChangedListener */
-//    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
-////        TODO("Not yet implemented")
-//        val range = (-appBarLayout!!.totalScrollRange).toFloat()
-//        iv_toolbar.imageAlpha = ((255 * (1.0f - verticalOffset.toFloat() / range)).toInt())
-//    }
 
     private lateinit var menu: Menu
 //    var isShowList = true
