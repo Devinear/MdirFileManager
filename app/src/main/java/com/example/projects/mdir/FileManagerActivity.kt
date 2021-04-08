@@ -22,6 +22,7 @@ import com.example.projects.R
 import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.RequestListener
+import com.example.projects.mdir.view.CustomCoordinatorLayout
 import com.example.projects.mdir.view.SortDialog
 import com.example.projects.mdir.view.fragment.BrowserFragment
 import com.example.projects.mdir.view.fragment.FindFragment
@@ -96,6 +97,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
         }
         else {
             showFragment = FragmentType.Home
+            (coordinator as CustomCoordinatorLayout).allowForScroll = true
         }
     }
 
@@ -189,16 +191,11 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 
         when {
             showFragment != FragmentType.Home -> {
-
-                // Visible을 바꾸는건 자연스럽지 못하다...
-//                appbar.iv_toolbar.visibility = View.INVISIBLE
-//                appbar.setExpanded(false, true)
-
-//                GlobalScope.launch {
-//                    delay(1000L)
-//                    appbar.setExpanded(false, true)
-//                    appbar.iv_toolbar.visibility = View.VISIBLE
-//                }
+                appbar.setExpanded(false)
+                (coordinator as CustomCoordinatorLayout).allowForScroll = false
+            }
+            else -> {
+                (coordinator as CustomCoordinatorLayout).allowForScroll = true
             }
         }
 
