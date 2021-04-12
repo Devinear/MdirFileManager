@@ -22,6 +22,7 @@ import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.BrowserType
 import com.example.projects.mdir.common.Category
+import com.example.projects.mdir.common.Image
 import com.example.projects.mdir.common.LayoutType
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.RequestListener
@@ -36,7 +37,7 @@ class BrowserFragment : Fragment() {
         private const val TAG = "[DE][FR] BROWSER"
         private const val PATH = "path"
         private const val TYPE = "type"
-        private const val GRID_ITEM_WIDTH_DP = 150
+        private val GRID_ITEM_WIDTH_DP = Image.widthGridItemDp
 
 //        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
 //            BrowserFragment()
