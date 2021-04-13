@@ -142,13 +142,13 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.action_list -> {
-                liveShowType.postValue(true)
+                liveShowType.postValue(false)
                 menu.findItem(R.id.action_list)?.isVisible = false
                 menu.findItem(R.id.action_grid)?.isVisible = true
                 true
             }
             R.id.action_grid -> {
-                liveShowType.postValue(false)
+                liveShowType.postValue(true)
                 menu.findItem(R.id.action_list)?.isVisible = true
                 menu.findItem(R.id.action_grid)?.isVisible = false
                 true
