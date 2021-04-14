@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="fragment"
+            type="com.example.projects.mdir.view.fragment.SettingFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,6 +46,7 @@
             android:layout_height="wrap_content"
             android:button="@null"
             android:background="@drawable/setting_check_box"
+            android:onClick="@{()->fragment.onCheckedShowFiles()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_title_show_file"
             app:layout_constraintBottom_toBottomOf="@id/tv_sub_show_file" />
