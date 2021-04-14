@@ -163,7 +163,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
                 true
             }
             R.id.action_settings -> {
-                changeFragment(FragmentType.Browser)
+                changeFragment(FragmentType.Setting)
                 true
             }
             android.R.id.home -> {

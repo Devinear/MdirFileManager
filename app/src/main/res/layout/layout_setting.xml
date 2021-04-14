@@ -1,17 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="30dp" >
 
         <TextView
+            android:id="@+id/tv_title_show_file"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="SETTING" />
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dos_m"
+            android:textColor="@color/colorLightGray"
+            android:textStyle="bold"
+            android:textSize="24dp"
+            android:text="Show Hidden Files"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_sub_show_file" />
+        <!--숨김 파일 표시-->
+        <TextView
+            android:id="@+id/tv_sub_show_file"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/dos_m"
+            android:textColor="@color/colorGrey"
+            android:textSize="16dp"
+            android:text="Show hidden system files."
+            app:layout_constraintTop_toBottomOf="@id/tv_title_show_file"
+            app:layout_constraintBottom_toTopOf="@id/tv_sub_show_file" />
+        <!--숨겨진 시스템 파일을 표시합니다.-->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/ckb_show_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:background="@drawable/setting_check_box"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_title_show_file"
+            app:layout_constraintBottom_toBottomOf="@id/tv_sub_show_file" />
+        <View
+            android:id="@+id/divider_show_file"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/color30Gray"
+            app:layout_constraintTop_toBottomOf="@id/tv_sub_show_file" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
