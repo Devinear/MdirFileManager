@@ -97,6 +97,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
         }
         else {
             showFragment = FragmentType.Home
+            appbar.setExpanded(true, true)
             (coordinator as CustomCoordinatorLayout).allowForScroll = true
         }
     }
@@ -195,6 +196,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
                 (coordinator as CustomCoordinatorLayout).allowForScroll = false
             }
             else -> {
+                appbar.setExpanded(true, true)
                 (coordinator as CustomCoordinatorLayout).allowForScroll = true
             }
         }
