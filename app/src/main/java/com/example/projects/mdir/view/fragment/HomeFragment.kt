@@ -16,9 +16,12 @@ import com.example.projects.databinding.LayoutHomeBinding
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
 import com.example.projects.mdir.common.FileType
+import com.example.projects.mdir.common.FragmentType
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.RequestListener
+import com.example.projects.mdir.view.CustomCoordinatorLayout
 import com.example.projects.mdir.view.HomeAdapter
+import kotlinx.android.synthetic.main.activity_file_manager.*
 
 class HomeFragment : Fragment() {
 
@@ -89,6 +92,12 @@ class HomeFragment : Fragment() {
             FileType.Dir -> { requestListener?.onRequestStoragePath(item.absolutePath) }
             else -> { viewModel.requestClickItem(item) }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume")
+        (activity as FileManagerActivity).showFragment = FragmentType.Home
     }
 
     companion object {

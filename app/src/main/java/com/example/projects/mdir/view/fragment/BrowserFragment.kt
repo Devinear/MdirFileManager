@@ -20,10 +20,7 @@ import com.example.projects.R
 import com.example.projects.databinding.LayoutBrowserBinding
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.FileViewModel
-import com.example.projects.mdir.common.BrowserType
-import com.example.projects.mdir.common.Category
-import com.example.projects.mdir.common.Image
-import com.example.projects.mdir.common.LayoutType
+import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.*
@@ -158,6 +155,7 @@ class BrowserFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "onResume")
+        (activity as FileManagerActivity).showFragment = FragmentType.Browser
     }
 
     private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }

@@ -53,7 +53,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     private var isHideShow : Boolean = false
     private var layoutType = LayoutType.Linear
 
-    private var showFragment = FragmentType.None
+    var showFragment = FragmentType.None
 
 //    private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }
 
@@ -90,13 +90,14 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     }
 
     override fun onBackPressed() {
-        Log.d(TAG, "onBackPressed Fragment:$showFragment")
-        super.onBackPressed()
+        // Home Fragment > Back Pressed
         if(showFragment == FragmentType.Home) {
             finish()
         }
-        else {
-            showFragment = FragmentType.Home
+
+        super.onBackPressed()
+        Log.d(TAG, "onBackPressed Fragment:$showFragment")
+        if(showFragment == FragmentType.Home) {
             appbar.setExpanded(true, true)
             (coordinator as CustomCoordinatorLayout).allowForScroll = true
         }
