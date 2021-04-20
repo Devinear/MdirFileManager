@@ -36,26 +36,26 @@
                 tools:src="@drawable/appbar_iu"/>
                 <!--android:src="@{item.type.drawableRes}"-->
                 <!--android:src="@{item.drawable}"-->
+
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dos_m"
+                android:background="#BB303030"
+                android:textAlignment="center"
+                android:layout_gravity="bottom|end"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="@dimen/recycler_grid_item_text_size"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                tools:textColor="#FFFFFF"
+                tools:text="1000" />
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/tv_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/dos_m"
-            android:background="#BB303030"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:textSize="@dimen/recycler_grid_item_text_size"
-            android:ellipsize="marquee"
-            android:singleLine="true"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="@id/la_border"
-            app:layout_constraintEnd_toEndOf="@id/la_border"
-            tools:textColor="#FFFFFF"
-            tools:text="1000" />
 
         <TextView
             android:id="@+id/tv_name"
