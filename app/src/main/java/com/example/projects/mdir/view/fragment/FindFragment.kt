@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import com.example.projects.R
 import com.example.projects.databinding.LayoutFindBinding
+import com.example.projects.mdir.common.FragmentType
+import com.example.projects.mdir.view.base.BaseFragment
 
-class FindFragment : Fragment() {
+class FindFragment : BaseFragment() {
     companion object {
         val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             FindFragment()
@@ -24,7 +25,7 @@ class FindFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             R.layout.layout_find,
@@ -32,5 +33,10 @@ class FindFragment : Fragment() {
             false
         )
         return binding.root
+    }
+
+    override fun initUi() {
+        super.initUi()
+        fragmentType = FragmentType.Find
     }
 }
