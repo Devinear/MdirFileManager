@@ -1,6 +1,5 @@
 package com.example.projects.mdir.view.fragment
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,11 +22,12 @@ import com.example.projects.mdir.common.*
 import com.example.projects.mdir.data.FileItemEx
 import com.example.projects.mdir.listener.RequestListener
 import com.example.projects.mdir.view.*
+import com.example.projects.mdir.view.base.BaseFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_file_manager.*
 import kotlinx.android.synthetic.main.layout_browser.*
 
-class BrowserFragment : Fragment() {
+class BrowserFragment : BaseFragment() {
 
     companion object {
         private const val TAG = "[DE][FR] BROWSER"
@@ -50,13 +49,12 @@ class BrowserFragment : Fragment() {
 
 
     private lateinit var binding : LayoutBrowserBinding
-    private lateinit var activity : Activity
     private lateinit var viewModel : FileViewModel
     var requestListener : RequestListener? = null
 
     // TARGET API 29 이상인 경우 사용할 수 없다. 외부 저장소 정책이 애플과 동일해진다.
-    private val adapterLinear by lazy { FileLinearAdapter(activity, viewModel) }
-    private val adapterGrid by lazy { FileGridAdapter(activity, viewModel) }
+    private val adapterLinear by lazy { FileLinearAdapter(requireContext(), viewModel) }
+    private val adapterGrid by lazy { FileGridAdapter(requireContext(), viewModel) }
     private var layoutType = LayoutType.Linear
 
     val livePath = MutableLiveData<String>()
@@ -76,8 +74,7 @@ class BrowserFragment : Fragment() {
     override fun onAttach(context: Context) {
         Log.d(TAG, "onAttach")
         super.onAttach(context)
-        activity = getActivity() as FileManagerActivity
-        activity.invalidateOptionsMenu()
+        activity?.invalidateOptionsMenu()
 
         // FileManagerActivity 에서 생성한 ViewModel과 LifeCycle 을 공유하는 동일한 ViewModel
         // ViewModel은 내부적으로 싱글턴이다.
@@ -139,23 +136,13 @@ class BrowserFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated")
-//        with(binding.progress) {
-//            show()
-//            isActivated = true
-//            visibility = View.VISIBLE
-//        }
+    override fun initUi() {
+        Log.d(TAG, "initUi")
+        super.initUi()
+        fragmentType = FragmentType.Browser
 
         showProgress()
         observeViewModel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
-        (activity as FileManagerActivity).showFragment = FragmentType.Browser
     }
 
     private val snackBar : Snackbar by lazy { Snackbar.make(binding.root, "SNACK BAR", Snackbar.LENGTH_LONG) }

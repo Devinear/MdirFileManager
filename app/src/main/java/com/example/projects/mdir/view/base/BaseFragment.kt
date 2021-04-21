@@ -1,7 +1,9 @@
 package com.example.projects.mdir.view.base
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.projects.mdir.FileManagerActivity
 import com.example.projects.mdir.common.FragmentType
@@ -14,8 +16,14 @@ open class BaseFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         Log.d(TAG, "onAttach")
-        activity = getActivity() as FileManagerActivity
         super.onAttach(context)
+        activity = getActivity() as FileManagerActivity
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d(TAG, "onViewCreated")
+        super.onViewCreated(view, savedInstanceState)
+        initUi()
     }
 
     override fun onResume() {

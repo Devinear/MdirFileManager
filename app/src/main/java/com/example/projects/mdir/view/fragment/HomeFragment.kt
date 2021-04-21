@@ -55,14 +55,14 @@ class HomeFragment : BaseFragment() {
         binding.vm = activityViewModel
         binding.activity = activity as FileManagerActivity
 
-        fragmentType = FragmentType.Home
-
-        initUi()
         return binding.root
     }
 
     override fun initUi() {
         Log.d(TAG, "initUi")
+        super.initUi()
+        fragmentType = FragmentType.Home
+
         binding.reFavorite.adapter = HomeAdapter(fragment = this).apply {
             val favorites = viewModel.favorites
             val items = mutableListOf<FileItemEx>()
