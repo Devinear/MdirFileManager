@@ -189,7 +189,9 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
 //        requestProgress(isShow = true)
         Log.d(TAG, "changeFragment FragmentType:$type")
-        showFragment = type
+
+        // 각 Fragment에서 설정
+//        showFragment = type
 
         when {
             showFragment != FragmentType.Home -> {
