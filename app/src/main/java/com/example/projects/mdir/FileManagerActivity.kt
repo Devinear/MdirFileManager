@@ -64,12 +64,15 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
-        checkPermission()
 
         initUi()
+        checkPermission()
     }
 
     private fun initUi() {
+        Log.d(TAG, "initUi")
+        showFragment = FragmentType.Home
+
         toolbar.apply {
 //            setBackgroundColor(ContextCompat.getColor(context, R.color.colorHomeLayout))
             setTitleTextColor(ContextCompat.getColor(context, R.color.colorHomeText))
@@ -177,6 +180,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     }
 
     private fun checkPermission() {
+        Log.d(TAG, "checkPermission")
         val permissions = Array(1) { "android.permission.WRITE_EXTERNAL_STORAGE" }
         if (ContextCompat.checkSelfPermission(this, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
@@ -187,11 +191,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     }
 
     private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
-//        requestProgress(isShow = true)
-        Log.d(TAG, "changeFragment FragmentType:$type")
-
-        // 각 Fragment에서 설정
-//        showFragment = type
+        Log.d(TAG, "changeFragment FragmentType:$type OldShow:$showFragment")
 
         when {
             showFragment != FragmentType.Home -> {
