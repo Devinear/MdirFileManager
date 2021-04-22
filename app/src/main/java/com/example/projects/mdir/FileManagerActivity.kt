@@ -93,6 +93,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 
     override fun onBackPressed() {
         // Home Fragment > Back Pressed
+        Log.d(TAG, "onBackPressed")
         if(showFragment == FragmentType.Home) {
             finish()
         }
@@ -100,7 +101,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
         super.onBackPressed()
         Log.d(TAG, "onBackPressed Fragment:$showFragment")
         if(showFragment == FragmentType.Home) {
-            appbar.setExpanded(true, true)
+            appbar.setExpanded(true, false)
             (coordinator as CustomCoordinatorLayout).allowForScroll = true
         }
     }
