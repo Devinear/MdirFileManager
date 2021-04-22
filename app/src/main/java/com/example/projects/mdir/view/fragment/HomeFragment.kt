@@ -60,8 +60,8 @@ class HomeFragment : BaseFragment() {
 
     override fun initUi() {
         Log.d(TAG, "initUi")
-        super.initUi()
         fragmentType = FragmentType.Home
+        super.initUi()
 
         binding.reFavorite.adapter = HomeAdapter(fragment = this).apply {
             val favorites = viewModel.favorites
@@ -81,7 +81,7 @@ class HomeFragment : BaseFragment() {
         binding.ibFavorite.visibility = if(favoriteSize > FAVORITE_MAX_VISIBLE_COUNT) View.VISIBLE else View.GONE
 
         // Back키로 Home으로 돌아온 경우 메뉴 초기화 작업
-        activity?.invalidateOptionsMenu()
+//        activity?.invalidateOptionsMenu()
     }
 
     fun onFavorite(item: FileItemEx) {

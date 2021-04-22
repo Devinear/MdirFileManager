@@ -32,7 +32,10 @@ open class BaseFragment : Fragment() {
         activity.showFragment = fragmentType
     }
 
-    open fun initUi() {}
+    open fun initUi() {
+        // 메뉴 초기화 작업
+        activity.invalidateOptionsMenu()
+    }
 
     companion object {
         private const val TAG = "[DE][FR] BASE"
