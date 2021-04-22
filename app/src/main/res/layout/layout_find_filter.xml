@@ -9,95 +9,104 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:background="@color/colorFilterLayout">
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/drawable_filter_border">
 
         <androidx.appcompat.widget.AppCompatTextView
+            style="@style/FindFilterText"
             android:id="@+id/tv_time"
             android:layout_width="match_parent"
             android:text="시간"
-            style="@style/FindFilterText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/bt_before_1"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_before_1"
-            android:text="어제"
-            android:layout_marginBottom="20dp"
             style="@style/FindFilterButton"
+            android:id="@+id/bt_before_1"
+            android:layout_marginBottom="20dp"
+            android:text="어제"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_time"
             app:layout_constraintBottom_toTopOf="@id/tv_type" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_before_7"
-            android:text="지난 7일"
             style="@style/FindFilterButton"
+            android:id="@+id/bt_before_7"
+            android:layout_marginStart="2dp"
+            android:text="지난 7일"
+            app:layout_constraintBottom_toBottomOf="@id/bt_before_1"
             app:layout_constraintStart_toEndOf="@id/bt_before_1"
-            app:layout_constraintTop_toTopOf="@id/bt_before_1"
-            app:layout_constraintBottom_toBottomOf="@id/bt_before_1" />
+            app:layout_constraintTop_toTopOf="@id/bt_before_1"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_before_30"
-            android:text="지난 30일"
             style="@style/FindFilterButton"
+            android:id="@+id/bt_before_30"
+            android:layout_marginStart="2dp"
+            android:text="지난 30일"
             app:layout_constraintStart_toEndOf="@id/bt_before_7"
             app:layout_constraintTop_toTopOf="@id/bt_before_1"
             app:layout_constraintBottom_toBottomOf="@id/bt_before_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            style="@style/FindFilterText"
             android:id="@+id/tv_type"
             android:layout_width="match_parent"
             android:text="유형"
-            style="@style/FindFilterText"
             app:layout_constraintTop_toBottomOf="@id/bt_before_1"
             app:layout_constraintBottom_toTopOf="@id/bt_image"/>
 
         <androidx.appcompat.widget.AppCompatButton
+            style="@style/FindFilterButton"
             android:id="@+id/bt_image"
             android:text="이미지"
             android:layout_marginBottom="10dp"
-            style="@style/FindFilterButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_type"
             app:layout_constraintBottom_toTopOf="@id/bt_apk"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_video"
-            android:text="비디오"
             style="@style/FindFilterButton"
+            android:id="@+id/bt_video"
+            android:layout_marginStart="2dp"
+            android:text="비디오"
             app:layout_constraintStart_toEndOf="@id/bt_image"
             app:layout_constraintTop_toTopOf="@id/bt_image"
             app:layout_constraintBottom_toBottomOf="@id/bt_image" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_audio"
-            android:text="오디오"
             style="@style/FindFilterButton"
+            android:id="@+id/bt_audio"
+            android:layout_marginStart="2dp"
+            android:text="오디오"
             app:layout_constraintStart_toEndOf="@id/bt_video"
             app:layout_constraintTop_toTopOf="@id/bt_image"
             app:layout_constraintBottom_toBottomOf="@id/bt_image" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_document"
-            android:text="문서"
             style="@style/FindFilterButton"
+            android:id="@+id/bt_document"
+            android:layout_marginStart="2dp"
+            android:text="문서"
             app:layout_constraintStart_toEndOf="@id/bt_audio"
             app:layout_constraintTop_toTopOf="@id/bt_image"
             app:layout_constraintBottom_toBottomOf="@id/bt_image" />
 
         <androidx.appcompat.widget.AppCompatButton
+            style="@style/FindFilterButton"
             android:id="@+id/bt_apk"
             android:text="설치파일"
-            style="@style/FindFilterButton"
             app:layout_constraintStart_toStartOf="@id/bt_image"
             app:layout_constraintTop_toBottomOf="@id/bt_image"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/bt_zip"
-            android:text="압축파일"
             style="@style/FindFilterButton"
+            android:id="@+id/bt_zip"
+            android:layout_marginStart="2dp"
+            android:text="압축파일"
             app:layout_constraintStart_toEndOf="@id/bt_apk"
             app:layout_constraintTop_toTopOf="@id/bt_apk"
             app:layout_constraintBottom_toBottomOf="@id/bt_apk" />
