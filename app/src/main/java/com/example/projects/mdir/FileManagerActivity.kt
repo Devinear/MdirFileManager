@@ -133,12 +133,21 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
             menu?.findItem(R.id.action_sort)?.isVisible = true
             menu?.findItem(R.id.action_list)?.isVisible = liveShowType.value ?: false
             menu?.findItem(R.id.action_grid)?.isVisible = !(liveShowType.value ?: false)
+            menu?.findItem(R.id.action_settings)?.isVisible = true
+        }
+        else if(showFragment == FragmentType.Find || showFragment == FragmentType.Setting) {
+            menu?.findItem(R.id.action_find)?.isVisible = false
+            menu?.findItem(R.id.action_sort)?.isVisible = false
+            menu?.findItem(R.id.action_list)?.isVisible = false
+            menu?.findItem(R.id.action_grid)?.isVisible = false
+            menu?.findItem(R.id.action_settings)?.isVisible = false
         }
         else {
             menu?.findItem(R.id.action_find)?.isVisible = showFragment == FragmentType.Home
             menu?.findItem(R.id.action_sort)?.isVisible = false
             menu?.findItem(R.id.action_list)?.isVisible = false
             menu?.findItem(R.id.action_grid)?.isVisible = false
+            menu?.findItem(R.id.action_settings)?.isVisible = true
         }
         return true
     }
@@ -252,11 +261,11 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
             when (showFragment) {
                 FragmentType.Home -> {
                     addToBackStack(null)
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+//                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 else -> {
                     addToBackStack(HomeFragment.toString())
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
             }
         }.commit()
