@@ -71,7 +71,6 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 
     private fun initUi() {
         Log.d(TAG, "initUi")
-        showFragment = FragmentType.Home
 
         toolbar.apply {
 //            setBackgroundColor(ContextCompat.getColor(context, R.color.colorHomeLayout))
@@ -192,6 +191,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 
     private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
         Log.d(TAG, "changeFragment FragmentType:$type OldShow:$showFragment")
+        showFragment = type
 
         when {
             showFragment != FragmentType.Home -> {
