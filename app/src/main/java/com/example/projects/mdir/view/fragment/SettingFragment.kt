@@ -34,8 +34,8 @@ class SettingFragment : BaseFragment() {
     }
 
     override fun initUi() {
-        super.initUi()
         fragmentType = FragmentType.Setting
+        super.initUi()
     }
 
     fun onCheckedShowFiles() {

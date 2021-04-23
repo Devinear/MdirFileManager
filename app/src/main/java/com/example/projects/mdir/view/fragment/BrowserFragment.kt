@@ -138,8 +138,8 @@ class BrowserFragment : BaseFragment() {
 
     override fun initUi() {
         Log.d(TAG, "initUi")
-        super.initUi()
         fragmentType = FragmentType.Browser
+        super.initUi()
 
         showProgress()
         observeViewModel()
