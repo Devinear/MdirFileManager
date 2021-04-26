@@ -16,15 +16,24 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.example.projects.MainActivity">
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
         <activity
             android:name="com.example.projects.mdir.FileManagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:configChanges="screenSize|orientation"/>
+        <activity android:name=".mdir.IntroActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.example.projects.maps.MapActivity"/>
 
