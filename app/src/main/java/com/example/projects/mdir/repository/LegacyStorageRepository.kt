@@ -13,10 +13,20 @@ import java.io.File
 class LegacyStorageRepository : AbsStorageRepository() {
 
     private val listFile = mutableListOf<FileItemEx>()
+    private var isInit = false
 
-    override fun initRepository() {
-        Log.d(TAG, "initRepository")
-        loadRoot()
+    override fun initRepository(listener: InitRepository?, isForce: Boolean) {
+        Log.d(TAG, "initRepository isInit:$isInit")
+
+        if(!isInit || isForce) {
+            loadRoot()
+            isInit = true
+            listener?.finish(complete = true)
+        }
+        else {
+            listener?.finish(complete = false)
+        }
+
     }
 
     override fun loadDirectory(context: Context, path: String, refresh: Boolean): MutableList<FileItemEx> {

@@ -6,6 +6,9 @@ import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.projects.R
+import com.example.projects.mdir.repository.AbsStorageRepository
+import com.example.projects.mdir.repository.InitRepository
+import com.example.projects.mdir.repository.LegacyStorageRepository
 
 class IntroActivity : AppCompatActivity(R.layout.activity_intro) {
 
@@ -13,12 +16,23 @@ class IntroActivity : AppCompatActivity(R.layout.activity_intro) {
         ViewModelProvider(this).get(FileViewModel::class.java)
     }
 
+    private val repository: AbsStorageRepository by lazy {
+        LegacyStorageRepository.INSTANCE
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Handler().postDelayed({
-            startActivity(Intent(this, FileManagerActivity::class.java))
-            finish()
-        }, 100)
+        repository.initRepository(object :InitRepository {
+            override fun finish(complete: Boolean) {
+                startActivity(Intent(this@IntroActivity, FileManagerActivity::class.java))
+                finish()
+            }
+        })
+
+//        Handler().postDelayed({
+//            startActivity(Intent(this, FileManagerActivity::class.java))
+//            finish()
+//        }, 100)
     }
 }
