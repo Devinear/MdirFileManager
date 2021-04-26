@@ -203,5 +203,9 @@ class LegacyStorageRepository : AbsStorageRepository() {
 
     companion object {
         private const val TAG = "[DE][RE] Legacy"
+
+        val INSTANCE by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            LegacyStorageRepository()
+        }
     }
 }
