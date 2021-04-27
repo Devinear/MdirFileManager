@@ -12,14 +12,13 @@ import com.example.projects.R
 import com.example.projects.mdir.repository.AbsStorageRepository
 import com.example.projects.mdir.repository.InitRepository
 import com.example.projects.mdir.repository.LegacyStorageRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class IntroActivity : AppCompatActivity(R.layout.activity_intro) {
 
-    private val repository: AbsStorageRepository by lazy {
-        LegacyStorageRepository.INSTANCE
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
 
         if(checkPermission()) {
@@ -39,15 +38,16 @@ class IntroActivity : AppCompatActivity(R.layout.activity_intro) {
 
     private fun initRepository() {
         Log.d(TAG, "initRepository")
-        repository.initRepository(object :InitRepository {
-            override fun finish(complete: Boolean) {
-                Log.d(TAG, "finish")
-                startActivity(Intent(this@IntroActivity, FileManagerActivity::class.java))
-                finish()
-            }
-        })
+        GlobalScope.launch {
+            LegacyStorageRepository.INSTANCE.initRepository(object :InitRepository {
+                override fun finish(complete: Boolean) {
+                    Log.d(TAG, "finish")
+                    startActivity(Intent(this@IntroActivity, FileManagerActivity::class.java))
+                    finish()
+                }
+            })
+        }
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         Log.d(TAG, "onRequestPermissionsResult")
