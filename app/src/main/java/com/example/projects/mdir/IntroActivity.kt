@@ -43,6 +43,7 @@ class IntroActivity : AppCompatActivity(R.layout.activity_intro) {
                 override fun finish(complete: Boolean) {
                     Log.d(TAG, "finish")
                     startActivity(Intent(this@IntroActivity, FileManagerActivity::class.java))
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                     finish()
                 }
             })
