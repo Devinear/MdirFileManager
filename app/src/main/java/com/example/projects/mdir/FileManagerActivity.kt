@@ -66,7 +66,8 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
         super.onCreate(savedInstanceState)
 
         initUi()
-        checkPermission()
+//        checkPermission()
+        changeFragment()
     }
 
     private fun initUi() {
@@ -188,16 +189,16 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
         }
     }
 
-    private fun checkPermission() {
-        Log.d(TAG, "checkPermission")
-        val permissions = Array(1) { "android.permission.WRITE_EXTERNAL_STORAGE" }
-        if (ContextCompat.checkSelfPermission(this, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
-        }
-        else {
-            changeFragment()
-        }
-    }
+//    private fun checkPermission() {
+//        Log.d(TAG, "checkPermission")
+//        val permissions = Array(1) { "android.permission.WRITE_EXTERNAL_STORAGE" }
+//        if (ContextCompat.checkSelfPermission(this, permissions[0]) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
+//        }
+//        else {
+//            changeFragment()
+//        }
+//    }
 
     private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
         Log.d(TAG, "changeFragment FragmentType:$type OldShow:$showFragment")
@@ -272,19 +273,19 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
         }.commit()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if(requestCode == REQUEST_CODE) {
-            grantResults.forEach {
-                // 허용 미동의
-                if(it != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "권한 설정이 필요합니다.", Toast.LENGTH_SHORT).show()
-                    finish()
-                }
-            }
-            changeFragment()
-//            updateFileList()
-        }
-    }
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        if(requestCode == REQUEST_CODE) {
+//            grantResults.forEach {
+//                // 허용 미동의
+//                if(it != PackageManager.PERMISSION_GRANTED) {
+//                    Toast.makeText(this, "권한 설정이 필요합니다.", Toast.LENGTH_SHORT).show()
+//                    finish()
+//                }
+//            }
+//            changeFragment()
+////            updateFileList()
+//        }
+//    }
 
     override fun onRequestProgressBar(show : Boolean) {
         Log.d(TAG, "onRequestProgressBar show:$show")
@@ -486,8 +487,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     }
 
     companion object {
-        const val GRID_ITEM_WIDTH_DP = 120
         const val TAG = "[DE] Activity"
-        const val REQUEST_CODE = 1
+//        const val REQUEST_CODE = 1
     }
 }
