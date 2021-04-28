@@ -13,6 +13,8 @@ import java.io.File
 class LegacyStorageRepository : AbsStorageRepository() {
 
     private val listFile = mutableListOf<FileItemEx>()
+    private val mapDir = mutableMapOf<String, FileItemEx>()
+
     private var isInit = false
 
     override fun initRepository(listener: InitRepository?, isForce: Boolean) {
@@ -26,51 +28,63 @@ class LegacyStorageRepository : AbsStorageRepository() {
         else {
             listener?.finish(complete = false)
         }
-
     }
 
     override fun loadDirectory(context: Context, path: String, refresh: Boolean): MutableList<FileItemEx> {
         // refresh : 기존의 데이터를 무시하고 전부 갱신할 것인가
-        Log.d(TAG, "loadDirectory PATH:[$path]")
+        Log.d(TAG, "loadDirectory PATH:[$path] MAP:[${mapDir.size}]")
+        mapDir[path]?.apply {
+            val list = this.subFiles
+            return mutableListOf<FileItemEx>().apply {
+                if(Setting.hideSystem)
+                    list.removeAll { item -> return@removeAll item.name[0] == '.' && item.name != ".nomedia" }
+                addAll(list)
+            }
+        }
 
         val file = File(path)
         if(!file.exists()) return mutableListOf()
 
         val list = file.listFiles().toMutableList()
-//        if(!isShowSystem) {
-//            list.removeAll { item -> return@removeAll item.name[0] == '.' }
-//        }
-        val showNomedia = Setting.hideNomedia
-        val showSystem = Setting.hideSystem
+        val hideSystem = Setting.hideSystem
 
         val root = FileItemEx(file.absolutePath)
         list.forEach {
             val item = FileItemEx(it.absolutePath).apply { parentDir = root }
-            root.subFiles.add(item)
+            if(hideSystem && item.name[0] == '.' && item.name != ".nomedia")
+                return@forEach
 
-            if(item.isDirectory)
-                loadDir(item)
+            root.subFiles.add(item)
+            if(item.isDirectory) {
+                loadDir(item, hideSystem = hideSystem)
+            }
         }
-        return mutableListOf<FileItemEx>().apply { addAll(root.subFiles) }
+        return mutableListOf<FileItemEx>().apply {
+
+            addAll(root.subFiles)
+        }
     }
 
     private fun loadRoot() {
         Log.d(TAG, "loadRoot")
         val root = FileItemEx(FileUtil.LEGACY_ROOT)
+//        val hideSystem = Setting.hideSystem
 
-        // Root의 경우에도 System을 구분하자.
-        // 위의 값을 변경하는 경우 Root부터 다시 설정하자.
-        val hideSystem = Setting.hideSystem
+        mapDir.clear()
+        mapDir[root.absolutePath] = root
 
-        root.listFiles().forEach {
-            if(hideSystem && it.name[0] == '.' && it.name != ".nomedia")
-                return@forEach
+        root.listFiles()?.forEach {
+//            if(hideSystem && it.name[0] == '.' && it.name != ".nomedia")
+//                return@forEach
 
             val item = FileItemEx(it.absolutePath).apply { parentDir = root }
             root.subFiles.add(item)
 
-            if(item.isDirectory)
-                loadDir(root = item, hideSystem = hideSystem)
+            if(item.isDirectory) {
+                mapDir[item.absolutePath] = item
+//                loadDir(root = item, hideSystem = hideSystem)
+                loadDir(root = item, hideSystem = false)
+            }
         }
 
         listFile.clear()
@@ -88,6 +102,7 @@ class LegacyStorageRepository : AbsStorageRepository() {
             root.subFiles.add(item)
 
             if(subFile.isDirectory) {
+                mapDir[item.absolutePath] = item
                 loadDir(item)
             }
         }
