@@ -1,16 +1,13 @@
 package com.example.projects.mdir
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.ObservableArrayList
@@ -32,6 +29,7 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_file_manager.*
 import kotlinx.android.synthetic.main.activity_file_manager.view.*
 import kotlinx.coroutines.*
+import kotlin.math.abs
 
 class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), ViewModelStoreOwner, RequestListener {
 
@@ -67,7 +65,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 
         initUi()
 //        checkPermission()
-        changeFragment()
+        requestFragment()
     }
 
     private fun initUi() {
@@ -77,7 +75,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 //            setBackgroundColor(ContextCompat.getColor(context, R.color.colorHomeLayout))
             setTitleTextColor(ContextCompat.getColor(context, R.color.colorHomeText))
         }.also {
-            setSupportActionBar(it.apply { title = "Retro File" }   )
+            setSupportActionBar(it.apply { title = "Retro File" })
         }
 
         // Favorite, Recent 둘중 하나라도 0인 경우 확장으로 시작하자
@@ -174,15 +172,15 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
                 true
             }
             R.id.action_find -> {
-                changeFragment(FragmentType.Find)
+                requestFragment(FragmentType.Find)
                 true
             }
             R.id.action_settings -> {
-                changeFragment(FragmentType.Setting)
+                requestFragment(FragmentType.Setting)
                 true
             }
             android.R.id.home -> {
-                changeFragment(FragmentType.Home)
+                requestFragment(FragmentType.Home)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -196,24 +194,46 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 //            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
 //        }
 //        else {
-//            changeFragment()
+//            requestFragment()
 //        }
 //    }
 
-    private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
-        Log.d(TAG, "changeFragment FragmentType:$type OldShow:$showFragment")
-        showFragment = type
+    private var request : Request? = null
+    inner class Request(val type: FragmentType, val browserType: BrowserType, val category: Category?, val path: String)
 
+    private fun requestFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
+        Log.d(TAG, "requestFragment FragmentType:$type OldShow:$showFragment")
         when {
-            showFragment != FragmentType.Home -> {
-                appbar.setExpanded(false)
+            type != FragmentType.Home -> {
+                appbar.setExpanded(false, true)
                 (coordinator as CustomCoordinatorLayout).allowForScroll = false
             }
             else -> {
                 appbar.setExpanded(true, true)
                 (coordinator as CustomCoordinatorLayout).allowForScroll = true
+
+                changeFragment(type, browserType, category, path)
             }
         }
+
+        request = Request(type, browserType, category, path)
+        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { layout, offset ->
+            Log.d(TAG, "onOffsetChanged VerticalOffset:$offset")
+            request ?: return@OnOffsetChangedListener
+            // Collapsed
+            if (layout?.totalScrollRange ?: 0 == abs(offset)) {
+                changeFragment(request!!.type, request!!.browserType, request!!.category, request!!.path)
+                request = null
+            }
+        })
+
+//        var listener = OnOffsetChangedListener { abl, offset -> abl.post { abl.removeOnOffsetChangedListener(listener) } }
+    }
+
+    private fun changeFragment(type: FragmentType = FragmentType.Home, browserType: BrowserType = BrowserType.Storage, category: Category? = null, path: String = "") {
+        Log.d(TAG, "changeFragment FragmentType:$type OldShow:$showFragment")
+        if(showFragment == type) return
+        else showFragment = type
 
         // 모든 Fragment 제거
         supportFragmentManager.fragments.removeAll { true }
@@ -223,24 +243,27 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
                 FragmentType.Home -> {
                     replace(R.id.fragment_container,
                             HomeFragment.INSTANCE.apply {
-                                requestListener = this@FileManagerActivity }
+                                requestListener = this@FileManagerActivity
+                            }
                     )
                 }
                 FragmentType.Browser -> {
-                    when(browserType) {
+                    when (browserType) {
                         BrowserType.Find, BrowserType.Recent, BrowserType.Favorite -> {
                             replace(R.id.fragment_container, BrowserFragment.newInstance(type = browserType))
                         }
                         BrowserType.Category -> {
                             category
-                                ?.run { replace(R.id.fragment_container,
-                                        BrowserFragment.newInstance(type = BrowserType.Category, category = category)
-                                                .apply { requestListener = this@FileManagerActivity })
-                                }
-                                ?:run { replace(R.id.fragment_container,
-                                        BrowserFragment.newInstance(type = BrowserType.Storage)
-                                                .apply { requestListener = this@FileManagerActivity })
-                                }
+                                    ?.run {
+                                        replace(R.id.fragment_container,
+                                                BrowserFragment.newInstance(type = BrowserType.Category, category = category)
+                                                        .apply { requestListener = this@FileManagerActivity })
+                                    }
+                                    ?: run {
+                                        replace(R.id.fragment_container,
+                                                BrowserFragment.newInstance(type = BrowserType.Storage)
+                                                        .apply { requestListener = this@FileManagerActivity })
+                                    }
                         }
                         else -> {
                             replace(R.id.fragment_container,
@@ -282,7 +305,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
 //                    finish()
 //                }
 //            }
-//            changeFragment()
+//            requestFragment()
 ////            updateFileList()
 //        }
 //    }
@@ -464,12 +487,20 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     fun requestStorage(path: String = "") {
         // 차후에 드라이브를 추가하게되면 타입을 늘리자.
         Log.d(TAG, "requestStorage path:$path")
-        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Storage, path = path)
+        requestFragment(type = FragmentType.Browser, browserType = BrowserType.Storage, path = path)
     }
 
     fun requestCategory(type: Category) {
         Log.d(TAG, "requestCategory type:${type.name}")
-        changeFragment(type = FragmentType.Browser, browserType = BrowserType.Category, category = type)
+//        appbar.setExpanded(false, true)
+//        appbar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { layout, offset ->
+//            Log.d(TAG, "onOffsetChanged VerticalOffset:$offset")
+//
+//            // Collapsed
+//            if (layout?.totalScrollRange ?: 0 == abs(offset))
+//                requestFragment(type = FragmentType.Browser, browserType = BrowserType.Category, category = type)
+//        })
+        requestFragment(type = FragmentType.Browser, browserType = BrowserType.Category, category = type)
     }
 
     fun onClickAll() = updateFileList(isShowType = ShowType.All)
@@ -483,7 +514,7 @@ class FileManagerActivity : AppCompatActivity(R.layout.activity_file_manager), V
     fun requestExtendFavorite() {
         // Favorite Empty 예외
         if(viewModel.favorites.isNotEmpty())
-            changeFragment(type = FragmentType.Browser, browserType = BrowserType.Favorite)
+            requestFragment(type = FragmentType.Browser, browserType = BrowserType.Favorite)
     }
 
     companion object {
