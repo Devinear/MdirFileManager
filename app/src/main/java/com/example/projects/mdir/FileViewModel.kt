@@ -53,7 +53,7 @@ class FileViewModel(val app: Application) : AndroidViewModel(app) {
     val favorites = mutableListOf<String>()
 
     private val repository: AbsStorageRepository by lazy {
-        LegacyStorageRepository()
+        LegacyStorageRepository.INSTANCE
     }
 
     private var rootUri: Uri = Uri.EMPTY
